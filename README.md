@@ -1,4 +1,4 @@
-# sclala
+# scala
 
 Project with personal tests of the technologies of the Scala context.
 
