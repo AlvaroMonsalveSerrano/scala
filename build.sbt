@@ -1,6 +1,7 @@
 import Dependencies._
 
-ThisBuild / scalaVersion     := "2.12.8"
+// "2.12.11"
+ThisBuild / scalaVersion     := "2.12.11"
 ThisBuild / version          := "0.1.0-SNAPSHOT"
 ThisBuild / organization     := "es.ams"
 ThisBuild / organizationName := "AMS"
@@ -21,10 +22,18 @@ lazy val basicScalacOptions = Seq(
 
  lazy val root = (project in file("."))
    .aggregate(cats)
+   .aggregate(doobie)
+   .aggregate(pf)
    .settings(
      name := "scala",
      scalacOptions ++= basicScalacOptions,
-     libraryDependencies += scalaTest % Test
+     libraryDependencies += scalaTest % Test,
+     resolvers ++= Seq(
+       "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
+       Resolver.sonatypeRepo("releases"),
+       Resolver.sonatypeRepo("snapshots"),
+       "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
+     )
    )
 
 lazy val cats = (project in file("cats"))
@@ -42,6 +51,42 @@ lazy val catsDependencies = Seq(
   cats_core,
   scalacheck,
   akka_actor
+)
+
+
+lazy val pf = (project in file("pf"))
+  .settings(
+    name := "pf",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    libraryDependencies ++=
+      Seq(
+        scalaTest
+      )
+  )
+
+lazy val doobie = (project in file("doobie"))
+  .settings(
+    name := "example-doobie",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    libraryDependencies ++=
+      doobieDependencies ++ Seq(
+        scalaTest
+      )
+  )
+
+lazy val doobieDependencies = Seq(
+  doobie_core,
+  doobie_h2,
+  doobie_hikari,
+  mysql_connector_java,
+  monix,
+//  doobie_postgres,
+//  postgresql,
+  doobie_quill,
+  doobie_spec2,
+  doobie_scalatest
 )
 
 
