@@ -3,9 +3,13 @@ import sbt._
 object Dependencies {
   lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
 
+  lazy val scalacheck =  "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
+
   lazy val cats_core = "org.typelevel" %% "cats-core" % "1.0.0-MF"
 
-  lazy val scalacheck =  "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
+  lazy val cats_effect = "org.typelevel" %% "cats-effect" % "2.2.0"
+  lazy val cats_effect_laws = "org.typelevel" %% "cats-effect-laws" % "2.2.0" % "test"
+
 
   lazy val akka_actor = "com.typesafe.akka" %% "akka-actor" % "2.4.12"
 
@@ -19,6 +23,6 @@ object Dependencies {
 
   lazy val mysql_connector_java = "mysql" % "mysql-connector-java" % "5.1.34"
 
-  lazy val monix = "io.monix" %% "monix" % "3.1.0",
+  lazy val monix = "io.monix" %% "monix" % "3.1.0"
 
 }

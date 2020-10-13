@@ -24,6 +24,7 @@ lazy val basicScalacOptions = Seq(
    .aggregate(cats)
    .aggregate(doobie)
    .aggregate(pf)
+   .aggregate(catsEffect)
    .settings(
      name := "scala",
      scalacOptions ++= basicScalacOptions,
@@ -54,6 +55,23 @@ lazy val catsDependencies = Seq(
 )
 
 
+lazy val catsEffect = (project in file("cats-effect"))
+  .settings(
+    name := "example-cats-effect",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    libraryDependencies ++=
+      catsEffectDependencies ++ Seq(
+        scalaTest
+      )
+  )
+
+lazy val catsEffectDependencies = Seq(
+  cats_effect,
+  cats_effect_laws
+)
+
+
 lazy val pf = (project in file("pf"))
   .settings(
     name := "pf",
@@ -64,6 +82,7 @@ lazy val pf = (project in file("pf"))
         scalaTest
       )
   )
+
 
 lazy val doobie = (project in file("doobie"))
   .settings(
