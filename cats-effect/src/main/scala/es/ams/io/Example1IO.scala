@@ -70,10 +70,55 @@ object Example1IO extends App {
 
   }
 
+  /**
+    * Stack safety.
+    * Es seguro realizar llamadas a flatMap en llamadas recursivas.
+    */
   def example3(): Unit = {
+
+    println(s"-*- Example 3 -*-")
+
+    def fib(n: Int, a: Long = 0, b: Long = 1): IO[Long] =
+      IO(a + b).flatMap { b2 =>
+        if (n > 0)
+          fib(n - 1, b, b2)
+        else
+          IO.pure(a)
+      }
+
+    val program1 =
+      for {
+        result <- fib(10)
+        _ <- IO( println(s"Result fib(10)=${result}"))
+      }yield ()
+    program1.unsafeRunSync()
+
+
+    def factorial(n:Int): IO[Long] = {
+
+      def doFactorial(n: Int, acc: Long): IO[Long] = {
+        IO(n * acc).flatMap { num =>
+          if (n > 1)
+            doFactorial(n - 1, num)
+          else
+            IO.pure(acc)
+        }
+      }
+      doFactorial(n, 1)
+    }
+
+    val program2 =
+      for {
+        result <- factorial(5)
+        _ <- IO( println(s"Result fib(10)=${result}"))
+      }yield ()
+    program2.unsafeRunSync()
+
 
   }
 
   example1()
   example2()
+  example3()
+
 }
