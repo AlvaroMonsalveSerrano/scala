@@ -25,8 +25,13 @@ object Example1 extends App {
         case Left(exception) => IO.raiseError(exception)
       }
     }
-
     ioa1.unsafeRunSync()
+
+    val ioa2: SyncIO[Unit] = Effect[IO].runAsync(operation1){
+        case Right(value) => IO( println(s"Result 2 Succes=${value}"))
+        case Left(exception) => IO.raiseError(exception)
+    }
+    ioa2.unsafeRunSync()
 
   }
 

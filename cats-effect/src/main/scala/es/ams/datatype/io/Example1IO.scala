@@ -1,4 +1,4 @@
-package es.ams.io
+package es.ams.datatype.io
 
 import cats.effect.IO
 //import cats.syntax.all._
