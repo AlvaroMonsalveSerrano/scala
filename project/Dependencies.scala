@@ -9,6 +9,7 @@ object Dependencies {
 
   lazy val cats_effect = "org.typelevel" %% "cats-effect" % "2.2.0"
   lazy val cats_effect_laws = "org.typelevel" %% "cats-effect-laws" % "2.2.0" % "test"
+  lazy val cats_free = "org.typelevel" %% "cats-free" % "2.2.0"
 
 
   lazy val akka_actor = "com.typesafe.akka" %% "akka-actor" % "2.4.12"

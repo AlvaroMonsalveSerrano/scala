@@ -16,7 +16,7 @@ import scala.collection.mutable
   *
   * https://typelevel.org/cats/datatypes/freemonad.html
   *
-  * Una FreeMonad (Free[_]) es una construcción que permite contriur una mónada desde cualquier Functor. Es una forma de
+  * Una FreeMonad (Free[_]) es una construcción que permite construir una mónada desde cualquier Functor. Es una forma de
   * representar y manipular cálculos.
   *
   * Proporcionan los siguiente:
@@ -49,26 +49,10 @@ object Example1 extends App {
 
   type KVStoreState[A] = State[ Map[String, Any], A ]
 
-  def example1(): Unit = {
-
-    // Parece un flujo monádico pero solo crea una estructura de datos recursiva que representa una secuencia de operaciones.
-    def program: KVStore[Option[Int]] =
-      for {
-        _ <- put("wild-cats", 2)
-        _ <- update[Int]("wild-cats", (_ + 12))
-        _ <- put("tame-cats", 5)
-        n <- get[Int]("wild-cats")
-        _ <- delete("tame-cats")
-      } yield { n }
-
-    println(s"$program")
-
-    val resultImpure: Option[Int] = program.foldMap(impureCompiler)
-    println(s"Result impure =${resultImpure}")
-
-    val resultPure: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
-    println(s"Result pure =${resultPure}")
-  }
+//  def example1(): Unit = {
+//
+//
+//  }
 
   def pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState ){
 
@@ -122,7 +106,7 @@ object Example1 extends App {
     liftF[KVStoreA, Unit](Put[T](key, value))
 
   def get[T](key: String): KVStore[Option[T]] =
-    liftF[KVStoreA, Option[T]]( Get[T](key))
+    liftF[KVStoreA, Option[T]](Get[T](key))
 
   // Definición de la gramática -------------------------
   sealed trait KVStoreA[A]
@@ -133,6 +117,23 @@ object Example1 extends App {
 
   case class Delete(key: String) extends KVStoreA[Unit]
 
-  example1()
+
+  // Parece un flujo monádico pero solo crea una estructura de datos recursiva que representa una secuencia de operaciones.
+  def program: KVStore[Option[Int]] =
+    for {
+      _ <- put("wild-cats", 2)
+      _ <- update[Int]("wild-cats", (_ + 12))
+      _ <- put("tame-cats", 5)
+      n <- get[Int]("wild-cats")
+      _ <- delete("tame-cats")
+    } yield { n }
+
+  println(s"$program")
+
+  val resultImpure: Option[Int] = program.foldMap(impureCompiler)
+  println(s"Result impure =${resultImpure}")
+
+  val resultPure: (Map[String, Any], Option[Int]) = program.foldMap(pureCompiler).run(Map.empty).value
+  println(s"Result pure =${resultPure}")
 
 }

@@ -1,17 +1,15 @@
 package es.ams.freemonaddoobie
 
-import cats.{Id, ~>}
+import cats.~>
 import cats.free.Free
 import cats.free.Free.liftF
 import cats.data.State
 import cats.effect.{Blocker, IO}
-
 import doobie.Transactor
 import doobie._
 import doobie.implicits._
 import doobie.util.ExecutionContexts
 import doobie.util.transactor.Transactor.Aux
-import es.ams.freemonaddoobie.ExampleDoobiePure.Author
 
 /**
   * Ejemplo básico de FreeMonad con un intérprete puro.
@@ -24,16 +22,20 @@ object ExampleDoobiePure extends App {
   // Definición del dominio.-----------------------------------------
   case class Author(id: Long, name: String)
 
+  // Definición de tipos.--------------------------------------------
   type Operation[A] = Free[OperationDB, A]
 
   type OperationState[A] = State[StateDatabase, A]
 
+  type OperationDBResponse[A] = Either[Exception, A]
+  type OperationDBResponseOption[A] = Either[Exception, Option[A]]
+
   // Definición de la gramática -------------------------------------
   sealed trait OperationDB[A]
-  case class CreateSchema() extends OperationDB[Unit]
-  case class Insert(author: Author) extends OperationDB[Int]
-  case class Select(key: Int) extends OperationDB[Option[String]]
-  case class Delete(key: Int) extends OperationDB[Int]
+  case class CreateSchema() extends OperationDB[OperationDBResponse[Boolean]]
+  case class Insert(author: Author) extends OperationDB[OperationDBResponse[Int]]
+  case class Select(key: Int) extends OperationDB[OperationDBResponseOption[String]]
+  case class Delete(key: Int) extends OperationDB[OperationDBResponse[Int]]
 
   sealed trait StateDatabase
   case object Init extends StateDatabase
@@ -41,17 +43,17 @@ object ExampleDoobiePure extends App {
   case object Deleted extends StateDatabase
 
   // Definición de las funciones del DSL ----------------------------
-  def createSchema(): Operation[Unit] =
-    liftF(CreateSchema())
+  def createSchema(): Operation[OperationDBResponse[Boolean]] =
+    liftF[OperationDB, OperationDBResponse[Boolean]](CreateSchema())
 
-  def insert(elem: Author): Operation[Int] =
-    liftF[OperationDB, Int](Insert(elem))
+  def insert(elem: Author): Operation[OperationDBResponse[Int]] =
+    liftF[OperationDB, OperationDBResponse[Int]](Insert(elem))
 
-  def delete(key: Int): Operation[Int] =
-    liftF[OperationDB, Int](Delete(key))
+  def delete(key: Int): Operation[OperationDBResponse[Int]] =
+    liftF[OperationDB, OperationDBResponse[Int]](Delete(key))
 
-  def select(key: Int): Operation[Option[String]] =
-    liftF[OperationDB, Option[String]](Select(key))
+  def select(key: Int): Operation[OperationDBResponseOption[String]] =
+    liftF[OperationDB, OperationDBResponseOption[String]](Select(key))
 
   // Definición del intérprete --------------------------------------
   def pureInterpreter: OperationDB ~> OperationState = new(OperationDB ~> OperationState){
@@ -67,46 +69,45 @@ object ExampleDoobiePure extends App {
     )
 
     override def apply[A](fa: OperationDB[A]): OperationState[A] = fa match {
-
       case CreateSchema() => {
-        val resultDatabase: Id[Unit] = MySqlDatabase.createSchemaIntoMySql(xa)
-        val stateResult: OperationState[Unit] = State.pure[StateDatabase, Unit](resultDatabase)
-        stateResult
+        val resultCreateSchema: Either[Exception, Boolean] = MySqlDatabase.createSchemaIntoMySqlB(xa)
+        resultCreateSchema
+          .fold( ex => State[StateDatabase, A]{ state => (Init,  resultCreateSchema) },
+            value => State[StateDatabase, A]{ state => (Created,  resultCreateSchema) } )
+
       }
 
       case Insert(author) =>{
-        val result: Id[Int] = MySqlDatabase.insertAuthorIntoMySql(xa, author)
-        val stateResult: OperationState[Int] = State.pure[StateDatabase, Int](result)
-        stateResult
+        State[StateDatabase, A]{ state =>
+          (Created,  MySqlDatabase.insertAuthorIntoMySql(xa, author))
+        }
       }
 
       case Delete(key) => {
-        val result: Id[Int] = MySqlDatabase.deleteAuthorById(xa, key)
-        val stateResult: OperationState[Int] = State.pure[StateDatabase, Int](result)
-        stateResult
+        State[StateDatabase, A]{ state =>
+          (Created,  MySqlDatabase.deleteAuthorById(xa, key))
+        }
       }
 
       case Select(key) => {
-        val result: Id[Option[String]] = MySqlDatabase.selectAuthorById(xa, key)
-        val stateResult: OperationState[Option[String]] = State.pure[StateDatabase, Option[String]](result)
-        stateResult
+        State[StateDatabase, A]{ state =>
+          (Created,  MySqlDatabase.selectAuthorById(xa, key))
+        }
       }
-
     } // apply
-
   } // pureInterpreter
 
 
-  def createDatabase(): Operation[Unit] = for {
-    _ <- createSchema()
-  } yield ()
+  def createDatabase(): Operation[Either[Exception, Boolean]] = for {
+    result <- createSchema()
+  } yield (result)
 
   val resultCreate = createDatabase().foldMap(pureInterpreter).run(Init).value
   println(s"Create database=${resultCreate}")
   println
 
-  def insertAuthor(): Operation[Int] = for {
-    num <- insert(Author(1, "Author1"))
+  def insertAuthor(): Operation[Either[Exception, Int]] = for {
+    num <- insert(Author(0, "Author1"))
   } yield (num)
 
   val resultInsertAuthor = insertAuthor().foldMap(pureInterpreter).run(Created).value
@@ -114,11 +115,11 @@ object ExampleDoobiePure extends App {
   println
 
 
-  def deleteAuthor(): Operation[Int] = for {
-    numInsert10 <- insert(Author(10, "Author10"))
-    numInsert11 <- insert(Author(11, "Author11"))
-    numInsert12 <- insert(Author(12, "Author12"))
-    numDeleted <- delete(11)
+  def deleteAuthor(): Operation[Either[Exception, Int]] = for {
+    numInsert10 <- insert(Author(0, "Author10"))
+    numInsert11 <- insert(Author(0, "Author11"))
+    numInsert12 <- insert(Author(0, "Author12"))
+    numDeleted <- delete(2)
   } yield (numDeleted)
 
   val resultDeleteAuthor = deleteAuthor().foldMap(pureInterpreter).run(Created).value
@@ -126,54 +127,123 @@ object ExampleDoobiePure extends App {
   println
 
 
-  def selectAuthor(): Operation[Option[String]] = for {
-    author <- select(10)
+  def selectAuthorKO(): Operation[Either[Exception, Option[String]]] = for {
+    author <- select(100)
   } yield (author)
 
-  val resultSelectAuthor = selectAuthor.foldMap(pureInterpreter).run(Created).value
-  println(s"Select Author=${resultSelectAuthor}")
+  val resultSelectAuthorKO = selectAuthorKO.foldMap(pureInterpreter).run(Created).value
+  println(s"Select Author=${resultSelectAuthorKO}")
+  println
+
+
+  def selectAuthorOK(): Operation[Either[Exception, Option[String]]] = for {
+    author <- select(1)
+  } yield (author)
+
+  val resultSelectAuthorOK = selectAuthorOK.foldMap(pureInterpreter).run(Created).value
+  println(s"Select Author=${resultSelectAuthorOK}")
   println
 
 }
 
 object MySqlDatabase{
 
-  def createSchemaIntoMySql[A](xa: Aux[IO, Unit]): Id[Unit] = {
-    val dropAuthor: ConnectionIO[Int] = sql"""DROP TABLE IF EXISTS Author""".update.run
-    val createAuthor: ConnectionIO[Int] = sql"""CREATE TABLE Author (id SERIAL, name text)""".update.run
+  import es.ams.freemonaddoobie.ExampleDoobiePure.{Author, OperationDBResponse, OperationDBResponseOption}
 
-    val creator = for {
+  val dropAuthor: ConnectionIO[Int] = sql"""DROP TABLE IF EXISTS Author""".update.run
+  val createAuthor: ConnectionIO[Int] = sql"""CREATE TABLE Author (id SERIAL, name text)""".update.run
+
+  def createSchemaIntoMySqlA[A](xa: Aux[IO, Unit]): Either[Exception, Unit] = {
+    val creator: ConnectionIO[Unit] = for {
       _ <- dropAuthor
       _ <- createAuthor
     } yield ()
 
-    val resultDatabase: Id[Unit] = creator.transact(xa).unsafeRunSync
-    resultDatabase
-  }
+    try{
+      val resultDatabase: Unit = creator.transact(xa).unsafeRunSync
+      Right(resultDatabase)
 
-  def insertAuthorIntoMySql(xa: Aux[IO, Unit], author: Author): Id[Int] = {
-    val result: Id[Int] = author match {
-      case p: Author =>
-        val id = p.id
-        val name = p.name
-        val resultInsert = sql"insert into Author (id, name) values ($id, $name)".update.run.transact(xa).unsafeRunSync()
-        resultInsert
-      case _ => 0
+    } catch {
+      case e: java.sql.SQLException =>{
+        println(s"Error create schema: ${e}")
+        Left(e)
+
+      }
     }
-    result
   }
 
-  def deleteAuthorById(xa: Aux[IO, Unit], key: Int): Id[Int] = {
-    val deleteOperation: ConnectionIO[Int] = sql"""delete from Author where id = $key""".update.run
-    val resultDelete: Int = deleteOperation.transact(xa).unsafeRunSync()
-    resultDelete
+
+  def createSchemaIntoMySqlB[A](xa: Aux[IO, Unit]): OperationDBResponse[Boolean] = {
+    val creator: ConnectionIO[Unit] = for {
+      _ <- dropAuthor
+      _ <- createAuthor
+    } yield ()
+
+    val creatorOperation = creator.attemptSql.map{
+      case Right(value) =>
+        Right(true)
+
+      case Left(ex) =>
+        Left(ex)
+    }
+
+    val transact = creatorOperation.transact(xa)
+    try {
+      transact.unsafeRunSync()
+
+    } catch {
+      case ex: Exception => Left(ex)
+    }
   }
 
-  def selectAuthorById(xa: Aux[IO, Unit], key: Int): Id[Option[String]] = {
-    val selectOperation: Query0[String] = sql"""select name from Author where id = $key""".query[String]
-    val listResult = selectOperation.stream.compile.toList.transact(xa).unsafeRunSync()
-    val result = Some(listResult.head)
-    result
+
+  def insertAuthorIntoMySql(xa: Aux[IO, Unit], author: Author): OperationDBResponse[Int] = {
+    val name = author.name
+    val insert =
+      sql"insert into Author (name) values ($name)"
+        .update
+        .withUniqueGeneratedKeys("id", "name")
+        .attemptSql.map{
+          case Right(value) => Right(1)
+          case Left(exception) => Left(exception) // Error: existiendo la conexión, la operación falla.
+        }
+
+    try{
+      insert.transact(xa).unsafeRunSync()
+    } catch {
+      case ex: Exception => Left(ex) // Error: No hay conexión, capturamos la excepción de error de conexión.
+    }
   }
 
+
+  def selectAuthorById(xa: Aux[IO, Unit], key: Int): OperationDBResponseOption[String] = {
+      val selectOperation: Query0[String] = sql"""select name from Author where id = $key""".query[String]
+      val selectResult =
+        selectOperation
+          .stream
+          .compile
+          .toList
+          .attemptSql.map{
+          case Right(value) => Right(Some(value.head))
+          case Left(ex) => Left(ex)
+           }
+
+      try{
+        selectResult.transact(xa).unsafeRunSync()
+      } catch {
+        case ex: Exception => Left(ex)
+      }
+  }
+
+
+  def deleteAuthorById(xa: Aux[IO, Unit], key: Int): OperationDBResponse[Int] = {
+    try{
+      val deleteOperation: ConnectionIO[Int] = sql"""delete from Author where id = $key""".update.run
+      Right(deleteOperation.transact(xa).unsafeRunSync())
+
+    } catch {
+      case ex: Exception =>
+        Left(ex)
+    }
+  }
 }
