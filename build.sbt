@@ -1,4 +1,6 @@
 import Dependencies._
+//import net.virtualvoid.sbt.graph.Plugin.graphSettings
+
 
 // "2.12.11"
 ThisBuild / scalaVersion     := "2.12.11"
@@ -120,8 +122,6 @@ lazy val doobieDependencies = Seq(
   doobie_hikari,
   mysql_connector_java,
   monix,
-//  doobie_postgres,
-//  postgresql,
   doobie_quill,
   doobie_spec2,
   doobie_scalatest

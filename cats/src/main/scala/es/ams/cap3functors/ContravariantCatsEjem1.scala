@@ -2,13 +2,12 @@ package es.ams.cap3functors
 
 
 
-
 object ContravariantCatsEjem1 extends App {
 
   // Ejemplos de Contramap
   def ejemplo1(): Unit = {
-    import cats.functor.Contravariant
     import cats.Show
+    import cats.functor.Contravariant
     import cats.instances.all._
 
     val showString = Show[String] // Definición de la categoría? inicial
@@ -43,9 +42,9 @@ object ContravariantCatsEjem1 extends App {
 
   def ejemplo2(): Unit = {
 
-    import cats.syntax.contravariant._
     import cats.Show
     import cats.instances.all._
+    import cats.syntax.contravariant._
 
     case class Symbol(name:String, numero:Int)
 
