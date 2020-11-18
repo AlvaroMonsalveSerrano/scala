@@ -1,13 +1,8 @@
 package es.ams.freemonaddoobie
 
-//import cats.~>
-//import cats.free.Free
-//import cats.free.Free.liftF
-//import cats.data.State
 import cats.effect.{Blocker, IO}
 import doobie.Transactor
 import doobie.util.ExecutionContexts
-//import doobie.util.transactor.Transactor.Aux
 
 import es.ams.freemonaddoobie.AuthorDSL._
 

@@ -9,7 +9,7 @@ import scala.collection.mutable.ListBuffer
   * FreeMomnad (Cont.)
   * ----------
   *
-  * https://typelevel.org/cats/datatypes/freemonad.html
+  *
   *
   * Composición de Free Monad.
   *
