@@ -28,6 +28,7 @@ lazy val basicScalacOptions = Seq(
    .aggregate(pf)
    .aggregate(catsEffect)
    .aggregate(catsFree)
+   .aggregate(ciris)
    .settings(
      name := "scala",
      scalacOptions ++= basicScalacOptions,
@@ -127,6 +128,26 @@ lazy val doobieDependencies = Seq(
   doobie_scalatest
 )
 
+
+lazy val ciris = (project in file("ciris"))
+  .settings(
+    name := "example-ciris",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    libraryDependencies ++=
+      cirisDependencies ++ Seq(
+        scalaTest
+      )
+  )
+
+lazy val cirisDependencies = Seq(
+  ciris_ciris
+  ,ciris_circe
+  ,ciris_enumeratum
+  ,ciris_refined
+  ,ciris_squants
+  ,ciris_refined_cats
+)
 
 lazy val assemblySettings = Seq(
   assemblyJarName in assembly := name.value + ".jar",

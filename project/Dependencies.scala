@@ -26,4 +26,11 @@ object Dependencies {
 
   lazy val monix = "io.monix" %% "monix" % "3.1.0"
 
+  lazy val ciris_ciris = "is.cir" %% "ciris" % "1.2.1"
+  lazy val ciris_circe = "is.cir" %% "ciris-circe" % "1.2.1"
+  lazy val ciris_enumeratum = "is.cir" %% "ciris-enumeratum" % "1.2.1"
+  lazy val ciris_refined = "is.cir" %% "ciris-refined" % "1.2.1"
+  lazy val ciris_squants = "is.cir" %% "ciris-squants" % "1.2.1"
+  lazy val ciris_refined_cats = "eu.timepit" %% "refined-cats" % "0.9.18"
+
 }
