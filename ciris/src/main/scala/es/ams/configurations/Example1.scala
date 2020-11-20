@@ -110,6 +110,29 @@ object Example1 extends IOApp {
   }
 
 
+  def exampleSource(): Unit = {
+
+    def env(name: String): ConfigValue[String] = {
+      ConfigValue.suspend {
+        val key = ConfigKey.env(name)
+        val value = System.getenv(name)
+
+        if (value != null) {
+          ConfigValue.loaded(key, value)
+        } else {
+          ConfigValue.missing(key)
+        }
+      }
+    }
+
+    val resultEnv: ConfigValue[String] = env("API_PORT")
+    val result: String = resultEnv.load[IO].unsafeRunSync()
+    println(s"Source result=${result}")
+    println()
+
+  }
+
+
   override def run(args: List[String]): IO[ExitCode] = {
     exampleLoadIntENV()
 
@@ -122,6 +145,8 @@ object Example1 extends IOApp {
     exampleDefaultValue2()
 
     exampleSecrets()
+
+    exampleSource()
 
     IO( println("End Example1") ).as(ExitCode.Success)
   }
