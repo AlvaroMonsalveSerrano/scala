@@ -1,20 +1,8 @@
 package es.ams.configurations
 
-
 import cats.effect.{ExitCode, IO, IOApp}
-//import cats.instances.option
 import cats.implicits._
 import ciris._
-//import ciris.refined._
-//import enumeratum.{CirisEnum, Enum, EnumEntry}
-//import eu.timepit.refined.api.Refined
-//import eu.timepit.refined.auto._
-//import eu.timepit.refined.cats._
-//import eu.timepit.refined.collection.MinSize
-//import eu.timepit.refined.string.MatchesRegex
-//import eu.timepit.refined.types.net.UserPortNumber
-//import eu.timepit.refined.types.string.NonEmptyString
-//import eu.timepit.refined.W
 
 import scala.concurrent.duration._
 
