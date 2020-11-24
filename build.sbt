@@ -84,6 +84,7 @@ lazy val catsFree = (project in file("cats-free"))
     libraryDependencies ++=
       catsFreeDependencies ++
       doobieDependencies ++
+      cirisDependencies ++
       catsEffectDependencies ++ Seq(
         scalaTest
 

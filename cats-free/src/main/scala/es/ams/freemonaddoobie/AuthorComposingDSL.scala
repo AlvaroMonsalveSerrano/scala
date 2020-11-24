@@ -1,47 +1,58 @@
 package es.ams.freemonaddoobie
 
-import cats.data.{EitherK}
+import cats.data.EitherK
 import cats.effect.{Blocker, IO}
 import cats.free.Free
 import cats.{Id, InjectK, ~>}
-
 import doobie.util.ExecutionContexts
 import doobie.Transactor
+import doobie.util.transactor.Transactor.Aux
+
 
 /**
-  * Ejemplo de compasición de Free Monads.
+  * Ejemplo de composición de Free Monads.
   *
   * AuthorComposingDSL define dos DSL: DBOperations, para las operaciones con la base de datos; y, LogOperations, para
   * las trazas de log.
   *
+  * Ejemplo de variables de entorno: DDBB_HOST=localhost;DDBB_PORT=3306;DDBB_USER=root;DDBB_PWD=root;
+  *
   */
 object AuthorComposingDSL {
 
+  val interpreter: DoobiePureComposingApp ~> OperationResponse = DBOperationsInterpreter or LogOperationsInterpreter
+
   type DoobiePureComposingApp[A] = EitherK[DBOperation, LogOperation, A]
+
+  type Response[A] = Either[Exception, A]
 
   type OperationResponse[A] = Id[A]
 
   // Definición de la gramática -------------------------------------
   sealed trait DBOperation[A]
-  case class CreateSchema() extends DBOperation[Either[Exception, Boolean]]
-  case class Insert(author: Author) extends DBOperation[Either[Exception, Int]]
-  case class Select(key: Int) extends DBOperation[Either[Exception, Option[String]]]
-  case class Delete(key: Int) extends DBOperation[Either[Exception, Int]]
+  case class Configure(xa: Aux[IO, Unit]) extends DBOperation[Response[Unit]]
+  case class CreateSchema() extends DBOperation[Response[Boolean]]
+  case class Insert(author: Author) extends DBOperation[Response[Int]]
+  case class Select(key: Int) extends DBOperation[Response[Option[String]]]
+  case class Delete(key: Int) extends DBOperation[Response[Int]]
 
   // Definición de la gramática -------------------------------------
   sealed trait LogOperation[A]
-  case class Info(msg: String) extends LogOperation[Either[Exception, Unit]]
-  case class Debug(msg: String) extends LogOperation[Either[Exception, Unit]]
+  case class Info(msg: String) extends LogOperation[Response[Unit]]
+  case class Debug(msg: String) extends LogOperation[Response[Unit]]
 
   // Definición del DSL DBOperations ---------------------------------
   class DBOperations[F[_]](implicit I: InjectK[DBOperation, F]){
-    def createSchema(): Free[F, Either[Exception, Boolean]] = Free.inject[DBOperation, F](CreateSchema())
 
-    def insert(elem: Author): Free[F, Either[Exception, Int]] = Free.inject[DBOperation, F](Insert(elem))
+    def configure(xa: Aux[IO, Unit]): Free[F, Response[Unit]] = Free.inject[DBOperation, F](Configure(xa))
 
-    def delete(key: Int): Free[F, Either[Exception, Int]] = Free.inject[DBOperation, F](Delete(key))
+    def createSchema(): Free[F, Response[Boolean]] = Free.inject[DBOperation, F](CreateSchema())
 
-    def select(key: Int): Free[F, Either[Exception, Option[String]]] = Free.inject[DBOperation, F](Select(key))
+    def insert(elem: Author): Free[F, Response[Int]] = Free.inject[DBOperation, F](Insert(elem))
+
+    def delete(key: Int): Free[F, Response[Int]] = Free.inject[DBOperation, F](Delete(key))
+
+    def select(key: Int): Free[F, Response[Option[String]]] = Free.inject[DBOperation, F](Select(key))
   }
   object DBOperations{
     implicit def dboperations[F[_]](implicit I: InjectK[DBOperation, F]) = new DBOperations[F]()
@@ -49,9 +60,9 @@ object AuthorComposingDSL {
 
 
   class LogOperations[F[_]](implicit I: InjectK[LogOperation, F]){
-      def infoLog(msg: String): Free[F, Either[Exception, Unit]] = Free.inject[LogOperation, F](Info(msg))
+      def infoLog(msg: String): Free[F, Response[Unit]] = Free.inject[LogOperation, F](Info(msg))
 
-      def debugLog(msg: String): Free[F, Either[Exception, Unit]] = Free.inject[LogOperation, F](Debug(msg))
+      def debugLog(msg: String): Free[F, Response[Unit]] = Free.inject[LogOperation, F](Debug(msg))
   }
   object LogOperations{
     implicit def logopearations[F[_]](implicit I: InjectK[LogOperation, F]) = new LogOperations[F]()
@@ -63,45 +74,49 @@ object AuthorComposingDSL {
 
     implicit val cs = IO.contextShift(ExecutionContexts.synchronous)
 
-    val xa = Transactor.fromDriverManager[IO](
-      "com.mysql.jdbc.Driver",
-      "jdbc:mysql://localhost:3306/doobie",
-      "root",
-      "root",
+    // TODO var -> val?
+    private var xa = Transactor.fromDriverManager[IO](
+      s"com.mysql.jdbc.Driver", s"jdbc:mysql://host:port/doobie", s"user", s"pwd",
       Blocker.liftExecutionContext(ExecutionContexts.synchronous) // just for testing
     )
 
     override def apply[A](fa: DBOperation[A]) = fa match {
 
+      case Configure(xaTransactor) => {
+        this.xa = xaTransactor
+        val result: OperationResponse[Response[Unit]] = Right(Unit)
+        result
+
+      }
+
       case CreateSchema() => {
-        val resultCreateSchema: Either[Exception, Boolean] = AuthorRepository.createSchemaIntoMySqlB(xa)
-        val result: OperationResponse[ Either[Exception, Boolean]] = resultCreateSchema
+        val resultCreateSchema: Response[Boolean] = AuthorRepository.createSchemaIntoMySqlB(xa)
+        val result: OperationResponse[ Response[Boolean]] = resultCreateSchema
         result
       }
 
       case Insert(author) =>{
-        val resultTask: Either[Exception, Int] = AuthorRepository.insertAuthorIntoMySql(xa, author)
-        val result: OperationResponse[Either[Exception, Int]] = resultTask
+        val resultTask: Response[Int] = AuthorRepository.insertAuthorIntoMySql(xa, author)
+        val result: OperationResponse[Response[Int]] = resultTask
         result
 
       }
 
       case Delete(key) => {
-        val resultTask: Either[Exception, Int] = AuthorRepository.deleteAuthorById(xa, key)
-        val result: OperationResponse[Either[Exception, Int]] = resultTask
+        val resultTask: Response[Int] = AuthorRepository.deleteAuthorById(xa, key)
+        val result: OperationResponse[Response[Int]] = resultTask
         (result)
       }
 
       case Select(key) => {
-        val resultTask: Either[Exception, Option[String]] = AuthorRepository.selectAuthorById(xa, key)
-        val result: OperationResponse[ Either[Exception, Option[String]]] = resultTask
+        val resultTask: Response[Option[String]] = AuthorRepository.selectAuthorById(xa, key)
+        val result: OperationResponse[Response[Option[String]]] = resultTask
         (result)
       }
 
     }
 
   }
-
 
   object LogOperationsInterpreter extends (LogOperation ~> OperationResponse){
 
@@ -109,18 +124,15 @@ object AuthorComposingDSL {
 
         case Info(msg) =>
           println(s"[*** INFO] ${msg}")
-          val result: OperationResponse[Either[Exception, Unit]] = Right(Unit)
+          val result: OperationResponse[Response[Unit]] = Right(Unit)
           result
 
         case Debug(msg) =>
           println(s"[*** DEBUG] ${msg}")
-          val result: OperationResponse[Either[Exception, Unit]] = Right(Unit)
+          val result: OperationResponse[Response[Unit]] = Right(Unit)
           result
     }
 
   }
-
-  val interpreter: DoobiePureComposingApp ~> OperationResponse = DBOperationsInterpreter or LogOperationsInterpreter
-
 
 }
