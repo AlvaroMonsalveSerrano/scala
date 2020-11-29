@@ -48,7 +48,7 @@ object ExampleDoobiePureComposing extends App{
   )
 
   def programBusiness(xa: Aux[IO, Unit])(implicit DB: DBOperations[DoobiePureComposingApp],
-                      L: LogOperations[DoobiePureComposingApp]): Free[DoobiePureComposingApp, Either[Exception, Option[String]]] = {
+                      L: LogOperations[DoobiePureComposingApp]): Free[DoobiePureComposingApp, Response[Option[String]]] = {
 
     import DB._
     import L._
