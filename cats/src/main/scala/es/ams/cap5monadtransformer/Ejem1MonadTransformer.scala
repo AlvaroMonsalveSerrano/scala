@@ -16,7 +16,7 @@ object Ejem1MonadTransformer extends App {
     println(s"-*-*- Ejemplo1 de OptionT -*-*-")
     val elem1: ListOption[Int] = 5.pure[ListOption]
     println(s"elem1: ListOption[Int]=${elem1}")
-    println
+    println()
 
     val resutlElem1 = for {
       elem <- elem1
@@ -26,11 +26,11 @@ object Ejem1MonadTransformer extends App {
     }
     println(s"resutlElem1=${resutlElem1}") // OJO, aquí no sacamos nada
     println(s"resutlElem1=${resutlElem1.value}")
-    println
+    println()
 
     val elem2: ListOption[Int] = 6.pure[ListOption]
     println(s"elem2: ListOption[Int]=${elem2}")
-    println
+    println()
 
     val sumElem1Elem2: ListOption[Int] = for {
       e1 <- elem1
@@ -41,7 +41,7 @@ object Ejem1MonadTransformer extends App {
       e1 + e2
     }
     println(s"sumElem1Elem2=${sumElem1Elem2}")
-    println
+    println()
 
   }
 

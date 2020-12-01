@@ -59,7 +59,7 @@ object Ejem2BasicCombinators extends App {
     println(s"Verificación 1. check(0)=${check(0)}")
     println(s"Verificación 1. check(5)=${check(5)}")
     println(s"Verificación 1. check(10)=${check(10)}")
-    println
+    println()
   }
 
 
@@ -81,7 +81,7 @@ object Ejem2BasicCombinators extends App {
     println(s"Verificación 1. bNothing(5)=${bNothing(5)}")
     println(s"Verificación 1. bNothing(10)=${bNothing(10)}")
 
-    println
+    println()
   }
 
 

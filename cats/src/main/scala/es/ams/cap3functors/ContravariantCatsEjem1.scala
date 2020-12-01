@@ -6,8 +6,9 @@ object ContravariantCatsEjem1 extends App {
 
   // Ejemplos de Contramap
   def ejemplo1(): Unit = {
-    import cats.Show
-    import cats.functor.Contravariant
+    import cats._
+//    import cats.implicits._
+//    import cats.functor.Contravariant
     import cats.instances.all._
 
     val showString = Show[String] // Definición de la categoría? inicial
@@ -15,28 +16,28 @@ object ContravariantCatsEjem1 extends App {
 
     println(s"-*-*- EJEMPLOS DE CONTRAMAP SIN SINTAXIS -*-*-")
     println(s"showString=${showString.show("Ejemplo de Show[String]")}")
-    println
+    println()
 
     println(s"showInt=${showInt.show(69)}")
-    println
+    println()
 
     case class Symbol(name:String, numero:Int)
 
     val showNameSymbol = Contravariant[Show].contramap(showString)((symbol:Symbol) => s"${symbol.name}" )
     println(s" Contramap Name Show=${showNameSymbol.show( Symbol("Martín", 7))} ")
-    println
+    println()
     println(s" Contramap Name Show=${showNameSymbol.show( Symbol("Martín", 7))} ")
-    println
+    println()
     println(s" Contramap Name Show=${showNameSymbol.show( Symbol("Natalia", 11)  )} ")
-    println
+    println()
 
     val showNumeroSymbol = Contravariant[Show].contramap(showString)( (symbol:Symbol) => s"${symbol.numero}" )
     println(s" Contramap Numero Show=${showNumeroSymbol.show( Symbol("Martín", 7))} ")
-    println
+    println()
     println(s" Contramap Numero Show=${showNumeroSymbol.show( Symbol("Martín", 7))} ")
-    println
+    println()
     println(s" Contramap Numero Show=${showNumeroSymbol.show( Symbol("Natalia", 11)  )} ")
-    println
+    println()
 
   }
 
@@ -55,9 +56,9 @@ object ContravariantCatsEjem1 extends App {
 
     println(s"-*-*- EJEMPLOS DE CONTRAMAP CON SINTAXIS -*-*-")
     println(s"Muestra name=${showName.show(Symbol("Martin",7))}")
-    println
+    println()
     println(s"Muestra numero=${showNumero.show(Symbol("Martin",7))}")
-    println
+    println()
 
   }
 

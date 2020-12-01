@@ -65,28 +65,28 @@ object Ejem5Validated extends App{
 
     val resultado1 = (valid1_1, valid1_2).tupled
     println(s"resultado1=${resultado1}")
-    println
+    println()
 
     val valid2_1:ValidatedForm[String] = Validated.fromEither(readName(formHtmlKO1))
     val valid2_2:ValidatedForm[Int] = Validated.fromEither(readAge(formHtmlKO1))
 
     val resultado2 = (valid2_1, valid2_2).tupled
     println(s"resultado2=${resultado2}")
-    println
+    println()
 
     val valid3_1:ValidatedForm[String] = Validated.fromEither(readName(formHtmlKO2))
     val valid3_2:ValidatedForm[Int] = Validated.fromEither(readAge(formHtmlKO2))
 
     val resultado3 = (valid3_1, valid3_2).tupled
     println(s"resultado3=${resultado3}")
-    println
+    println()
 
     val valid4_1:ValidatedForm[String] = Validated.fromEither(readName(formHtmlKO3))
     val valid4_2:ValidatedForm[Int] = Validated.fromEither(readAge(formHtmlKO3))
 
     val resultado4 = (valid4_1, valid4_2).tupled
     println(s"resultado4=${resultado4}")
-    println
+    println()
 
   println(s"1 ->${parseInt("campo")("34")}")
   println()

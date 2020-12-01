@@ -84,7 +84,7 @@ object AuthorComposingDSL {
 
       case Configure(xaTransactor) => {
         this.xa = xaTransactor
-        val result: OperationResponse[Response[Unit]] = Right(Unit)
+        val result: OperationResponse[Response[Unit]] = Right(())
         result
 
       }
@@ -124,12 +124,12 @@ object AuthorComposingDSL {
 
         case Info(msg) =>
           println(s"[*** INFO] ${msg}")
-          val result: OperationResponse[Response[Unit]] = Right(Unit)
+          val result: OperationResponse[Response[Unit]] = Right(())
           result
 
         case Debug(msg) =>
           println(s"[*** DEBUG] ${msg}")
-          val result: OperationResponse[Response[Unit]] = Right(Unit)
+          val result: OperationResponse[Response[Unit]] = Right(())
           result
     }
 

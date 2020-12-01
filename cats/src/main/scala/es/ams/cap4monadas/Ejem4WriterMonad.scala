@@ -44,7 +44,7 @@ object Ejem4WriterMonad extends App {
     val (log, result) = sumaPares(5)(esPar).run
     println(s"1.1 Log=${log}")
     println(s"1.2 Result=${result}")
-    println
+    println()
 
   }
 
@@ -80,7 +80,7 @@ object Ejem4WriterMonad extends App {
     val (log, result) = listaEnteros(lista)(esPar).run
     println(s"2.1 Log=${log}")
     println(s"2.2 Result=${result.split("").toList}") // Creación de la lista.
-    println
+    println()
 
   }
 

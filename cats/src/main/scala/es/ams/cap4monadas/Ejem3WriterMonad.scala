@@ -69,12 +69,12 @@ object Ejem3WriterMonad extends App {
     val (log, result) = factorialWM(5).run
     println(s"4.1 Log=${log}")
     println(s"4.2 Result=${result}")
-    println
+    println()
 
   }
 //
-//  ejemploMonoHilo
-//  ejemploMultiHilo
-  factorialWriterMonad
+//  ejemploMonoHilo()
+//  ejemploMultiHilo()
+  factorialWriterMonad()
 
 }

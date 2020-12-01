@@ -4,9 +4,9 @@ import doobie._
 import doobie.implicits._
 import doobie.util.ExecutionContexts
 import cats.effect._
-import cats.implicits._
+//import cats.implicits._
 
-import Fragments.{ in, whereAndOpt }
+//import Fragments.{ in, whereAndOpt }
 
 /**
  * Statement Fragments
@@ -81,7 +81,7 @@ object Example6StatementFragmentsDoobie extends App {
     val c = a ++ b // concatenation by ++
     // c: Fragment = Fragment("select name from country where code = 'POR' ") // concatenation by ++
 
-    c.query[String].unique.quick.unsafeRunSync
+    c.query[String].unique.quick.unsafeRunSync()
 
   }
 
@@ -95,11 +95,11 @@ object Example6StatementFragmentsDoobie extends App {
     def whereCode(s: String) = fr"where code = $s"
     val esp = whereCode("ESP")
     // esp: Fragment = Fragment("where code = ? ")
-    (fr"select name from country" ++ esp).query[String].quick.unsafeRunSync
+    (fr"select name from country" ++ esp).query[String].quick.unsafeRunSync()
 
     def count(table: String) =
       (fr"select count(*) from" ++ Fragment.const(table)).query[Int].unique
-    count("country").quick.unsafeRunSync
+    count("country").quick.unsafeRunSync()
 
   }
 
@@ -112,25 +112,27 @@ object Example6StatementFragmentsDoobie extends App {
 
     case class Info(name: String, code: String, population: Int)
 
-    def select(name: Option[String], pop: Option[Int], codes: List[String], limit: Long) = {
+    // TODO 2.13
+//    def select(name: Option[String], pop: Option[Int], codes: List[String], limit: Long) = {
+//
+//      // Three Option[Fragment] filter conditions.
+//      val f1 = name.map(s => fr"name LIKE $s")
+//      val f2 = pop.map(n => fr"population > $n")
+//      val f3 = codes.toNel.map(cs => in(fr"code", cs))
+//
+//      // Our final query
+//      val q: Fragment =
+//        fr"SELECT name, code, population FROM country" ++
+//          whereAndOpt(f1, f2, f3)                         ++
+//          fr"LIMIT $limit"
+//
+//
+//      // Construct a Query0
+//      q.query[Info]
+//
+//    }
 
-      // Three Option[Fragment] filter conditions.
-      val f1 = name.map(s => fr"name LIKE $s")
-      val f2 = pop.map(n => fr"population > $n")
-      val f3 = codes.toNel.map(cs => in(fr"code", cs))
-
-      // Our final query
-      val q: Fragment =
-        fr"SELECT name, code, population FROM country" ++
-          whereAndOpt(f1, f2, f3)                         ++
-          fr"LIMIT $limit"
-
-      // Construct a Query0
-      q.query[Info]
-
-    }
-
-    select(None, None, Nil, 10).stream.quick.unsafeRunSync
+//    select(None, None, Nil, 10).stream.quick.unsafeRunSync()
 
   }
 

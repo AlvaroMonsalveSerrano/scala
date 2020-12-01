@@ -21,7 +21,7 @@ object Ejem3EvalMonad extends App {
   println(s"Lista=$miLista")
 
   println(s"1 Suma de la lista= ${miFoldRight[Int, Int](miLista, 0)(_ + _)} ")
-  println
+  println()
 
 
   def miFoldRightEval[A, B](list: MiLista[A], empty: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = list match {
@@ -31,7 +31,7 @@ object Ejem3EvalMonad extends App {
 
   val miLista1 =  (1 to 10000).toList
   println(s"2 Suma de la lista= ${miFoldRightEval[Int, Int]( miLista, Eval.always(0))( (a: Int, b:Eval[Int]) =>  Eval.always(a + b.value) ).value } ")
-  println
+  println()
 
 
 
@@ -47,6 +47,6 @@ object Ejem3EvalMonad extends App {
 
   val miLista2 =  (1 to 10000000).toList
   println(s"3 Suma de la lista= ${mifoldRight( miLista2, 0L)( _ + _ ) } ")
-  println
+  println()
 
 }

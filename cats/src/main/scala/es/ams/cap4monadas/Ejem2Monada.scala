@@ -3,7 +3,6 @@ package es.ams.cap4monadas
 import cats.Monad
 import cats.syntax.functor._
 import cats.syntax.flatMap._
-import scala.language.higherKinds
 import cats.instances.all._
 
 
@@ -37,12 +36,12 @@ object Ejem2Monada extends App {
   def monadaFlatMapFor(): Unit = {
     val monadaOption = Monad[Option]
     println(s"sumaMonadica(Some(2), Some(3), Some(4))=${ sumaMonadica(monadaOption.pure(2), monadaOption.pure(3), monadaOption.pure(4)) }")
-    println
+    println()
     println(s"sumaMonadicaFor(Some(2), Some(3), Some(4))=${ sumaMonadicaFor(monadaOption.pure(2), monadaOption.pure(3), monadaOption.pure(4)) }")
-    println
+    println()
     // Si ponemos todo con Some no funciona.
     println(s"sumaMonadicaFor(Some(2), Some(3), Some(4))=${ sumaMonadicaFor(Option(2), Option(3), Option(4)) }")
-    println
+    println()
   }
 
 
@@ -50,9 +49,9 @@ object Ejem2Monada extends App {
     import cats.Id // type Id[A] = A
     val monadaId = Monad[Id]
     println(s"sumaMonadicaId(2, 3, 4)=${ sumaMonadica(monadaId.pure(2), monadaId.pure(3), monadaId.pure(4))}")
-    println
+    println()
     println(s"sumaMonadicaFor(2, 3, 4)=${ sumaMonadicaFor(monadaId.pure(2), monadaId.pure(3), monadaId.pure(4)) }")
-    println
+    println()
   }
 
   monadaFlatMapFor()

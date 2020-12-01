@@ -6,14 +6,14 @@ object PrintableContramap2App extends App{
 
   val numero3 = 3
   println(s"Conversión de un entero a String=${AA_BB(numero3)} ")
-  println
+  println()
 
   val numero4 = 4
   println(s"Conversión de un entero a String=${AA_BB(numero4)} ")
-  println
+  println()
 
   println(s"Conversión de un entero a String=${AA_BB(numero3) + AA_BB(numero4) } ")
-  println
+  println()
 
   println("-------------------------------------------------")
   val stringToInt = (elem:String) => elem.toInt
@@ -21,16 +21,13 @@ object PrintableContramap2App extends App{
 
   val string3 = "3"
   println(s"Conversión de un String a Int=${contramapIntToString.format(string3)  }")
-  println
+  println()
 
   val string4 = "4"
   println(s"Conversión de un String a Int=${ contramapIntToString.format(string4) }")
-  println
+  println()
 
   println(s"Conversión de un String a Int=${ contramapIntToString.format(string3) +  contramapIntToString.format(string4) }")
-  println
-
-
-
+  println()
 
 }

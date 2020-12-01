@@ -17,7 +17,7 @@ object MyFunctorApp extends App {
 
     val resultado1 = lista.transformador(funcion1)
     println(s"Transformador de List=${resultado1}")
-    println
+    println()
   }
 
   def transformadorOption(): Unit = {
@@ -26,10 +26,10 @@ object MyFunctorApp extends App {
 
     val resultado1 = option.transformador(funcion1)
     println(s"Transformador de Option=${resultado1}")
-    println
+    println()
   }
 
-  transformadorList
-  transformadorOption
+  transformadorList()
+  transformadorOption()
 
 }

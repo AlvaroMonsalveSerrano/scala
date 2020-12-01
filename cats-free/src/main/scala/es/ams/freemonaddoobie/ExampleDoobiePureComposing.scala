@@ -72,6 +72,6 @@ object ExampleDoobiePureComposing extends App{
   val result = programBusiness(xa).foldMap(interpreter)
 
   println(s"Result=${result}")
-  println
+  println()
 
 }

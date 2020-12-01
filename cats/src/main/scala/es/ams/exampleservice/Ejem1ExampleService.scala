@@ -9,7 +9,7 @@ import scala.util.Try
 import cats.data.EitherT
 import cats.implicits._
 
-import scala.language.postfixOps
+//import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
@@ -91,19 +91,19 @@ object Ejem1ExampleService extends App{
     val objService1 = Service.businessFunction1(paramTest1)
     val result1: List[OrderOutput] = objService1.run(startOrder)
     println(s"Result1=${result1}")
-    println
+    println()
 
     val paramTest2 = "ValueKO"
     val objService2 = Service.businessFunction1(paramTest2)
     val result2: List[OrderOutput] = objService2.run(startOrder)
     println(s"Result2=${result2}")
-    println
+    println()
 
 
     val objService3 = Service.businessFunction2("20", "4")
     val result3: List[OrderOutput] = objService3.run(startOrder)
     println(s"Result3=${result3}")
-    println
+    println()
 
 
   }

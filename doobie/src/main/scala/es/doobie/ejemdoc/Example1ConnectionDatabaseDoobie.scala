@@ -33,7 +33,7 @@ object Example1ConnectionDatabaseDoobie extends App{
     val program1 = 42.pure[ConnectionIO]
     val io = program1.transact(xa)
     println(s"program1 = ${io.unsafeRunSync()}")
-    println
+    println()
 
   }
 
@@ -54,7 +54,7 @@ object Example1ConnectionDatabaseDoobie extends App{
     val program2 = sql"select 42".query[Int].unique
     val io = program2.transact(xa)
     println(s"program2 = ${io.unsafeRunSync()}")
-    println
+    println()
 
   }
 
@@ -78,7 +78,7 @@ object Example1ConnectionDatabaseDoobie extends App{
 
     val io = program3.transact(xa)
     println(s"program3 = ${io.unsafeRunSync()}")
-    println
+    println()
 
 
     // Applicative functor
@@ -89,7 +89,7 @@ object Example1ConnectionDatabaseDoobie extends App{
     }
     val ioa = program3a.transact(xa)
     println(s"program3a = ${ioa.unsafeRunSync()}")
-    println
+    println()
 
     val valueList = program3a.replicateA(5)
     println(s"valueList=${valueList}")
@@ -116,7 +116,7 @@ object Example1ConnectionDatabaseDoobie extends App{
 
     val io3 = IO(null: java.sql.Connection) >>= kleisli.run
 
-    println(s"example4=${io3.unsafeRunSync}")
+    println(s"example4=${io3.unsafeRunSync()}")
   }
 
 

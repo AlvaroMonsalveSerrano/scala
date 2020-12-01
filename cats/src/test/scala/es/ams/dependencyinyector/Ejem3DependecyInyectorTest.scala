@@ -1,13 +1,15 @@
 package es.ams.dependencyinyector
 
 import cats.syntax.all._
-import es.ams.dependencyinyector.typesEjem3.{ GetComponent1, GetComponent2, ServiceContext} //
-import org.scalatest.{Matchers, WordSpec}
+import es.ams.dependencyinyector.typesEjem3.{GetComponent1, GetComponent2, ServiceContext}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.wordspec.AnyWordSpec
 
-class Ejem3DependecyInyectorTest extends WordSpec with Matchers {
+class Ejem3DependecyInyectorTest extends AnyWordSpec with Matchers {
 
 
-  "Example Mock" should {
+  "Example Mock" when {
 
     "Example OK" in {
 

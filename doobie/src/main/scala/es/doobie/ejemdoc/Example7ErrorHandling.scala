@@ -69,7 +69,7 @@ object Example7ErrorHandling extends App{
           id    SERIAL,
           name  varchar(250) not null unique
         )"""
-    ).traverse(_.update.quick).void.unsafeRunSync
+    ).traverse(_.update.quick).void.unsafeRunSync()
 
     case class Person(id: Long, name: String)
 
@@ -83,7 +83,7 @@ object Example7ErrorHandling extends App{
 
     // Insert KO
     try {
-      insert("bob").quick.unsafeRunSync
+      insert("bob").quick.unsafeRunSync()
     } catch {
       case e: java.sql.SQLException =>
         println(s"getMessage=${e.getMessage}")
@@ -94,9 +94,9 @@ object Example7ErrorHandling extends App{
     def safeInsert(valueName: String): ConnectionIO[Either[SQLException, Unit]] =
       insert(valueName).attemptSql
 
-    safeInsert("bob").quick.unsafeRunSync
+    safeInsert("bob").quick.unsafeRunSync()
     //   Left(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'bob' for key 'name')
-    safeInsert("steve").quick.unsafeRunSync
+    safeInsert("steve").quick.unsafeRunSync()
 
 
     // ok2
@@ -122,7 +122,7 @@ object Example7ErrorHandling extends App{
 
     val resultInsertRows: Either[String, Boolean] = insertRows.transact[IO](xa).unsafeRunSync()
     println(s"resultInsertRows=${resultInsertRows}")
-    println
+    println()
 
   }
 

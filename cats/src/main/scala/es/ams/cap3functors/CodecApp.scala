@@ -6,21 +6,21 @@ object CodecApp extends App {
 
   val cadenaJson = codifica[String]("cadena")
   println(s" codifica('cadena')=${cadenaJson} ")
-  println
+  println()
 
   val cadenaString1 = decodifica[String](cadenaJson)
   println(s" codifica('{cadena}')=${cadenaString1} ")
-  println
+  println()
 
 
   val ejem1 = codifica[Double](123.4)
   println(s" ejem1=${ejem1} ")
-  println
+  println()
 
 
   val ejem2 = decodifica[Double]("123.4")
   println(s" ejem2=${ejem2} ")
-  println
+  println()
 
 
   // Pendiente las pruebas d IMAP

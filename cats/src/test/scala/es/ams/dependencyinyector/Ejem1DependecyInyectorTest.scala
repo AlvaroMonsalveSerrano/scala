@@ -1,15 +1,17 @@
 package es.ams.dependencyinyector
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.wordspec.AnyWordSpec
 
 import es.ams.dependencyinyector.Ejem1DependecyInyector._
 
 import cats.syntax.all._
 
-class Ejem1DependecyInyectorTest extends WordSpec with Matchers {
+class Ejem1DependecyInyectorTest extends AnyWordSpec with Matchers {
 
 
-  "Example Mock" should {
+  "Example Mock" when {
 
     "Example OK" in {
         val msg: String = "prueba"

@@ -75,7 +75,7 @@ object Example9SQLArrays extends App {
           )
       """.update.quick
 
-    (drop *> create).unsafeRunSync
+    (drop *> create).unsafeRunSync()
 
   }
 

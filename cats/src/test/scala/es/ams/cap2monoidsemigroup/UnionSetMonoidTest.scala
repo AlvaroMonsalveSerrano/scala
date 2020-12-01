@@ -1,8 +1,10 @@
 package es.ams.cap2monoidsemigroup
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.flatspec.AnyFlatSpec
 
-class UnionSetMonoidTest extends FlatSpec with Matchers{
+class UnionSetMonoidTest extends AnyFlatSpec with Matchers{
 
 
   "Test de las leyes del Monoide UnionSetMonoid" should "cumple las leyes asociativas y de identidad" in {
@@ -11,7 +13,7 @@ class UnionSetMonoidTest extends FlatSpec with Matchers{
     import es.ams.cap2monoidsemigroup.UnionSetMonoid.Laws
     import es.ams.cap2monoidsemigroup.UnionSetMonoid.syntax._
 
-    val unionSet = emptySet[Int]
+    val unionSet = emptySet[Int]()
     val laws = Laws.apply
     assert( laws.asociatividad( unionSet, setTest1, setTest2) == true )
     assert( laws.identidadIzquierda(setTest1) == true )
@@ -24,7 +26,7 @@ class UnionSetMonoidTest extends FlatSpec with Matchers{
     val resultadoSet = Set(1,2,3,4,5,6)
     import es.ams.cap2monoidsemigroup.UnionSetMonoid.syntax._
 
-    assert( emptySet[Int] == Set.empty[Int] )
+    assert( emptySet[Int]() == Set.empty[Int] )
     assert( A__B(setTest1, setTest2).equals(resultadoSet) )
   }
 

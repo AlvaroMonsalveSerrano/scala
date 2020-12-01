@@ -70,7 +70,7 @@ object ExampleDoobieImpure extends App{
 
         println(s"getClass=${creator.getClass}")
 
-        val result: Id[Unit] = creator.transact(xa).unsafeRunSync
+        val result: Id[Unit] = creator.transact(xa).unsafeRunSync()
         result
       } // CreateSchema
 
@@ -106,7 +106,7 @@ object ExampleDoobieImpure extends App{
             delete from Book where id = $id
           """.update.run
 
-        deleteById(key).transact(xa).unsafeRunSync
+        deleteById(key).transact(xa).unsafeRunSync()
         ()
       }
 
@@ -128,7 +128,7 @@ object ExampleDoobieImpure extends App{
 
   val resultProgramCreate = programCreate.foldMap(impureInterpreter)
   println(s"Result program create =${resultProgramCreate}")
-  println
+  println()
 
   def programInser: OperationDoobie[Int] = for {
     numInserted4 <- insert(Book(4, "Book4"))
@@ -140,6 +140,6 @@ object ExampleDoobieImpure extends App{
   }
   val resultProgramInser = programInser.foldMap(impureInterpreter)
   println(s"ProgramInser=${resultProgramInser}")
-  println
+  println()
 
 }

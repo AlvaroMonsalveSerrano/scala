@@ -15,12 +15,12 @@ object Ejem1BasicCombinators extends App{
 
     val ejem1 = semigroup.combine( List("Ejemplo1 Monoid"), List("Ejemplo2 Monoid") )
     println(s"Resultado ejem1 con Monoid=${ejem1}")
-    println
+    println()
 
 
     val ejem2 = List("Ejemplo1 semigroup") |+| List("Ejemplo2 semigroup")
     println(s"Resultado ejem2 con Semigroup=${ejem2}")
-    println
+    println()
   }
 
   ejemplo1()

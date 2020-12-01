@@ -52,17 +52,17 @@ object EjemEither2Monada extends App{
     val result1 = monadError.pure(42)
     println(s"result1=${result1}")
     println(s"${result1.getClass}") // Retorna de ErrorOr
-    println
+    println()
 
     val failure = monadError.raiseError("Error de prueba")
     println(s"failure=${failure}")
     println(s"${failure.getClass}") // Retorna de ErrorOr
-    println
+    println()
 
     val failure2 = monadError.raiseError("Error 2 de prueba")
     println(s"failure=${failure2}")
     println(s"${failure2.getClass}") // Retorna de ErrorOr
-    println
+    println()
 
     val resultHandle = monadError.handleError(failure){
       case "Error de prueba" => monadError.pure("Error controlado?")
@@ -70,7 +70,7 @@ object EjemEither2Monada extends App{
     }
     println(s"resultHandle=${resultHandle}")
     println(s"${resultHandle.getClass}") // Retorna de ErrorOr
-    println
+    println()
 
 
     val resultHandle2 = monadError.handleError(failure2){
@@ -79,7 +79,7 @@ object EjemEither2Monada extends App{
     }
     println(s"resultHandle=${resultHandle2}")
     println(s"${resultHandle2.getClass}") // Retorna de ErrorOr
-    println
+    println()
 
     // Con ensure, definimos un predicado que se tiene que cumplir.
 

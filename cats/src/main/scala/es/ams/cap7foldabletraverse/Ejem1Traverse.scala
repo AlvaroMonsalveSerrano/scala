@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 import cats.syntax.applicative._
 import cats.syntax.apply._
 
-import scala.language.higherKinds
+//import scala.language.higherKinds
 
 object Ejem1Traverse extends App {
 
@@ -88,7 +88,7 @@ object Ejem1Traverse extends App {
     val resultExample1 = myTraverse(listExample1)(getFutureTest)
     println(s"--Ejemplo1--")
     println(s"myTraverse(List ('a', 'aa', 'aaa'))-->${Await.result( resultExample1, 5.seconds )}")
-    println
+    println()
   }
 
 
@@ -101,7 +101,7 @@ object Ejem1Traverse extends App {
     val resultExample2 = mySequence(listExampleSequence1)
     println(s"--Ejemplo2--")
     println(s"myTraverse(List (Future('a'), Future('aa'), Future('aaa'))-->${Await.result( resultExample2, 5.seconds )}")
-    println
+    println()
   }
 
 
@@ -112,7 +112,7 @@ object Ejem1Traverse extends App {
     val result1:Future[List[Int]] = Traverse[List].sequence(listExampleSequence1)
     println(s"--Ejemplo2_1--")
     println(s"myTraverse(List (Future('a'), Future('aa'), Future('aaa'))-->${Await.result( result1, 5.seconds )}")
-    println
+    println()
   }
 
   def example3(): Unit = {
@@ -124,9 +124,9 @@ object Ejem1Traverse extends App {
 
     println(s"--Ejemplo3--")
     println(s"process(List(2,4,6))==>>${process(List(2,4,6))}")
-    println
+    println()
     println(s"process(List(1,2,3))==>>${process(List(1,2,3))}")
-    println
+    println()
   }
 
 
@@ -150,11 +150,11 @@ object Ejem1Traverse extends App {
 
     println(s"--Ejemplo4--")
     println(s"process(List(2,4,6))==>>${process(List(2,4,6))}")
-    println
+    println()
     println(s"process(List(1,2,3))==>>${process(List(1,2,3))}")
-    println
+    println()
     println(s"process(List(2,4,5,6))==>>${process(List(2,4,5,6))}")
-    println
+    println()
 
   }
 
@@ -167,12 +167,12 @@ object Ejem1Traverse extends App {
     val listExample1 = List ("a", "aa", "aaa")
     val result1:Future[List[Int]] = Traverse[List].traverse(listExample1)(getFutureTest)
     println(s"Traverse1=${Await.result( result1, 2.seconds )}")
-    println
+    println()
 
     val listExampleSequence1 = List( Future(1), Future(2), Future(3))
     val result2: Future[List[Int]] = Traverse[List].sequence(listExampleSequence1)
     println(s"Sequence1=${Await.result( result2, 2.seconds )}")
-    println
+    println()
 
 
   }

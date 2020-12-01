@@ -4,7 +4,7 @@ import java.io.{BufferedReader, File, FileReader}
 
 import cats.effect.{Blocker, ContextShift, ExitCode, IO, IOApp, Resource, Sync}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
 
 /**
@@ -57,7 +57,7 @@ object ExampleBlocker3Resource extends IOApp{
 
 
   def convertIteratorToList(stream: java.util.Iterator[String]): List[String] = {
-    asScalaIterator(stream).toList
+    stream.asScala.toList
   }
 
 }

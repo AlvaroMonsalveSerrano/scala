@@ -22,7 +22,7 @@ object Ejemplo2WriterMonad extends App{
     val (log, result) = writer1.run
     println(s"Log=${log}")
     println(s"Result=${result}")
-    println
+    println()
 
 
     println("--- Transformación de los mensajes con mapWritter ---")
@@ -30,7 +30,7 @@ object Ejemplo2WriterMonad extends App{
     val (log2, result2) = writer2.run
     println(s"Log2=${log2}")
     println(s"Result2=${result2}")
-    println
+    println()
 
 
     // Transformación de los mensajes y el resultado con f. bimap
@@ -42,7 +42,7 @@ object Ejemplo2WriterMonad extends App{
     val (log3, result3) = writer3.run
     println(s"Log3=${log3}")
     println(s"Result3=${result3}")
-    println
+    println()
 
 
     // Transformación de los mensajes y el resultado con f. bimap
@@ -55,14 +55,14 @@ object Ejemplo2WriterMonad extends App{
     val (log4, result4) = writer4.run
     println(s"Log4=${log4}")
     println(s"Result4=${result4}")
-    println
+    println()
 
     println("--- Función reset ---")
     val writer5 = writer1.reset
     val (log5, result5) = writer5.run
     println(s"Log5=${log5}")
     println(s"Result5=${result5}")
-    println
+    println()
 
 
     println("--- Función swap, Calbia (m, r) => (r, m) ---")
@@ -70,9 +70,9 @@ object Ejemplo2WriterMonad extends App{
     val (log6, result6) = writer6.run
     println(s"Log6=${log6}")
     println(s"Result6=${result6}")
-    println
+    println()
   }
 
-  ejemplo1
+  ejemplo1()
 
 }

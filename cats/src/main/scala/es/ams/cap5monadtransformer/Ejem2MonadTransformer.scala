@@ -1,6 +1,5 @@
 package es.ams.cap5monadtransformer
 
-import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
 import scala.util.Try
@@ -46,10 +45,10 @@ object Ejem2MonadTransformer extends App{
 
     println(s"-*- exampleEither1() -*-")
     println(s"Ejemplo1=${divisionProgram("4", "2")}")
-    println
+    println()
 
     println(s"Ejemplo2=${divisionProgram("a", "b")}")
-    println
+    println()
 
   }
 
@@ -73,11 +72,11 @@ object Ejem2MonadTransformer extends App{
     println(s"-*- exampleFutureEither() -*-")
     val result1 = Await.result(divisionProgramAsync("4", "2"), timeout.duration)
     println(s"Ejemplo1=${result1}")
-    println
+    println()
 
     val result2 = Await.result(divisionProgramAsync("a", "b"), timeout.duration)
     println(s"Ejemplo2=${result2}")
-    println
+    println()
   }
 
   def exampleEiitherT(): Unit = {
@@ -94,7 +93,7 @@ object Ejem2MonadTransformer extends App{
     println(s"-*- exampleFutureEitherT() -*-")
     val result1 = Await.result(divisionProgramAsyncEitherT("4", "2").value, timeout.duration)
     println(s"Ejemplo1=${result1}")
-    println
+    println()
 
   }
 

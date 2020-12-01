@@ -11,7 +11,7 @@ object Ejem2EvalMonad extends App{
       .always{ println("Paso 1"); "Hello"}
       .map{ str => println("Paso 2"); s"${str} world"  }
     println(greeting.value)
-    println
+    println()
 
   }
 
@@ -26,9 +26,9 @@ object Ejem2EvalMonad extends App{
       a + b
     }
     println(s"Calculo1=${ans.value}")
-    println
+    println()
     println(s"Calculo2=${ans.value}")
-    println
+    println()
 
   }
 
@@ -43,9 +43,9 @@ object Ejem2EvalMonad extends App{
       .map{ str => println("Paso 3"); s"${str} la alfombra" }
 
     println(s"Calculo1=${saying.value}")
-    println
+    println()
     println(s"Calculo2=${saying.value}")
-    println
+    println()
 
   }
 
@@ -87,8 +87,8 @@ object Ejem2EvalMonad extends App{
 
   }
 
-  ejemplo1
-  ejemplo2
-  ejemplo3
-  ejemplo4
+  ejemplo1()
+  ejemplo2()
+  ejemplo3()
+  ejemplo4()
 }

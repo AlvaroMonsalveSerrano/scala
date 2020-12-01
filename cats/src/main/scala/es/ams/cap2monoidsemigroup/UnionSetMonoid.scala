@@ -37,8 +37,8 @@ trait UnionSetMonoidLaws{
     implicit val instances: UnionSetMonoid[A]
 
     def asociatividad(e1: Set[A], e2:Set[A], e3:Set[A]): Boolean = A__B(A__B(e1, e2), e3) == A__B(e1, A__B(e2, e3))
-    def identidadIzquierda(e1:Set[A]): Boolean = A__B( e1, emptySet[A] ) == e1
-    def identidadDerecha(e1:Set[A]): Boolean = A__B( emptySet[A], e1 ) == e1
+    def identidadIzquierda(e1:Set[A]): Boolean = A__B( e1, emptySet[A]() ) == e1
+    def identidadDerecha(e1:Set[A]): Boolean = A__B( emptySet[A](), e1 ) == e1
   }
 
   object Laws{

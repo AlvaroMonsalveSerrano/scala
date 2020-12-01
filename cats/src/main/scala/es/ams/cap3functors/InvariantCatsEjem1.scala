@@ -18,17 +18,17 @@ object InvariantCatsEjem1 extends App {
     val monoidSymbol = Monoid[Symbol].empty
 
     println(s"monoidSymbol=${ monoidSymbol } ")
-    println
-    println(s"Símbolo básico=${ 'SymbolEjem1 } ")
-    println
+    println()
+    println(s"Símbolo básico=${"SymbolEjem1"} ")
+    println()
 
-    val symbolFromString = 'SymbolEjem1 |+| 'paraProbar |+| 'cosasInvariantes
+    val symbolFromString = "SymbolEjem1" |+| "paraProbar" |+| "cosasInvariantes"
     println(s"symbolFromString= ${ symbolFromString } ")
     println(s"getClass= ${ symbolFromString.getClass } ")
-    println
+    println()
 
     println(s"monoidSymbol=${ "stringToImap" |+| "Imap"} ")
-    println
+    println()
 
   }
 

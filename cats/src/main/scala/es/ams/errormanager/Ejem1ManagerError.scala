@@ -60,7 +60,7 @@ object Ejem1ManagerError extends App{
     case Failure(error) => error
   }
   println(s"Resultado1=${result1}")
-  println
+  println()
 
 
   val result2 = doBusinessService("") match {
@@ -68,7 +68,7 @@ object Ejem1ManagerError extends App{
     case Failure(error) => error
   }
   println(s"Resultado2=${result2}")
-  println
+  println()
 
 
 

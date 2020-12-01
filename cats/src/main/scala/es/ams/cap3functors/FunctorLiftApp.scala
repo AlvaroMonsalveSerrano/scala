@@ -12,7 +12,7 @@ object FunctorLiftApp extends App {
     val funcionLift = Functor[List].lift(funcion1)
 
     println(s"Lift de List(1,2)=${funcionLift(List(1,2))}")
-    println
+    println()
   }
 
   def ejemploFuncionLiftDeOption(): Unit = {
@@ -21,12 +21,12 @@ object FunctorLiftApp extends App {
     val funcionLift = Functor[Option].lift(funcion1)
 
     println(s"Lift de Option(1,2)=${funcionLift(Option(1))}")
-    println
+    println()
   }
 
 
 
-  ejemploFuncionLiftDeList
-  ejemploFuncionLiftDeOption
+  ejemploFuncionLiftDeList()
+  ejemploFuncionLiftDeOption()
 
 }

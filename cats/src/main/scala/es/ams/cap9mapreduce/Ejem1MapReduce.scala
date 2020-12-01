@@ -8,7 +8,7 @@ import cats.syntax.all._
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import scala.language.postfixOps
+//import scala.language.postfixOps
 import akka.util.Timeout
 
 
@@ -33,11 +33,11 @@ object Ejem1MapReduce extends App {
     println(s"-- Ejemplo1 --")
     val dataInputInt = Vector(1, 2, 3, 4)
     println(s"FoldMap=${foldMap(dataInputInt)(intToString)}")
-    println
+    println()
 
     val dataInputString = Vector("1", "2", "3", "4")
     println(s"FoldMap=${foldMap(dataInputString)(stringToInt)}")
-    println
+    println()
   }
 
   /**
@@ -48,13 +48,13 @@ object Ejem1MapReduce extends App {
     println(s"-- Ejemplo2 --")
     val dataInputInt = Vector(1, 2, 3, 4)
     println( s"FolMap Foldable=${Foldable[Vector].foldMap(dataInputInt)(identity)}" )
-    println
+    println()
     val dataInputString = Vector("1", "2", "3", "4")
     println(s"FoldMap Foldable=${Foldable[Vector].foldMap(dataInputString)(identity)}")
-    println
+    println()
     val dataFromString: Vector[Char] = "Esto es un mensaje desde un String".toVector
     println(s"FoldMap Foldable=${Foldable[Vector].foldMap(dataFromString)(  (elem:Char) => elem.toString.toUpperCase() )}")
-    println
+    println()
   }
 
   /**
@@ -69,10 +69,10 @@ object Ejem1MapReduce extends App {
     println(s"-- Ejemplo3 --")
     val dataInputInt = Vector(1, 2, 3, 4)
     println( s"FolMap Foldable=${myFoldMap(dataInputInt)((elem:Int) => elem.toString)}")
-    println
+    println()
     val dataInputString = Vector("1", "2", "3", "4")
     println( s"FolMap Foldable=${myFoldMap(dataInputString)((elem:String) => elem.toInt)}")
-    println
+    println()
   }
 
 
@@ -87,7 +87,7 @@ object Ejem1MapReduce extends App {
   def ejemplo4(): Unit = {
     println(s"-- Ejemplo4 --")
     println( s"Número de procesadores=${Runtime.getRuntime.availableProcessors}" )
-    println
+    println()
   }
 
 
@@ -104,7 +104,7 @@ object Ejem1MapReduce extends App {
     println(s"Lista de datos particionados en 3(Vector)=${resultVectorGrouped}")
     val resultVectorGroupedRuntime = (1 to 10).toVector.grouped(Runtime.getRuntime.availableProcessors).toList
     println(s"Lista de datos particionados en 3(Vector)=${resultVectorGroupedRuntime}")
-    println
+    println()
   }
 
   /**
@@ -141,7 +141,7 @@ object Ejem1MapReduce extends App {
 
     println(s"-- Ejemplo6 --")
     println(s"Result Map-Reduce=${Await.result(result, 1.second)}")
-    println
+    println()
 
   }
 
@@ -179,7 +179,7 @@ object Ejem1MapReduce extends App {
 
     println(s"-- Ejemplo7 --")
     println(s"Result Map-Reduce=${Await.result(result, 1.second)}")
-    println
+    println()
 
   }
 

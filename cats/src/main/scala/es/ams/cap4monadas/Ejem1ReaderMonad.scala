@@ -23,7 +23,7 @@ object Ejem1ReaderMonad extends App {
     // Uso de una Reader.
     println(s"--- EJEMPLO 1: Creación ---")
     println(s"Nombre de gato=${catName.run(Cat("Gatito", "Comida de gatito"))} ")
-    println
+    println()
 
   }
 
@@ -40,7 +40,7 @@ object Ejem1ReaderMonad extends App {
 
     println(s"--- EJEMPLO 2: composición de funciones con map---")
     println(s"Composicion función=${saludo.run(Cat("Gato2", "Comida 2"))}")
-    println
+    println()
 
   }
 
@@ -69,7 +69,7 @@ object Ejem1ReaderMonad extends App {
 
     println(s"--- EJEMPLO 3: combinaciones de Reader ---")
     println(s"Combinación de Reader=${saludoYalimentoGato(Cat("Gato3","Comida de gatito3"))}" )
-    println
+    println()
 
   }
 

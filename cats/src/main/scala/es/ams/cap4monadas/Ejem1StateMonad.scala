@@ -28,17 +28,17 @@ object Ejem1StateMonad extends App {
     // Retorna es estado y el resultado
     val (state, result) = a.run(10).value
     println(s"run() estado y resultado: Estado=${state} y el resultado=${result}")
-    println
+    println()
 
     // Retorna solo el estado
     val state2 = a.runS(10).value
     println(s"runS() solo el estado=${state2}")
-    println
+    println()
 
     // Retorna solo el resultado.
     val resultado2 = a.runA(10).value
     println(s"runA() solo el resultado=${resultado2}")
-    println
+    println()
 
   }
 
@@ -74,7 +74,7 @@ object Ejem1StateMonad extends App {
 
     val (state, result) = both.run(20).value
     println(s"run() Combinación de State: Estado=${state} y el resultado=${result}")
-    println
+    println()
 
   }
 
@@ -94,23 +94,24 @@ object Ejem1StateMonad extends App {
     println(s"--- EJEMPLO3: ejemplo de funciones de State ---")
     val getDemo = State.get[Int]
     println(s"getDemo=${getDemo.run(10).value}")
-    println
+    println()
 
     val setDemo = State.set[Int](30)
     println(s"setDemo=${setDemo.run(10).value}")
-    println
+    println()
 
     val pureDemo = State.pure[Int, String]("Result")
     println(s"pureDemo=${pureDemo.run(10).value}")
-    println
+    println()
 
-    val inspectDemo = State.inspect[Int, String](_ + "!") // OJO! Transforma el estado en un resultado de salida.
-    println(s"inspectDemo=${inspectDemo.run(10).value}")
-    println
+// TODO 2.13
+//    val inspectDemo = State.inspect[Int, String](_ + "!") // OJO! Transforma el estado en un resultado de salida.
+//    println(s"inspectDemo=${inspectDemo.run(10).value}")
+//    println()
 
     val modifyDemo = State.modify[Int](_ + 1) // OJO! Transforma el estado en un resultado de salida.
     println(s"modifyDemo=${modifyDemo.run(10).value}")
-    println
+    println()
 
   }
 
@@ -137,7 +138,7 @@ object Ejem1StateMonad extends App {
 
     val (state, result) = program.run(1).value
     println(s"run() For comprehension: Estado=${state} y el resultado=${result}")
-    println
+    println()
 
   }
 

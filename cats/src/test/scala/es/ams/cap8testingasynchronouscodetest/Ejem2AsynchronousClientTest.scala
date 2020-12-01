@@ -2,25 +2,26 @@ package es.ams.cap8testingasynchronouscodetest
 
 import cats.Id
 import es.ams.cap8testingasynchronouscode.Ejem2AsynchronousClient.{UptimeClientFuture, UptimeClientId, UptimeService2}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.wordspec.AnyWordSpec
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
-import scala.language.postfixOps
 
 import akka.util.Timeout
 
 import cats.implicits._
 
-class Ejem2AsynchronousClientTest extends WordSpec with Matchers {
+class Ejem2AsynchronousClientTest extends AnyWordSpec with Matchers {
 
   val listHostNames = List("10", "20")
   val listHostNamesIncorrect = List("10", "20", "", "hostError")
   implicit val timeout = Timeout(2 seconds)
 
-  "Test del libro del cliente asíncrono: prueba síncrona" should {
+  "Test del libro del cliente asíncrono: prueba síncrona" when {
     "prueba con una lista de host correctos el cliente síncrono" in {
         val cliente = UptimeClientId
         val service = new UptimeService2[Id](cliente)
@@ -39,7 +40,7 @@ class Ejem2AsynchronousClientTest extends WordSpec with Matchers {
     }
   }
 
-  "Test del libro del cliente asíncrono: prueba Asíncrona" should {
+  "Test del libro del cliente asíncrono: prueba Asíncrona" when {
     "prueba con una lista de host correctos el cliente Asíncrono" in {
       val cliente = UptimeClientFuture
       val service = new UptimeService2[Future](cliente)

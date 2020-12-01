@@ -79,12 +79,12 @@ object Ejem3Kleisli extends App{
 
   def ejemplo1BasicList(): Unit = {
     println(s"-*- ejemplo1BasicList() -*-")
-    val elem = Trading3Generic[List].clientOrder andThen Trading3Generic[List].execute(Market("Market"), Account("Account"))
+    val elem = Trading3Generic[List].clientOrder() andThen Trading3Generic[List].execute(Market("Market"), Account("Account"))
     println(s"-->${elem.run(ClientOrder("ClienteOrderPrueba"))}")
 
-    val elem2 = Trading3Generic[Option].clientOrder andThen Trading3Generic[Option].execute(Market("Market"), Account("Account"))
+    val elem2 = Trading3Generic[Option].clientOrder() andThen Trading3Generic[Option].execute(Market("Market"), Account("Account"))
     println(s"-->${elem2.run(ClientOrder("ClienteOrderPrueba"))}")
-    println
+    println()
   }
 
 
@@ -104,7 +104,7 @@ object Ejem3Kleisli extends App{
 
     val elem2 = clientOrder[Option] andThen execute[Option](Market("Market"), Account("Account"))
     println(s"-->${elem2.run(ClientOrder("ClienteOrderPrueba"))}")
-    println
+    println()
   }
 
   ejemplo1BasicList()

@@ -3,7 +3,7 @@ package es.ams.dependencyinyector
 import cats.data.Reader
 import cats.syntax.either._
 
-import scala.language.higherKinds
+//import scala.language.higherKinds
 
 object typesEjem3{
   type MensajeError = String
@@ -57,8 +57,8 @@ trait Service3[F[_]]{
 object ServiceImpl extends Service3[typesEjem3.ServiceOperation]{
   override def doBusiness(msg: typesEjem3.ParameterString): typesEjem3.ServiceOperation[Either[typesEjem3.MensajeError, String]] = Reader{ ctx =>
         for{
-          response1 <- ctx.funcComponent1(msg).right
-          response2 <- ctx.funcComponent2(msg.length).right
+          response1 <- ctx.funcComponent1(msg)
+          response2 <- ctx.funcComponent2(msg.length)
         }yield{
           response1 + "-" + response2
         }
@@ -75,7 +75,7 @@ object Ejem3DependencyInyector extends App{
       case Right(msg) => println(s"Test1=${msg}")
       case Left(error) => println(error)
     }
-    println
+    println()
   }
 
   ejemplo1()

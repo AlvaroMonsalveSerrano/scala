@@ -28,7 +28,7 @@ object Ejem2WriterMonad extends App{
     val (log, result) = writer1.run
     println(s"1.1 Log=${log}")
     println(s"1.2 Result=${result}")
-    println
+    println()
 
   }
 
@@ -53,7 +53,7 @@ object Ejem2WriterMonad extends App{
     val (log, result) = writer2.run
     println(s"2.1 Log=${log}")
     println(s"2.2 Result=${result}")
-    println
+    println()
 
   }
 
@@ -73,7 +73,7 @@ object Ejem2WriterMonad extends App{
     val (log, result) = writer3.run
     println(s"3.1 Log=${log}")
     println(s"3.2 Result=${result}")
-    println
+    println()
 
   }
 
@@ -94,7 +94,7 @@ object Ejem2WriterMonad extends App{
     val (log, result) = writer4.run
     println(s"4.1 Log=${log}")
     println(s"4.2 Result=${result}")
-    println
+    println()
 
   }
 
@@ -106,12 +106,12 @@ object Ejem2WriterMonad extends App{
     println(s"MÓNADA INICIAL:")
     println(s"5.1 Log=${log}")
     println(s"5.2 Result=${result}")
-    println
+    println()
     val (log2, result2) = writer5.reset.run
     println(s"MÓNADA POST-RESET:")
     println(s"5.1 Log=${log2}")
     println(s"5.2 Result=${result2}")
-    println
+    println()
 
   }
 
@@ -127,15 +127,15 @@ object Ejem2WriterMonad extends App{
     println(s"MÓNADA INICIAL:")
     println(s"6.1 Log=${log}")
     println(s"6.2 Result=${result}")
-    println
+    println()
 
   }
 
-  ejemplo1
-  ejemplo2
-  ejemplo3
-  ejemplo4
-  ejemplo5
-  ejemplo6
+  ejemplo1()
+  ejemplo2()
+  ejemplo3()
+  ejemplo4()
+  ejemplo5()
+  ejemplo6()
 
 }

@@ -14,18 +14,18 @@ object EjemEither1Monada extends App {
       a + b
     }
     println(s"Resultado2.12=${result212}")
-    println
+    println()
 
     // Con Scala 2.11
     val result211 = for{
-      a <- either1.right
-      b <- either2.right
+      a <- either1 //.right
+      b <- either2 //.right
     }yield{
       a + b
     }
 
     println(s"Resultado2.11=${result211}")
-    println
+    println()
   }
 
   def eitherEjem1Cats(): Unit = {
@@ -41,7 +41,7 @@ object EjemEither1Monada extends App {
     }yield{ a + b }
 
     println(s"Resultado Cats=${result1}")
-    println
+    println()
   }
 
   def eitherMetodos(): Unit = {
@@ -51,15 +51,15 @@ object EjemEither1Monada extends App {
 
     val result1 = Either.catchOnly[NumberFormatException]( "ERROR!".toInt )
     println(s"result1=${result1}")
-    println
+    println()
     val result2 = Either.catchOnly[NumberFormatException]( "69".toInt )
     println(s"resul2=${result2}")
-    println
+    println()
 
 
     val result3: Either[Throwable, Nothing] = Either.catchNonFatal( sys.error("SYSTEM ERROR") )
     println(s"result3=${result3}")
-    println
+    println()
 
   }
 
@@ -70,11 +70,11 @@ object EjemEither1Monada extends App {
 
     val result1: Either[String, Int] = Either.fromOption[String, Int]( None, "Error")
     println(s"result1=${result1}")
-    println
+    println()
 
     val result2: Either[String, Int] = Either.fromOption[String, Int]( Option(90), "Error")
     println(s"result1=${result2}")
-    println
+    println()
 
   }
 

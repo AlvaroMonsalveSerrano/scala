@@ -10,14 +10,14 @@ object Ejem1Foldable extends App{
   def ejemplo1Foldright(): Unit = {
     println(s"1.- foldRight=${ List(1,2,3).foldRight(List.empty[Int])( (e, acc) => e :: acc) }")
     println(s"2.- foldRight=${ List(1,2,3).foldRight(0)( (e, acc) => e + acc ) }")
-    println
+    println()
   }
 
 
   def ejemplo1Foldleft(): Unit = {
     println(s"1.- foldLeft=${ List(1,2,3).foldLeft(List.empty[Int])((acc, e) => e :: acc) }")
     println(s"2.- foldLeft=${ List(1,2,3).foldLeft(0)( (acc, e) => acc + e ) }")
-    println
+    println()
   }
 
 
@@ -32,7 +32,7 @@ object Ejem1Foldable extends App{
       list.foldRight(numeric.zero)(numeric.plus)
 
     println(s"Suma con Numeric=${sumaConNumeric(List(1, 2, 3, 4))}")
-    println
+    println()
   }
 
 
@@ -44,7 +44,7 @@ object Ejem1Foldable extends App{
       list.foldRight(monoid.empty)(monoid.combine)
 
     println(s"Suma con Momoid=${sumaConMonoid(List(1, 2, 3, 4))}")
-    println
+    println()
 
   }
 
@@ -55,14 +55,14 @@ object Ejem1Foldable extends App{
 
     val elemFilter2: Int = 5
     println(s"List(1, 2, 3, 4) existe el 5?=${List(1, 2, 3, 4).foldRight(false)( (elem, resul) => resul || elem.equals(elemFilter2))}")
-    println
+    println()
 
     def myfilter[A](list: List[A])(func: A => Boolean): List[A] =
       list.foldRight(List.empty[A]) { (item, accum) => if(func(item)) item :: accum else accum }
 
 
     println(s"List(1, 2, 3, 4) filtra los pares.=${ myfilter(List(1, 2, 3, 4))(_%2==0)  }")
-    println
+    println()
 
   }
 
@@ -72,7 +72,7 @@ object Ejem1Foldable extends App{
 
     println(s"List(1, 2, 3) map to String=${List(1, 2, 3).foldRight(List.empty[String])( (elem, resul) =>  s"-${elem.toString}-" :: resul)}")
     println(s"List(1, 2, 3) map to String=${ myMap(List(1, 2, 3))( (elem:Int) => s"*${elem.toString}*" ) }")
-    println
+    println()
   }
 
 
@@ -80,7 +80,7 @@ object Ejem1Foldable extends App{
     def flatMap[A, B](list: List[A])(func: A => List[B]): List[B] =
       list.foldRight(List.empty[B]) { (item, accum) => func(item) ::: accum }
     println(s"-->>${flatMap(List(1, 2, 3))(a => List(a, a * 10, a * 100))}")
-    println
+    println()
   }
 
 

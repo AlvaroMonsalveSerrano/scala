@@ -22,7 +22,7 @@ object Ejem1WriterMonad extends App {
       "Era el peor en el tiempo"), 1859)
 
     println(s"Result1 Writer= ${e1}")
-    println
+    println()
 
   }
 
@@ -38,7 +38,7 @@ object Ejem1WriterMonad extends App {
 
     val var1 = 123.pure[Logged]
     println(s"var1=${var1}")
-    println
+    println()
 
   }
 
@@ -51,7 +51,7 @@ object Ejem1WriterMonad extends App {
 
     val vector1 = Vector("msg1", "msg2", "msg3").tell
     println(s"vector1=${vector1}")
-    println
+    println()
 
   }
 
@@ -70,11 +70,11 @@ object Ejem1WriterMonad extends App {
 
     val aLog: Vector[String] = a.written // Obtención de los mensajes.
     println(s"4.3  aLog de a=${aLog}")
-    println
+    println()
 
     val b = 123.writer(Vector("msg1", "msg2", "msg3")) // Creación de los mensaje de log
     println(s"4.4  b=${b}")
-    println
+    println()
 
     val (log, result) = b.run // Obtención de una tupla con los mensaje de lg y el resultado.
     println(s"4.5  Log=${log}")
@@ -82,9 +82,9 @@ object Ejem1WriterMonad extends App {
 
   }
 
-  ejemplo1
-  ejemplo2
-  ejemplo3
-  ejemplo4
+  ejemplo1()
+  ejemplo2()
+  ejemplo3()
+  ejemplo4()
 
 }

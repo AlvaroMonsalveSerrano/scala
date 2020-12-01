@@ -22,6 +22,7 @@ object Ejem4Validated extends App{
       case Some(name) if nonBlank(name) => Right(name)
       case Some(name) if !nonBlank(name) => Left( List("Name not valid") )
       case None => Left( List("Name not valid") )
+      case Some(_) => Left( List("Name not valid") )
     }
   }
 
@@ -41,6 +42,7 @@ object Ejem4Validated extends App{
       case Some(age) if nonNegative(parseInt(age)) => Right(age)
       case Some(age) if !nonNegative(parseInt(age)) => Left(List("Age not valid"))
       case None => Left(List("Age not valid"))
+      case Some(_) => Left(List("Age not valid") )
     }
   }
 
@@ -74,7 +76,7 @@ object Ejem4Validated extends App{
 
     val resultado1 = (valid1_1, valid1_2).tupled
     println(s"resultado1=${resultado1}")
-    println
+    println()
 
 
     val valid2_1:ValidatedForm[String] = Validated.fromEither[List[String],String](readName(formHtmlKO1))
@@ -82,7 +84,7 @@ object Ejem4Validated extends App{
 
     val resultado2 = (valid2_1, valid2_2).tupled
     println(s"resultado2=${resultado2}")
-    println
+    println()
 
 
     val valid3_1:ValidatedForm[String] = Validated.fromEither[List[String],String](readName(formHtmlKO2))
@@ -90,7 +92,7 @@ object Ejem4Validated extends App{
 
     val resultado3 = (valid3_1, valid3_2).tupled
     println(s"resultado3=${resultado3}")
-    println
+    println()
 
   }
 

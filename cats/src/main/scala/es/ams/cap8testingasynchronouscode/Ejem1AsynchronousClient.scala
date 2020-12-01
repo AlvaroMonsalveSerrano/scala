@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 //import cats.syntax.semigroup._
 
 import scala.concurrent.{Await, Future}
-import scala.language.postfixOps
+//import scala.language.postfixOps
 
 
 //  import cats.instances.option._ // for Applicative Option

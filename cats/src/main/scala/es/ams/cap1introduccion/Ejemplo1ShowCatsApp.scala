@@ -19,15 +19,15 @@ object Ejemplo1ShowCatsApp extends App {
     val showString: Show[String] = Show.apply[String]
 
     println("showInt.show(69)=" + showInt.show(69) )
-    println
+    println()
     println("showString.show(\"Esto es un String\")=" + showString.show("Esto es un String"))
-    println
+    println()
 
     import cats.syntax.show._
     println("[syntax] 69.show=" + 69.show )
-    println
+    println()
     println("[Syntax] \"69\".show=" + "69".show )
-    println
+    println()
   }
 
   ejemplo1()

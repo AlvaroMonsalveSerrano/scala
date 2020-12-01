@@ -84,7 +84,7 @@ object Example5DDLInsertingUpdatingDoobie extends App{
       """.update.run
 
     // mapN. Semigroupal de Applicative.
-    (drop, create).mapN(_ + _).transact(xa).unsafeRunSync
+    (drop, create).mapN(_ + _).transact(xa).unsafeRunSync()
 
   }
 
@@ -98,16 +98,17 @@ object Example5DDLInsertingUpdatingDoobie extends App{
     def insert1(name: String, age: Option[Short]): Update0 =
       sql"insert into person (name, age) values ($name, $age)".update
 
-    insert1("Alice", Some(12)).run.transact(xa).unsafeRunSync
-    insert1("Bob", None).quick.unsafeRunSync
+    insert1("Alice", Some(12)).run.transact(xa).unsafeRunSync()
+    insert1("Bob", None).quick.unsafeRunSync()
 
     case class Person(id: Long, name: String, age: Option[Short])
 
-    sql"""
-          select
-            id, name, age
-          from person
-    """.query[Person].stream.quick.unsafeRunSync()
+    // TODO 2.13
+//    sql"""
+//          select
+//            id, name, age
+//          from person
+//    """.query[Person].stream.quick.unsafeRunSync()
 
   }
 
@@ -120,9 +121,10 @@ object Example5DDLInsertingUpdatingDoobie extends App{
 
     println(s"-*- Example3 -*-")
     case class Person(id: Long, name: String, age: Option[Short])
-    sql"update person set age = 15 where name = 'Alice'".update.quick.unsafeRunSync
+    sql"update person set age = 15 where name = 'Alice'".update.quick.unsafeRunSync()
 
-    sql"select id, name, age from person".query[Person].stream.quick.unsafeRunSync
+    // TODO 2.13
+//    sql"select id, name, age from person".query[Person].stream.quick.unsafeRunSync()
 
   }
 
@@ -135,15 +137,16 @@ object Example5DDLInsertingUpdatingDoobie extends App{
     println(s"-*- Example4 -*-")
     case class Person(id: Long, name: String, age: Option[Short])
 
-    def insert2(name: String, age: Option[Short]): ConnectionIO[Person] =
-      for {
-        _  <- sql"insert into person (name, age) values ($name, $age)".update.run
-        id <- sql"select LAST_INSERT_ID()".query[Long].unique
-        p  <- sql"select id, name, age from person where id = $id".query[Person].unique
-      } yield p
-
-
-    insert2("Jimmy", Some(42)).quick.unsafeRunSync
+    // TODO 2.13
+//    def insert2(name: String, age: Option[Short]): ConnectionIO[Person] =
+//      for {
+//        _  <- sql"insert into person (name, age) values ($name, $age)".update.run
+//        id <- sql"select LAST_INSERT_ID()".query[Long].unique
+//        p  <- sql"select id, name, age from person where id = $id".query[Person].unique
+//      } yield p
+//
+//
+//    insert2("Jimmy", Some(42)).quick.unsafeRunSync()
 
   }
 
@@ -156,20 +159,21 @@ object Example5DDLInsertingUpdatingDoobie extends App{
     println(s"-*- Example5 -*-")
     case class Person(id: Long, name: String, age: Option[Short])
 
-    type PersonInfo = (String, Option[Short])
+    // TODO 2.13
+//    type PersonInfo = (String, Option[Short])
 
-    def insertMany(ps: List[PersonInfo]): ConnectionIO[Int] = {
-      val sql = "insert into person (name, age) values (?, ?)"
-      Update[PersonInfo](sql).updateMany(ps)
-    }
+//    def insertMany(ps: List[PersonInfo]): ConnectionIO[Int] = {
+//      val sql = "insert into person (name, age) values (?, ?)"
+//      Update[PersonInfo](sql).updateMany(ps)
+//    }
 
-    val data = List[PersonInfo](
-      ("Frank", Some(12)),
-      ("Daddy", None))
+//    val data = List[PersonInfo](
+//      ("Frank", Some(12)),
+//      ("Daddy", None))
 
-    insertMany(data).quick.unsafeRunSync
+//    insertMany(data).quick.unsafeRunSync()
 
-    sql"select id, name, age from person".query[Person].stream.quick.unsafeRunSync
+//    sql"select id, name, age from person".query[Person].stream.quick.unsafeRunSync()
   }
 
 

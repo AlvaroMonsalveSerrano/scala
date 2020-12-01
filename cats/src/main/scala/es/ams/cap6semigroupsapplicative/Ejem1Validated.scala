@@ -14,21 +14,21 @@ object Ejem1Validated extends App{
     // FORMA 1.
     val validated1 = Validated.valid(123)
     println(s"validated_1.1=${validated1}")
-    println
+    println()
 
     val validated2 = Validated.invalid(List("Error 1"))
     println(s"validated_1.2=${validated2}")
-    println
+    println()
 
     //
     // FORMA 2. Definición de los tipos
     val validated3 = Validated.valid[List[String], Int](123)
     println(s"validated_1.3=${validated3}")
-    println
+    println()
 
     val validated4 = Validated.invalid[List[String], Int](List("Error en Validated4"))
     println(s"validated_1.4=${validated4}")
-    println
+    println()
 
 
     //
@@ -37,11 +37,11 @@ object Ejem1Validated extends App{
 
     val validated5 = 123.valid[List[String]] // OJO el tipo es el Left
     println(s"validated_1.5=${validated5}")
-    println
+    println()
 
     val validated6 = List("Error").invalid[Int] // OJO el tipo es el Left
     println(s"validated_1.6=${validated6}")
-    println
+    println()
 
   }
 
@@ -58,15 +58,15 @@ object Ejem1Validated extends App{
     // FORMA 1.
     val validated1: Option[Validador[Int]] = Option(Validated.valid(123))
     println(s"validated_1_1.1=${validated1.get}")
-    println
+    println()
 
     val validated2: Option[Validador[Int]] = Option(Validated.invalid(List("Error 1")))
     println(s"validated_1_1.2=${validated2.get}")
-    println
+    println()
 
     val reusult1: Option[( Validador[Int], Validador[Int] )] = ( validated1, validated2 ).tupled
     println(s"Resultado_1_1.3 Tupla de dos valores =${reusult1}")
-    println
+    println()
 
 
 
@@ -107,25 +107,25 @@ object Ejem1Validated extends App{
 
     val validated1 = Validated.catchOnly[NumberFormatException]("error".toInt)
     println(s"validated 3.1=${validated1}")
-    println
+    println()
 
 
     val validated2 = Validated.catchNonFatal(sys.error("Error"))
     println(s"validated 3.2=${validated2}")
-    println
+    println()
 
     val validated3 = Validated.fromTry( scala.util.Try("ErrorNumerico".toInt) )
     println(s"validated 3.3=${validated3}")
-    println
+    println()
 
 
     val validated4 = Validated.fromEither[String, Int]( scala.util.Left("ErrorEither") )
     println(s"validated 3.4=${validated4}")
-    println
+    println()
 
     val validated5 = Validated.fromOption[String, Int]( None, "ErrorOption" )
     println(s"validated 3.4=${validated5}")
-    println
+    println()
 
 
   }

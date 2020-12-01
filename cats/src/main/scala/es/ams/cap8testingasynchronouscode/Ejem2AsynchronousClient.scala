@@ -17,9 +17,9 @@ import cats.Applicative
 //import cats.Id
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent._
+//import scala.concurrent._
 import scala.concurrent.duration._
-import scala.language.postfixOps
+//import scala.language.postfixOps
 
 import akka.util.Timeout
 
@@ -88,11 +88,11 @@ object Ejem2AsynchronousClient extends App {
   val serviceId = new UptimeService2[Id](clienteId)
   val listHostNamesSincrono = List("10", "20")
   println(s"Lista de host=${listHostNamesSincrono}")
-  println
+  println()
 
   val resultId: Id[Int] = serviceId.getTotalUptime(listHostNamesSincrono)
   println(s"Resultado Síncrono=${resultId}")
-  println
+  println()
 
 
   val clienteFuture = UptimeClientFuture

@@ -27,7 +27,7 @@ object Ejem1Introduccion extends App{
     }yield( a + b + c)
 
     println(s"--- Ejemplo 1: Control de errores con soluciones monádicas(KO)---")
-    println(s"Resultado1=${result1.right}")
+    println(s"Resultado1=${result1 /*.right*/ }")
     println()
 
     val result2:Either[String, Int] = for{
@@ -37,7 +37,7 @@ object Ejem1Introduccion extends App{
     }yield( a + b + c)
 
     println(s"--- Ejemplo 2: Control de errores con soluciones monádicas(OK)---")
-    println(s"Resultado2=${result2.right.get}")
+    println(s"Resultado2=${result2.getOrElse(0)}")
     println()
 
   }

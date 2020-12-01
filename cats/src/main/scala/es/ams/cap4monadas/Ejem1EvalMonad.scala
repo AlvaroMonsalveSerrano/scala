@@ -28,7 +28,8 @@ object Ejem1EvalMonad extends App {
     }
     println(x)
     println(x)
-    println
+    println()
+
   }
 
 
@@ -40,7 +41,7 @@ object Ejem1EvalMonad extends App {
     }
     println(x)
     println(x)
-    println
+    println()
   }
 
 
@@ -52,7 +53,7 @@ object Ejem1EvalMonad extends App {
     }
     println(x)
     println(x)
-    println
+    println()
   }
   // [END] -------------------------------------------------------
   //
@@ -71,7 +72,7 @@ object Ejem1EvalMonad extends App {
     }
     println(x.value)
     println(x.value)
-    println
+    println()
   }
 
   def ejemploEvalAlways(): Unit = {
@@ -83,7 +84,7 @@ object Ejem1EvalMonad extends App {
     }
     println(x.value)
     println(x.value)
-    println
+    println()
   }
 
   def ejemploEvalLater(): Unit = {
@@ -95,7 +96,7 @@ object Ejem1EvalMonad extends App {
     }
     println(x.value)
     println(x.value)
-    println
+    println()
   }
 
   // [END] -------------------------------------------------------

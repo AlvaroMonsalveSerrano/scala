@@ -12,12 +12,12 @@ object Ejem3MonadTrasnformer extends App{
     val number: EitherT[Option, String, Int] = EitherT.rightT(5)
     println(s"number=${number}")
     println(s"number.value=${number.value}")
-    println
+    println()
 
     val error: EitherT[Option, String, Int] = EitherT.leftT("Not a number")
     println(s"error=${error}")
     println(s"error.value=${error.value}")
-    println
+    println()
   }
 
   // From F[A] or F[B] to EitherT[F, A, B]
@@ -27,13 +27,13 @@ object Ejem3MonadTrasnformer extends App{
     val number: EitherT[Option, String, Int] = EitherT.right(number0)
     println(s"number=${number}")
     println(s"number.value=${number.value}")
-    println
+    println()
 
     val error0: Option[String] = Some("Not a number")
     val error: EitherT[Option, String, Int] = EitherT.left(error0)
     println(s"error=${error}")
     println(s"error.value=${error.value}")
-    println
+    println()
   }
 
   // From Either[A, B] or F[Either[A, B]] to EitherT[F, A, B]
@@ -44,19 +44,19 @@ object Ejem3MonadTrasnformer extends App{
     val numberET: EitherT[List, String, Int] = EitherT.fromEither(NumberE)
     println(s"number=${numberET}")
     println(s"number.value=${numberET.value}")
-    println
+    println()
 
     val errorE: Either[String, Int] = Left("Not a number")
     val errorET: EitherT[List, String, Int] = EitherT.fromEither(errorE)
     println(s"errorET=${errorET}")
     println(s"errorET.value=${errorET.value}")
-    println
+    println()
 
     val numberFE: List[Either[String, Int]] = List(Right(250))
     val numberFET: EitherT[List, String, Int] = EitherT(numberFE)
     println(s"numberFET=${numberFET}")
     println(s"numberFET.value=${numberFET.value}")
-    println
+    println()
   }
 
 

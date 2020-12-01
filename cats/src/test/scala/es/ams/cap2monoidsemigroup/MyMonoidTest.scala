@@ -1,8 +1,10 @@
 package es.ams.cap2monoidsemigroup
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.flatspec.AnyFlatSpec
 
-class MyMonoidTest extends FlatSpec with Matchers{
+class MyMonoidTest extends AnyFlatSpec with Matchers{
 
   "Test de las leyes del Monoide lógico Suma" should "cumple las leyes asociativas y de identidad" in {
     import es.ams.cap2monoidsemigroup.MonoidSuma.Laws

@@ -1,18 +1,17 @@
 import sbt._
 
 object Dependencies {
-  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
+  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.2"
 
   lazy val scalacheck =  "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
 
-  lazy val cats_core = "org.typelevel" %% "cats-core" % "1.0.0-MF"
+  lazy val cats_core = "org.typelevel" %% "cats-core" % "2.0.0"
 
   lazy val cats_effect = "org.typelevel" %% "cats-effect" % "2.2.0"
   lazy val cats_effect_laws = "org.typelevel" %% "cats-effect-laws" % "2.2.0" % "test"
   lazy val cats_free = "org.typelevel" %% "cats-free" % "2.2.0"
 
-
-  lazy val akka_actor = "com.typesafe.akka" %% "akka-actor" % "2.4.12"
+  lazy val akka_actor = "com.typesafe.akka" %% "akka-actor" % "2.5.23"
 
   lazy val doobie_core = "org.tpolecat" %% "doobie-core"  % "0.9.0"
   lazy val doobie_h2 = "org.tpolecat" %% "doobie-h2" % "0.9.0"  // H2 driver 1.4.200 + type mappings.
@@ -32,5 +31,4 @@ object Dependencies {
   lazy val ciris_refined = "is.cir" %% "ciris-refined" % "1.2.1"
   lazy val ciris_squants = "is.cir" %% "ciris-squants" % "1.2.1"
   lazy val ciris_refined_cats = "eu.timepit" %% "refined-cats" % "0.9.18"
-
 }

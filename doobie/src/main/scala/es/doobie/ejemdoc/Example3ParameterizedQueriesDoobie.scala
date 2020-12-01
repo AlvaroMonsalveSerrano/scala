@@ -1,8 +1,8 @@
 package es.doobie.ejemdoc
 
-import cats.data.NonEmptyList
-import doobie._
-import doobie.implicits._
+//import cats.data.NonEmptyList
+//import doobie._
+//import doobie.implicits._
 import cats.effect.{Blocker, IO}
 import doobie.Transactor
 import doobie.util.ExecutionContexts
@@ -59,8 +59,8 @@ object Example3ParameterizedQueriesDoobie extends App {
     "root",
     Blocker.liftExecutionContext(ExecutionContexts.synchronous) // just for testing
   )
-  val y = xa.yolo
-  import y._
+//  val y = xa.yolo
+//  import y._
 
   case class Country(code: String, name: String, pop: Int, gnp: Option[Double])
 
@@ -70,56 +70,60 @@ object Example3ParameterizedQueriesDoobie extends App {
   def example1(): Unit = {
 
     // Define a query with parameter minPop
-    def biggerThan(minPop: Int) = sql"""
-        select code, name, population, gnp
-        from country
-        where population > $minPop
-      """.query[Country]
+    // TODO 2.13
+//    def biggerThan(minPop: Int) = sql"""
+//        select code, name, population, gnp
+//        from country
+//        where population > $minPop
+//      """.query[Country]
+//
+//    biggerThan(9).quick.unsafeRunSync()
+//    println()
 
-    biggerThan(9).quick.unsafeRunSync
-    println
-
+    // TODO 2.13
     // Define a query with multiple parameters
-    def populationIn(range: Range) = sql"""
-          select code, name, population, gnp
-          from country
-          where population > ${range.min}
-          and   population < ${range.max}
-        """.query[Country]
+//    def populationIn(range: Range) = sql"""
+//          select code, name, population, gnp
+//          from country
+//          where population > ${range.min}
+//          and   population < ${range.max}
+//        """.query[Country]
+//
+//    populationIn(1 to 10).quick.unsafeRunSync()
+//    println()
 
-    populationIn(1 to 10).quick.unsafeRunSync
-    println
-
-    def populationIn2(range: Range, codes: NonEmptyList[String]) = {
-          val q = fr"""
-              select code, name, population, gnp
-              from country
-              where population > ${range.min}
-              and   population < ${range.max}
-              and   """ ++ Fragments.in(fr"code", codes) // code IN (...)
-          q.query[Country]
-    }
-    populationIn2(1 to 10, NonEmptyList.of("POR", "USA", "BRA", "PAK", "GBR")).quick.unsafeRunSync
-    println
+    // TODO 2.13
+//    def populationIn2(range: Range, codes: NonEmptyList[String]) = {
+//          val q = fr"""
+//              select code, name, population, gnp
+//              from country
+//              where population > ${range.min}
+//              and   population < ${range.max}
+//              and   """ ++ Fragments.in(fr"code", codes) // code IN (...)
+//          q.query[Country]
+//    }
+//    populationIn2(1 to 10, NonEmptyList.of("POR", "USA", "BRA", "PAK", "GBR")).quick.unsafeRunSync()
+//    println()
 
   }
 
   def example2(): Unit = {
-    import fs2.Stream
+//    import fs2.Stream
 
-    val q = """
-      select code, name, population, gnp
-      from country
-      where population > ?
-      and   population < ?
-      """
+//    val q = """
+//      select code, name, population, gnp
+//      from country
+//      where population > ?
+//      and   population < ?
+//      """
 
     println(s"-*- Example2 -*-")
-    // Equals to sql"..."
-    def proc(range: Range): Stream[ConnectionIO, Country] =
-      HC.stream[Country](q, HPS.set((range.min, range.max)), 512)
-
-    proc(1 to 10).quick.unsafeRunSync
+    // Equals to sql"...
+    // TODO 2.13
+//    def proc(range: Range): Stream[ConnectionIO, Country] =
+//      HC.stream[Country](q, HPS.set((range.min, range.max)), 512)
+//
+//    proc(1 to 10).quick.unsafeRunSync()
   }
 
   example1()

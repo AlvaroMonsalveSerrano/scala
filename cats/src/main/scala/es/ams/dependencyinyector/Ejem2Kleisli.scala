@@ -67,24 +67,24 @@ object Ejem2Kleisli extends App{
   //
   def operateWithTrading2List(): Unit = {
     println(s"-- operateWithTrading2List() --")
-    val objTrading = Trading2GenericList.clientOrder andThen
+    val objTrading = Trading2GenericList.clientOrder() andThen
         Trading2GenericList.execute(Market("Market"), Account("Account"))
     println(s"-->${objTrading.run(ClientOrder("ClienteOrderPrueba"))}")
 
     val objTrading2 = objTrading andThen Trading2GenericList.allocate(List( Account("A1"), Account("A2")))
     println(s"-->${objTrading2.run(ClientOrder("ClienteOrderPrueba"))}")
-    println
+    println()
   }
 
   def operateWithTrading2Option(): Unit = {
     println(s"-- operateWithTrading2Option() --")
-    val objTrading = Trading2GenericOption.clientOrder andThen
+    val objTrading = Trading2GenericOption.clientOrder() andThen
         Trading2GenericOption.execute(Market("Market"), Account("Account"))
     println(s"-->${objTrading.run(ClientOrder("ClienteOrderPrueba"))}")
 
     val objTrading2 = objTrading andThen Trading2GenericOption.allocate(List( Account("A1"), Account("A2")))
     println(s"-->${objTrading2.run(ClientOrder("ClienteOrderPrueba"))}")
-    println
+    println()
   }
 
   //
@@ -92,7 +92,7 @@ object Ejem2Kleisli extends App{
   //
   def compositionFunction2List(): Unit = {
     def businessFunction1(): Kleisli[List, ClientOrder, Execution] = {
-      Trading2GenericList.clientOrder andThen Trading2GenericList.execute(Market("Market"), Account("Account"))
+      Trading2GenericList.clientOrder() andThen Trading2GenericList.execute(Market("Market"), Account("Account"))
     }
 
     def businessFunction2(): Kleisli[List, ClientOrder, Trade] = {
@@ -100,14 +100,14 @@ object Ejem2Kleisli extends App{
     }
 
     println(s"-- compositionFunction2List() --")
-    println(s"-->${businessFunction1.run(ClientOrder("ClienteOrderPrueba"))}")
-    println(s"-->${businessFunction2.run(ClientOrder("ClienteOrderPrueba"))}")
-    println
+    println(s"-->${businessFunction1().run(ClientOrder("ClienteOrderPrueba"))}")
+    println(s"-->${businessFunction2().run(ClientOrder("ClienteOrderPrueba"))}")
+    println()
   }
 
   def compositionFunction2Option(): Unit = {
     def businessFunction1(): Kleisli[Option, ClientOrder, Execution] = {
-      Trading2GenericOption.clientOrder andThen Trading2GenericOption.execute(Market("Market"), Account("Account"))
+      Trading2GenericOption.clientOrder() andThen Trading2GenericOption.execute(Market("Market"), Account("Account"))
     }
 
     def businessFunction2(): Kleisli[Option, ClientOrder, Trade] = {
@@ -115,9 +115,9 @@ object Ejem2Kleisli extends App{
     }
 
     println(s"-- compositionFunction2Option() --")
-    println(s"-->${businessFunction1.run(ClientOrder("ClienteOrderPrueba"))}")
-    println(s"-->${businessFunction2.run(ClientOrder("ClienteOrderPrueba"))}")
-    println
+    println(s"-->${businessFunction1().run(ClientOrder("ClienteOrderPrueba"))}")
+    println(s"-->${businessFunction2().run(ClientOrder("ClienteOrderPrueba"))}")
+    println()
   }
 
   operateWithTrading2List()

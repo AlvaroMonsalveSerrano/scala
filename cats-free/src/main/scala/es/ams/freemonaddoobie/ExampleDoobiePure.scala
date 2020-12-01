@@ -31,7 +31,7 @@ object ExampleDoobiePure extends App {
 
   val resultCreate = createDatabase().foldMap(pureInterpreter(xa)).run(Init).value
   println(s"Create database=${resultCreate}")
-  println
+  println()
 
   def insertAuthor(): Operation[Either[Exception, Int]] = for {
     num <- insert(Author(0, "Author1"))
@@ -39,7 +39,7 @@ object ExampleDoobiePure extends App {
 
   val resultInsertAuthor = insertAuthor().foldMap(pureInterpreter(xa)).run(Created).value
   println(s"Insert Author=${resultInsertAuthor}")
-  println
+  println()
 
 
   def deleteAuthor(): Operation[Either[Exception, Int]] = for {
@@ -51,25 +51,25 @@ object ExampleDoobiePure extends App {
 
   val resultDeleteAuthor = deleteAuthor().foldMap(pureInterpreter(xa)).run(Created).value
   println(s"Delete Author=${resultDeleteAuthor}")
-  println
+  println()
 
 
   def selectAuthorKO(): Operation[Either[Exception, Option[String]]] = for {
     author <- select(100)
   } yield (author)
 
-  val resultSelectAuthorKO = selectAuthorKO.foldMap(pureInterpreter(xa)).run(Created).value
+  val resultSelectAuthorKO = selectAuthorKO().foldMap(pureInterpreter(xa)).run(Created).value
   println(s"Select Author=${resultSelectAuthorKO}")
-  println
+  println()
 
 
   def selectAuthorOK(): Operation[Either[Exception, Option[String]]] = for {
     author <- select(1)
   } yield (author)
 
-  val resultSelectAuthorOK = selectAuthorOK.foldMap(pureInterpreter(xa)).run(Created).value
+  val resultSelectAuthorOK = selectAuthorOK().foldMap(pureInterpreter(xa)).run(Created).value
   println(s"Select Author=${resultSelectAuthorOK}")
-  println
+  println()
 
 }
 

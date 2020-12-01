@@ -25,7 +25,7 @@ object Ejem2Validated extends App{
     val resultado1 = ( operador1, operador2 ).tupled
     println(s"resultado1.1=${resultado1}")
     println(s"resultado1.2=${resultado1.isValid}")
-    println
+    println()
 
   }
 
@@ -48,7 +48,7 @@ object Ejem2Validated extends App{
     val resultado1 = ( operador1, operador2 ).tupled
     println(s"resultado2=${resultado1}")
     println(s"resultado2.1=${resultado1.isValid}")
-    println
+    println()
 
   }
 
@@ -70,7 +70,7 @@ object Ejem2Validated extends App{
     val resultado1 = ( operador1, operador2 ).tupled
     println(s"resultado3=${resultado1}")
     println(s"resultado3.1=${resultado1.isValid}")
-    println
+    println()
 
   }
 
@@ -103,7 +103,7 @@ object Ejem2Validated extends App{
     }
 
     println(s"resultado4.2=${resultado1.valueOr( funcion )}")
-    println
+    println()
 
   }
 

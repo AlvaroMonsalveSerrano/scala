@@ -44,7 +44,7 @@ object Ejem4BasicCombinators extends App{
     println(s"Verificación 1. check(0)=${check(0)}")
     println(s"Verificación 1. check(5)=${check(5)}")
     println(s"Verificación 1. check(10)=${check(10)}")
-    println
+    println()
 
   }
 

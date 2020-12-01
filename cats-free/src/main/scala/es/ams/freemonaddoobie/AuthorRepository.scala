@@ -18,7 +18,7 @@ object AuthorRepository{
     } yield ()
 
     try{
-      val resultDatabase: Unit = creator.transact(xa).unsafeRunSync
+      val resultDatabase: Unit = creator.transact(xa).unsafeRunSync()
       Right(resultDatabase)
 
     } catch {

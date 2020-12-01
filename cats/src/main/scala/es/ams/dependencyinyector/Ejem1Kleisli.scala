@@ -41,12 +41,12 @@ object Ejem1Kleisli extends App{
   //
   def operateWithTrading(): Unit = {
     println(s"-- operateWithTrading() --")
-    val objTrading = Trading.clientOrder andThen Trading.execute(Market("Market"), Account("Account"))
+    val objTrading = Trading.clientOrder() andThen Trading.execute(Market("Market"), Account("Account"))
     println(s"-->${objTrading.run(ClientOrder("ClienteOrderPrueba"))}")
 
     val objTrading2 = objTrading andThen Trading.allocate(List( Account("A1"), Account("A2")))
     println(s"-->${objTrading2.run(ClientOrder("ClienteOrderPrueba"))}")
-    println
+    println()
 
   }
 
@@ -57,7 +57,7 @@ object Ejem1Kleisli extends App{
   def compositionFunction(): Unit = {
 
     def businessFunction1(): Kleisli[List, ClientOrder, Execution] = {
-      Trading.clientOrder andThen Trading.execute(Market("Market"), Account("Account"))
+      Trading.clientOrder() andThen Trading.execute(Market("Market"), Account("Account"))
     }
 
     def businessFunction2(): Kleisli[List, ClientOrder, Trade] = {
@@ -65,9 +65,9 @@ object Ejem1Kleisli extends App{
     }
 
     println(s"-- compositionFunction() --")
-    println(s"-->${businessFunction1.run(ClientOrder("ClienteOrderPrueba"))}")
-    println(s"-->${businessFunction2.run(ClientOrder("ClienteOrderPrueba"))}")
-    println
+    println(s"-->${businessFunction1().run(ClientOrder("ClienteOrderPrueba"))}")
+    println(s"-->${businessFunction2().run(ClientOrder("ClienteOrderPrueba"))}")
+    println()
 
   }
 
