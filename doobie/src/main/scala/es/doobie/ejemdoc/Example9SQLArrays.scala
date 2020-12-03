@@ -4,7 +4,7 @@ import doobie._
 import doobie.implicits._
 import doobie.util.ExecutionContexts
 import cats.effect._
-import cats.implicits._
+//import cats.implicits._
 
 /** SQL Arrays
   * ----------

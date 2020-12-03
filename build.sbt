@@ -25,10 +25,8 @@ lazy val basicScalacOptions = Seq(
   "-language:postfixOps",
   "-language:higherKinds",
   "-language:implicitConversions",
-  "-Xlint" // enable handy linter warnings
-  ,
-  "-Xfatal-warnings" // turn compiler warnings into errors
-  ,
+  "-Xlint",
+  "-Xfatal-warnings",
   "-language:reflectiveCalls"
 )
 
@@ -45,11 +43,13 @@ lazy val root = (project in file("."))
   .aggregate(catsEffect)
   .aggregate(catsFree)
   .aggregate(ciris)
+  .settings(BuildInfoSettings.value)
   .settings(
     name := "scala",
     commonSettings,
     scalacOptions ++= basicScalacOptions,
-    libraryDependencies += scalaTest % Test,
+    libraryDependencies ++= commonDependencies,
+    buildInfoOptions += BuildInfoOption.ToJson,
     resolvers ++= Seq(
       "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
       Resolver.sonatypeRepo("releases"),
@@ -57,6 +57,13 @@ lazy val root = (project in file("."))
       "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
     )
   )
+  .enablePlugins(GitVersioning)
+  .enablePlugins(BuildInfoPlugin)
+
+lazy val commonDependencies = Seq(
+  scalaTest,
+  scalacheck
+)
 
 lazy val cats = (project in file("cats"))
   .settings(
