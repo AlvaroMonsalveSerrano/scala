@@ -1,8 +1,6 @@
 package es.ams.cap4monadas
 
-/**
-  * Ejemplos básico de la mónada Writer.
-  *
+/** Ejemplos básico de la mónada Writer.
   */
 object Ejem1WriterMonad extends App {
 
@@ -17,9 +15,7 @@ object Ejem1WriterMonad extends App {
     //import cats.instances.vector._
     println(s"== EJEMPLO 1 ==")
 
-    val e1 = Writer(Vector(
-      "Era el mejor en el tiempo",
-      "Era el peor en el tiempo"), 1859)
+    val e1 = Writer(Vector("Era el mejor en el tiempo", "Era el peor en el tiempo"), 1859)
 
     println(s"Result1 Writer= ${e1}")
     println()
@@ -41,7 +37,6 @@ object Ejem1WriterMonad extends App {
     println()
 
   }
-
 
   def ejemplo3(): Unit = {
 

@@ -2,13 +2,10 @@ package es.ams.typeclass.effect
 
 import cats.effect.{Effect, IO, SyncIO}
 
-
-/**
-  * Effect
+/** Effect
   * ------
   *
   * Reference: https://typelevel.org/cats-effect/typeclasses/effect.html
-  *
   */
 object Example1 extends App {
 
@@ -17,19 +14,19 @@ object Example1 extends App {
 
     println(s"-*- Example1 -*-")
 
-    val operation1 = IO( println("Doing Operation1 ...") )
+    val operation1 = IO(println("Doing Operation1 ..."))
 
-    val ioa1: SyncIO[Unit] = Effect[IO].runAsync(operation1){ cb =>
+    val ioa1: SyncIO[Unit] = Effect[IO].runAsync(operation1) { cb =>
       cb match {
-        case Right(value) => IO( println(s"Result Succes=${value}"))
+        case Right(value)    => IO(println(s"Result Succes=${value}"))
         case Left(exception) => IO.raiseError(exception)
       }
     }
     ioa1.unsafeRunSync()
 
-    val ioa2: SyncIO[Unit] = Effect[IO].runAsync(operation1){
-        case Right(value) => IO( println(s"Result 2 Succes=${value}"))
-        case Left(exception) => IO.raiseError(exception)
+    val ioa2: SyncIO[Unit] = Effect[IO].runAsync(operation1) {
+      case Right(value)    => IO(println(s"Result 2 Succes=${value}"))
+      case Left(exception) => IO.raiseError(exception)
     }
     ioa2.unsafeRunSync()
 

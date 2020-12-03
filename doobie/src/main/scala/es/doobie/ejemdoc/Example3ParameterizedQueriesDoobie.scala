@@ -9,44 +9,41 @@ import doobie.util.ExecutionContexts
 
 import scala.concurrent.ExecutionContext
 
-/**
- * Parameterized Queries
- * ---------------------
- *
- * https://tpolecat.github.io/doobie/docs/05-Parameterized.html
- *
- * + Docker MySQL:
- *
- * # run mysql
- * docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.0
- *
- * # connect to mysql container
- * docker exec -it mysql bash
- *
- * # connect to mysql
- * mysql -uroot -p
- *
- * # create database
- * CREATE DATABASE IF NOT EXISTS doobie;
- *
- *
- * + SQL:
- *
- * CREATE TABLE doobie.country (
- * code       character(3)  NOT NULL,
- * name       text          NOT NULL,
- * population integer       NOT NULL,
- * gnp        numeric(10,2)
- * -- more columns, but we won't use them here
- * );
- *
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'ESP', 'España', 10, 10.10);
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'POR', 'Portugal', 9, 9.9);
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'FRA', 'Francia', 8, 8.8);
- *
- * SELECT * FROM country;
- *
- */
+/** Parameterized Queries
+  * ---------------------
+  *
+  * https://tpolecat.github.io/doobie/docs/05-Parameterized.html
+  *
+  * + Docker MySQL:
+  *
+  * # run mysql
+  * docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.0
+  *
+  * # connect to mysql container
+  * docker exec -it mysql bash
+  *
+  * # connect to mysql
+  * mysql -uroot -p
+  *
+  * # create database
+  * CREATE DATABASE IF NOT EXISTS doobie;
+  *
+  * + SQL:
+  *
+  * CREATE TABLE doobie.country (
+  * code       character(3)  NOT NULL,
+  * name       text          NOT NULL,
+  * population integer       NOT NULL,
+  * gnp        numeric(10,2)
+  * -- more columns, but we won't use them here
+  * );
+  *
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'ESP', 'España', 10, 10.10);
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'POR', 'Portugal', 9, 9.9);
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'FRA', 'Francia', 8, 8.8);
+  *
+  * SELECT * FROM country;
+  */
 
 object Example3ParameterizedQueriesDoobie extends App {
 
@@ -64,9 +61,8 @@ object Example3ParameterizedQueriesDoobie extends App {
 
   case class Country(code: String, name: String, pop: Int, gnp: Option[Double])
 
-  /**
-   * Adding a Parameter
-   */
+  /** Adding a Parameter
+    */
   def example1(): Unit = {
 
     // Define a query with parameter minPop

@@ -5,7 +5,6 @@ import cats.instances.list._ // for Monad
 
 object Ejem1Kleisli extends App {
 
-
   def ejemplo1(): Unit = {
 
     val step1: Kleisli[List, Int, Int] = Kleisli(x => List(x + 1, x - 1))
@@ -18,7 +17,6 @@ object Ejem1Kleisli extends App {
     println(s"step2=${step2(20)}")
     println(s"step3=${step3(20)}")
     println()
-
 
     val pipeline1 = step1 andThen step2
     println(s"pipeline1=${pipeline1(20)}")

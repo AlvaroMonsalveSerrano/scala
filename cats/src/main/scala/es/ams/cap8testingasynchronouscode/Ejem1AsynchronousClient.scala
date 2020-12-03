@@ -10,37 +10,33 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 //import scala.language.postfixOps
 
-
 //  import cats.instances.option._ // for Applicative Option
 import cats.instances.future._ // for Applicative Future
-import cats.instances.list._ // for Traverse
+import cats.instances.list._   // for Traverse
 import cats.syntax.traverse._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/**
-  * La clase Ejem1AsynchronoClient define unos componentes que realizan operaciones asíncronas.
+/** La clase Ejem1AsynchronoClient define unos componentes que realizan operaciones asíncronas.
   * Para la realización de los test, al ser asíncrona, no se puede realizar la comparación del
   * resultado del servicio con un valor porque salta una excepción.
   *
   * La solución es utilizar los contructores de tipos.
-  *
   */
-object Ejem1AsynchronoClient extends App{
+object Ejem1AsynchronoClient extends App {
 
   implicit val timeout = Timeout(2 seconds)
-
 
   // Cliente asíncrono--------------------------------------------------------------------------------------------------
   trait UptimeClient {
     def getUptime(hostname: String): Future[Int]
   }
 
-  object UptimeClient extends UptimeClient{
+  object UptimeClient extends UptimeClient {
     override def getUptime(hostname: String): Future[Int] =
       Future(hostname.toInt)
-        .recover{
-          case e:Exception => 0
+        .recover { case e: Exception =>
+          0
         }
   }
 
@@ -51,14 +47,13 @@ object Ejem1AsynchronoClient extends App{
   }
   // -------------------------------------------------------------------------------------------------------------------
 
-
   def ejemplo1(): Unit = {
 
-    val client = UptimeClient
-    val service = new UptimeService(client)
-    val listHostName = List("1","2","3")
+    val client       = UptimeClient
+    val service      = new UptimeService(client)
+    val listHostName = List("1", "2", "3")
 
-    val result1 = Await.result( service.getTotalUptime(listHostName), timeout.duration )
+    val result1 = Await.result(service.getTotalUptime(listHostName), timeout.duration)
     println(s"Resultado1=${result1}")
   }
 

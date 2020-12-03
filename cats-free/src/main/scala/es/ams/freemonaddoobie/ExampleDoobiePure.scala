@@ -6,11 +6,9 @@ import doobie.util.ExecutionContexts
 
 import es.ams.freemonaddoobie.AuthorDSL._
 
-/**
-  * Ejemplo básico de FreeMonad con un intérprete puro.
+/** Ejemplo básico de FreeMonad con un intérprete puro.
   *
   * Trabajar la generalidad.
-  *
   */
 object ExampleDoobiePure extends App {
 
@@ -41,18 +39,16 @@ object ExampleDoobiePure extends App {
   println(s"Insert Author=${resultInsertAuthor}")
   println()
 
-
   def deleteAuthor(): Operation[Either[Exception, Int]] = for {
     numInsert10 <- insert(Author(0, "Author10"))
     numInsert11 <- insert(Author(0, "Author11"))
     numInsert12 <- insert(Author(0, "Author12"))
-    numDeleted <- delete(2)
+    numDeleted  <- delete(2)
   } yield (numDeleted)
 
   val resultDeleteAuthor = deleteAuthor().foldMap(pureInterpreter(xa)).run(Created).value
   println(s"Delete Author=${resultDeleteAuthor}")
   println()
-
 
   def selectAuthorKO(): Operation[Either[Exception, Option[String]]] = for {
     author <- select(100)
@@ -61,7 +57,6 @@ object ExampleDoobiePure extends App {
   val resultSelectAuthorKO = selectAuthorKO().foldMap(pureInterpreter(xa)).run(Created).value
   println(s"Select Author=${resultSelectAuthorKO}")
   println()
-
 
   def selectAuthorOK(): Operation[Either[Exception, Option[String]]] = for {
     author <- select(1)
@@ -72,4 +67,3 @@ object ExampleDoobiePure extends App {
   println()
 
 }
-

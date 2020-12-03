@@ -10,57 +10,52 @@ import cats.syntax.all._
 
 class Ejem2DependecyInyectorTest extends AnyWordSpec with Matchers {
 
-
   "Example Mock" when {
 
     "Example OK" in {
-        val msg: String = "prueba"
-        val result: String = Service.doBusinessActivity(Component1.doSomething, Component2.doSomething)(msg) match {
-          case Right(msg) => { println(msg); msg}
-          case Left(error) => error
-        }
-        result shouldBe(msg + " modificado-6")
+      val msg: String = "prueba"
+      val result: String = Service.doBusinessActivity(Component1.doSomething, Component2.doSomething)(msg) match {
+        case Right(msg)  => { println(msg); msg }
+        case Left(error) => error
+      }
+      result shouldBe (msg + " modificado-6")
     }
-
 
     "Example OK: mock component1" in {
       val funcGetResponse1Mock: GetComponent1 = (num: String) => "mock".asRight
 
       val msg: String = "prueba"
       val result: String = Service.doBusinessActivity(funcGetResponse1Mock, Component2.doSomething)(msg) match {
-        case Right(msg) => { println(msg); msg}
+        case Right(msg)  => { println(msg); msg }
         case Left(error) => error
       }
       assert(result.length > 0)
       assert(result.equals("mock-6"))
     }
 
-
     "Example OK: mock component2" in {
-      val funcComponent2: GetComponent2 =  (num: Int) => 0.asRight
+      val funcComponent2: GetComponent2 = (num: Int) => 0.asRight
 
       val msg: String = "prueba"
       val result: String = Service.doBusinessActivity(Component1.doSomething, funcComponent2)(msg) match {
-        case Right(msg) => { println(msg); msg}
+        case Right(msg)  => { println(msg); msg }
         case Left(error) => error
       }
       assert(result.length > 0)
     }
-
 
     "Example OK: mock component1 and mock component2" in {
       val funcGetResponse1Mock: GetComponent1 = (num: String) => "mock".asRight
       val funcGetResponse2Mock: GetComponent2 = (num: Int) => 0.asRight
 
       val msg: String = "prueba"
-      val result: String =Service.doBusinessActivity(funcGetResponse1Mock, funcGetResponse2Mock)(msg) match {
-        case Right(msg) => { println(msg); msg}
+      val result: String = Service.doBusinessActivity(funcGetResponse1Mock, funcGetResponse2Mock)(msg) match {
+        case Right(msg)  => { println(msg); msg }
         case Left(error) => error
       }
       assert(result.length > 0)
       assert(result.equals("mock-0"))
     }
-
 
   }
 

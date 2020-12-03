@@ -1,7 +1,6 @@
 package es.ams.cap4monadas
 
-/**
-  * cats.data.Reader es una mónada que admite una secuencia de operaciones que depende de una entrada.
+/** cats.data.Reader es una mónada que admite una secuencia de operaciones que depende de una entrada.
   *
   * Un ejemplo es la inyección de dependencias
   */
@@ -9,9 +8,7 @@ object Ejem1ReaderMonad extends App {
 
   case class Cat(name: String, favoriteFoods: String)
 
-  /**
-    * Ejemlo de creación de una mónada Reader.
-    *
+  /** Ejemlo de creación de una mónada Reader.
     */
   def ejemplo1(): Unit = {
 
@@ -27,8 +24,7 @@ object Ejem1ReaderMonad extends App {
 
   }
 
-  /**
-    * Con la función map nos permite componer funciones
+  /** Con la función map nos permite componer funciones
     */
   def ejemplo2(): Unit = {
 
@@ -44,10 +40,7 @@ object Ejem1ReaderMonad extends App {
 
   }
 
-
-  /**
-    * Con la función flatMap permite combinar Reader que dependen de algún valor de entrada.
-    *
+  /** Con la función flatMap permite combinar Reader que dependen de algún valor de entrada.
     */
   def ejemplo3(): Unit = {
 
@@ -68,7 +61,7 @@ object Ejem1ReaderMonad extends App {
     }
 
     println(s"--- EJEMPLO 3: combinaciones de Reader ---")
-    println(s"Combinación de Reader=${saludoYalimentoGato(Cat("Gato3","Comida de gatito3"))}" )
+    println(s"Combinación de Reader=${saludoYalimentoGato(Cat("Gato3", "Comida de gatito3"))}")
     println()
 
   }

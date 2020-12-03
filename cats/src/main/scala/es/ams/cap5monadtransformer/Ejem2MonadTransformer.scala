@@ -10,10 +10,9 @@ import cats.implicits._
 
 import scala.concurrent.duration._
 
-/**
-  * Ejemplo de la documentación de Cats. Referencia: https://typelevel.org/cats/datatypes/eithert.html
+/** Ejemplo de la documentación de Cats. Referencia: https://typelevel.org/cats/datatypes/eithert.html
   */
-object Ejem2MonadTransformer extends App{
+object Ejem2MonadTransformer extends App {
 
   implicit val timeout = Timeout(2 seconds)
 
@@ -27,19 +26,17 @@ object Ejem2MonadTransformer extends App{
     Future.successful(parseDouble(s))
 
   def divideAsync(a: Double, b: Double): Future[Either[String, Double]] =
-    Future.successful(divide(a,b))
-
-
+    Future.successful(divide(a, b))
 
   // Primer ejemplo. Ejemplo básico de realización de una división de forma síncrona.
   def exampleEitherBasic(): Unit = {
 
     def divisionProgram(inputA: String, inputB: String): Either[String, Double] =
-      for{
-        a <- parseDouble(inputA)
-        b <- parseDouble(inputB)
+      for {
+        a      <- parseDouble(inputA)
+        b      <- parseDouble(inputB)
         result <- divide(a, b)
-      }yield{
+      } yield {
         result
       }
 
@@ -55,15 +52,13 @@ object Ejem2MonadTransformer extends App{
   // Primer ejemplo. Ejemplo básico de realización de una división de forma asíncrona.
   def exampleFutureEither(): Unit = {
 
-
-
     def divisionProgramAsync(inputA: String, inputB: String): Future[Either[String, Double]] =
-      parseDoubleAsync(inputA) flatMap{ eitherA =>
-        parseDoubleAsync(inputB) flatMap{ eitherB =>
+      parseDoubleAsync(inputA) flatMap { eitherA =>
+        parseDoubleAsync(inputB) flatMap { eitherB =>
           (eitherA, eitherB) match {
-            case(Right(a), Right(b)) => divideAsync(a, b)
-            case(Left(err), _) => Future.successful(Left(err))
-            case(_, Left(err)) => Future.successful(Left(err))
+            case (Right(a), Right(b)) => divideAsync(a, b)
+            case (Left(err), _)       => Future.successful(Left(err))
+            case (_, Left(err))       => Future.successful(Left(err))
           }
 
         }
@@ -83,10 +78,10 @@ object Ejem2MonadTransformer extends App{
 
     def divisionProgramAsyncEitherT(inputA: String, inputB: String): EitherT[Future, String, Double] =
       for {
-        a <- EitherT(parseDoubleAsync(inputA))
-        b <- EitherT(parseDoubleAsync(inputB))
-        result <- EitherT(divideAsync(a,b))
-      }yield {
+        a      <- EitherT(parseDoubleAsync(inputA))
+        b      <- EitherT(parseDoubleAsync(inputB))
+        result <- EitherT(divideAsync(a, b))
+      } yield {
         result
       }
 

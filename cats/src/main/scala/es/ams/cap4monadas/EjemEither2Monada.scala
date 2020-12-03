@@ -2,8 +2,7 @@ package es.ams.cap4monadas
 
 import cats.syntax.all._
 
-object EjemEither2Monada extends App{
-
+object EjemEither2Monada extends App {
 
   def errorHandling(): Unit = {
 
@@ -12,33 +11,33 @@ object EjemEither2Monada extends App{
     //
 
     // Product hereda de Any. Product tiene funciones de iteración.
-    sealed trait      LoginError                         extends Product with Serializable
-    final case class  UserNotFound(username:String)      extends LoginError
-    final case class  PasswordIncorrect(username:String) extends LoginError
-    case object UnexpectedError                    extends LoginError
+    sealed trait LoginError                              extends Product with Serializable
+    final case class UserNotFound(username: String)      extends LoginError
+    final case class PasswordIncorrect(username: String) extends LoginError
+    case object UnexpectedError                          extends LoginError
 
-    case class User(username:String, password:String)
+    case class User(username: String, password: String)
 
     type LoginResult = Either[LoginError, User]
 
     // Manejador de error
-    def handleError(error: LoginError): Unit = error match  {
-      case UserNotFound( u )    => println(s"Usuario no encontrado: ${u}")
+    def handleError(error: LoginError): Unit = error match {
+      case UserNotFound(u)      => println(s"Usuario no encontrado: ${u}")
       case PasswordIncorrect(u) => println(s"password incorrecta ${u}")
       case UnexpectedError      => println(s"Error inesperado")
     }
 
-    val result1: LoginResult = User("user1","pwd1").asRight // OJO, definido el tipo previamente.
-    val result2: LoginResult = UserNotFound("user2").asLeft // OJO, definido el tipo previamente.
+    val result1: LoginResult = User("user1", "pwd1").asRight // OJO, definido el tipo previamente.
+    val result2: LoginResult = UserNotFound("user2").asLeft  // OJO, definido el tipo previamente.
 
     // OJO, Si result1 es Right entonces fb=println; si result1 es Left entonces fa handleError.
     // NO ES COMO EL CATAMORFISMO.
-    result1.fold(handleError, println )
+    result1.fold(handleError, println)
 
     // OJO, Si result1 es Right entonces fb=println; si result1 es Left entonces fa handleError.
-    result2.fold(handleError, println )
+    result2.fold(handleError, println)
 
-  }// Fin errorHandling
+  } // Fin errorHandling
 
   def monadError(): Unit = {
 
@@ -64,18 +63,17 @@ object EjemEither2Monada extends App{
     println(s"${failure2.getClass}") // Retorna de ErrorOr
     println()
 
-    val resultHandle = monadError.handleError(failure){
+    val resultHandle = monadError.handleError(failure) {
       case "Error de prueba" => monadError.pure("Error controlado?")
-      case _ => monadError.raiseError("Esto no está controlado")
+      case _                 => monadError.raiseError("Esto no está controlado")
     }
     println(s"resultHandle=${resultHandle}")
     println(s"${resultHandle.getClass}") // Retorna de ErrorOr
     println()
 
-
-    val resultHandle2 = monadError.handleError(failure2){
+    val resultHandle2 = monadError.handleError(failure2) {
       case "Error de prueba" => monadError.pure("Error controlado?")
-      case _ => monadError.raiseError("Esto no está controlado")
+      case _                 => monadError.raiseError("Esto no está controlado")
     }
     println(s"resultHandle=${resultHandle2}")
     println(s"${resultHandle2.getClass}") // Retorna de ErrorOr
@@ -83,11 +81,13 @@ object EjemEither2Monada extends App{
 
     // Con ensure, definimos un predicado que se tiene que cumplir.
 
-    println( s"Control numérico 142=${monadError.ensure( monadError.pure(142) )("Número demasiado algo")(elem => elem > 100)} ")
-    println( s"Control numérico 42 =${monadError.ensure( monadError.pure(42) )("Número demasiado algo")(elem => elem > 100)} ")
+    println(
+      s"Control numérico 142=${monadError.ensure(monadError.pure(142))("Número demasiado algo")(elem => elem > 100)} "
+    )
+    println(
+      s"Control numérico 42 =${monadError.ensure(monadError.pure(42))("Número demasiado algo")(elem => elem > 100)} "
+    )
     println()
-
-
 
   }
 

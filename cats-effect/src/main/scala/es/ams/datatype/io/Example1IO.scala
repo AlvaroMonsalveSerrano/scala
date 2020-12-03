@@ -3,8 +3,7 @@ package es.ams.datatype.io
 import cats.effect.IO
 //import cats.syntax.all._
 
-/**
-  * Type class IO
+/** Type class IO
   * -------------
   *
   * Ref: https://typelevel.org/cats-effect/datatypes/io.html
@@ -21,7 +20,6 @@ import cats.effect.IO
   * - la computación del programa retorna un resultado.
   * - Si hay error se gestiona como una Mónada error.
   * - Se peude cancelar, operación dependiente del usuario.
-  *
   */
 object Example1IO extends App {
 
@@ -31,7 +29,7 @@ object Example1IO extends App {
     val ioa = IO { println("Hola Mundo!") }
 
     val program: IO[Unit] =
-      for{
+      for {
         _ <- ioa
         _ <- ioa
       } yield ()
@@ -40,21 +38,19 @@ object Example1IO extends App {
 
   }
 
-  /**
-    * El tipo de datos IO conserva la transparencia referencial incluso cuando se trata de efectos secundarios y se
+  /** El tipo de datos IO conserva la transparencia referencial incluso cuando se trata de efectos secundarios y se
     * evalúa de forma perezosa. En un lenguaje como Scala, esta es la diferencia entre un resultado y la función que lo
     * produce.
-    *
     */
   def example2(): Unit = {
 
     println(s"-*- Example2 -*-")
 
     def doSometing(value: Int): IO[Unit] = {
-      IO{ println(s" Value: ${value}")}
+      IO { println(s" Value: ${value}") }
     }
 
-    val program1 = for{
+    val program1 = for {
       _ <- doSometing(20)
       _ <- doSometing(30)
     } yield ()
@@ -62,7 +58,7 @@ object Example1IO extends App {
 
     // Ejemplo transparencia referencial.
     val task = doSometing(40)
-    val program2 = for{
+    val program2 = for {
       _ <- task
       _ <- task
     } yield ()
@@ -70,8 +66,7 @@ object Example1IO extends App {
 
   }
 
-  /**
-    * Stack safety.
+  /** Stack safety.
     * Es seguro realizar llamadas a flatMap en llamadas recursivas.
     */
   def example3(): Unit = {
@@ -89,12 +84,11 @@ object Example1IO extends App {
     val program1 =
       for {
         result <- fib(10)
-        _ <- IO( println(s"Result fib(10)=${result}"))
-      }yield ()
+        _      <- IO(println(s"Result fib(10)=${result}"))
+      } yield ()
     program1.unsafeRunSync()
 
-
-    def factorial(n:Int): IO[Long] = {
+    def factorial(n: Int): IO[Long] = {
 
       def doFactorial(n: Int, acc: Long): IO[Long] = {
         IO(n * acc).flatMap { num =>
@@ -110,10 +104,9 @@ object Example1IO extends App {
     val program2 =
       for {
         result <- factorial(5)
-        _ <- IO( println(s"Result fib(10)=${result}"))
-      }yield ()
+        _      <- IO(println(s"Result fib(10)=${result}"))
+      } yield ()
     program2.unsafeRunSync()
-
 
   }
 

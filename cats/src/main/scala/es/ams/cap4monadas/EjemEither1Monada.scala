@@ -7,20 +7,20 @@ object EjemEither1Monada extends App {
     val either2: Either[String, Int] = Right(32)
 
     // Con Scala 2.12
-    val result212 = for{
+    val result212 = for {
       a <- either1
       b <- either2
-    }yield{
+    } yield {
       a + b
     }
     println(s"Resultado2.12=${result212}")
     println()
 
     // Con Scala 2.11
-    val result211 = for{
+    val result211 = for {
       a <- either1 //.right
       b <- either2 //.right
-    }yield{
+    } yield {
       a + b
     }
 
@@ -35,10 +35,10 @@ object EjemEither1Monada extends App {
     val either1 = 12.asRight[String] // OJO! String es para el valor izquierdo.
     val either2 = 25.asRight[String]
 
-    val result1 = for{
+    val result1 = for {
       a <- either1
       b <- either2
-    }yield{ a + b }
+    } yield { a + b }
 
     println(s"Resultado Cats=${result1}")
     println()
@@ -49,15 +49,14 @@ object EjemEither1Monada extends App {
     import cats.syntax.all._
 //    import cats.syntax.either._
 
-    val result1 = Either.catchOnly[NumberFormatException]( "ERROR!".toInt )
+    val result1 = Either.catchOnly[NumberFormatException]("ERROR!".toInt)
     println(s"result1=${result1}")
     println()
-    val result2 = Either.catchOnly[NumberFormatException]( "69".toInt )
+    val result2 = Either.catchOnly[NumberFormatException]("69".toInt)
     println(s"resul2=${result2}")
     println()
 
-
-    val result3: Either[Throwable, Nothing] = Either.catchNonFatal( sys.error("SYSTEM ERROR") )
+    val result3: Either[Throwable, Nothing] = Either.catchNonFatal(sys.error("SYSTEM ERROR"))
     println(s"result3=${result3}")
     println()
 
@@ -68,11 +67,11 @@ object EjemEither1Monada extends App {
     import cats.syntax.all._
 //    import cats.syntax.either._
 
-    val result1: Either[String, Int] = Either.fromOption[String, Int]( None, "Error")
+    val result1: Either[String, Int] = Either.fromOption[String, Int](None, "Error")
     println(s"result1=${result1}")
     println()
 
-    val result2: Either[String, Int] = Either.fromOption[String, Int]( Option(90), "Error")
+    val result2: Either[String, Int] = Either.fromOption[String, Int](Option(90), "Error")
     println(s"result1=${result2}")
     println()
 
@@ -86,24 +85,24 @@ object EjemEither1Monada extends App {
     println(s"result1.getClass=${either1.getClass}")
     println()
 
-    val either2 = "Error".asLeft[Int].orElse( 2.asRight[String] )
+    val either2 = "Error".asLeft[Int].orElse(2.asRight[String])
     println(s"result2=${either2}")
     println(s"result2.getClass=${either2.getClass}")
     println()
 
     // Interesante para validaciones.
-    val either3 = 1.asRight[String].ensure("Debe de ser no negativo")( elem => elem > 10)
+    val either3 = 1.asRight[String].ensure("Debe de ser no negativo")(elem => elem > 10)
     println(s"-1 > 10?${either3}")
     println()
 
     // Recover permite "recuperar" la ejecución cuando se produce un resultado Left.
-    val either4 = "error".asLeft[Int].recover {
-      case str: String => -1
+    val either4 = "error".asLeft[Int].recover { case str: String =>
+      -1
     }
     println(s"either4=${either4}")
     println()
 
-    val either5 = "error".asLeft[Int].recoverWith{
+    val either5 = "error".asLeft[Int].recoverWith {
       case str: String => { print("-" + str + "-"); Right(-1) }
     }
     println(s"either5=${either5}")

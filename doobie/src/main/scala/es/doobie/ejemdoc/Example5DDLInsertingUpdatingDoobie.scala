@@ -6,47 +6,42 @@ import doobie.util.ExecutionContexts
 import cats.effect._
 import cats.implicits._
 
-
-/**
- * DDL, Inserting, and Updating
- * ----------------------------
- *
- * https://tpolecat.github.io/doobie/docs/07-Updating.html
- *
- * + Docker MySQL:
- *
- * # run mysql
- * docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.0
- *
- * # connect to mysql container
- * docker exec -it mysql bash
- *
- * # connect to mysql
- * mysql -uroot -p
- *
- * # create database
- * CREATE DATABASE IF NOT EXISTS doobie;
- *
- *
- * + SQL:
- *
- * CREATE TABLE doobie.country (
- * code       character(3)  NOT NULL,
- * name       text          NOT NULL,
- * population integer       NOT NULL,
- * gnp        numeric(10,2)
- * -- more columns, but we won't use them here
- * );
- *
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'ESP', 'España', 10, 10.10);
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'POR', 'Portugal', 9, 9.9);
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'FRA', 'Francia', 8, 8.8);
- *
- * SELECT * FROM country;
- *
- */
-object Example5DDLInsertingUpdatingDoobie extends App{
-
+/** DDL, Inserting, and Updating
+  * ----------------------------
+  *
+  * https://tpolecat.github.io/doobie/docs/07-Updating.html
+  *
+  * + Docker MySQL:
+  *
+  * # run mysql
+  * docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.0
+  *
+  * # connect to mysql container
+  * docker exec -it mysql bash
+  *
+  * # connect to mysql
+  * mysql -uroot -p
+  *
+  * # create database
+  * CREATE DATABASE IF NOT EXISTS doobie;
+  *
+  * + SQL:
+  *
+  * CREATE TABLE doobie.country (
+  * code       character(3)  NOT NULL,
+  * name       text          NOT NULL,
+  * population integer       NOT NULL,
+  * gnp        numeric(10,2)
+  * -- more columns, but we won't use them here
+  * );
+  *
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'ESP', 'España', 10, 10.10);
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'POR', 'Portugal', 9, 9.9);
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'FRA', 'Francia', 8, 8.8);
+  *
+  * SELECT * FROM country;
+  */
+object Example5DDLInsertingUpdatingDoobie extends App {
 
   implicit val cs = IO.contextShift(ExecutionContexts.synchronous)
 
@@ -61,16 +56,13 @@ object Example5DDLInsertingUpdatingDoobie extends App{
   val y = xa.yolo
   import y._
 
-
-  /**
-   * Data definition.
-   *
-   */
+  /** Data definition.
+    */
   def example1(): Unit = {
 
     println(s"-*- Example1 -*-")
     val drop =
-        sql"""
+      sql"""
           DROP TABLE IF EXISTS person
         """.update.run
 
@@ -88,10 +80,8 @@ object Example5DDLInsertingUpdatingDoobie extends App{
 
   }
 
-
-  /**
-   * Inserting
-   */
+  /** Inserting
+    */
   def example2(): Unit = {
 
     println(s"-*- Example2 -*-")
@@ -112,11 +102,8 @@ object Example5DDLInsertingUpdatingDoobie extends App{
 
   }
 
-
-  /**
-   * Updating
-   *
-   */
+  /** Updating
+    */
   def example3(): Unit = {
 
     println(s"-*- Example3 -*-")
@@ -128,10 +115,8 @@ object Example5DDLInsertingUpdatingDoobie extends App{
 
   }
 
-
-  /**
-   * Retrieving Results
-   */
+  /** Retrieving Results
+    */
   def example4(): Unit = {
 
     println(s"-*- Example4 -*-")
@@ -150,10 +135,8 @@ object Example5DDLInsertingUpdatingDoobie extends App{
 
   }
 
-
-  /**
-   * Batch Updates
-   */
+  /** Batch Updates
+    */
   def example5(): Unit = {
 
     println(s"-*- Example5 -*-")
@@ -175,8 +158,6 @@ object Example5DDLInsertingUpdatingDoobie extends App{
 
 //    sql"select id, name, age from person".query[Person].stream.quick.unsafeRunSync()
   }
-
-
 
   example1()
   example2()

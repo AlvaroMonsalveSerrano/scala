@@ -1,9 +1,8 @@
 package es.ams.cap6semigroupsapplicative
 
-object Ejem1Validated extends App{
+object Ejem1Validated extends App {
 
-  /**
-    * Ejemplos de creación básica de Validated.
+  /** Ejemplos de creación básica de Validated.
     */
   def ejemplo1(): Unit = {
 
@@ -30,7 +29,6 @@ object Ejem1Validated extends App{
     println(s"validated_1.4=${validated4}")
     println()
 
-
     //
     // FORMA 3. Creación utilizando la sintaxis.
     import cats.syntax.validated._
@@ -52,7 +50,7 @@ object Ejem1Validated extends App{
     import cats.syntax.apply._
 
     println(s"--- EJEMPLO1_1: Creación de Validated básico y Semigropal ---")
-    type Validador[A] = Validated[List[String],A]
+    type Validador[A] = Validated[List[String], A]
 
     //
     // FORMA 1.
@@ -64,17 +62,13 @@ object Ejem1Validated extends App{
     println(s"validated_1_1.2=${validated2.get}")
     println()
 
-    val reusult1: Option[( Validador[Int], Validador[Int] )] = ( validated1, validated2 ).tupled
+    val reusult1: Option[(Validador[Int], Validador[Int])] = (validated1, validated2).tupled
     println(s"Resultado_1_1.3 Tupla de dos valores =${reusult1}")
     println()
 
-
-
   }
 
-
-  /**
-    * Creación de Validated con applicative.
+  /** Creación de Validated con applicative.
     *
     * ESTO NO FUNCIONA. no encuentra los valres implícitos de cats.Applicative[ErroresOr]
     */
@@ -97,9 +91,7 @@ object Ejem1Validated extends App{
 
   }
 
-
-  /**
-    * Ejemplos de Helper de Validated
+  /** Ejemplos de Helper de Validated
     */
   def ejemplo3(): Unit = {
 
@@ -109,24 +101,21 @@ object Ejem1Validated extends App{
     println(s"validated 3.1=${validated1}")
     println()
 
-
     val validated2 = Validated.catchNonFatal(sys.error("Error"))
     println(s"validated 3.2=${validated2}")
     println()
 
-    val validated3 = Validated.fromTry( scala.util.Try("ErrorNumerico".toInt) )
+    val validated3 = Validated.fromTry(scala.util.Try("ErrorNumerico".toInt))
     println(s"validated 3.3=${validated3}")
     println()
 
-
-    val validated4 = Validated.fromEither[String, Int]( scala.util.Left("ErrorEither") )
+    val validated4 = Validated.fromEither[String, Int](scala.util.Left("ErrorEither"))
     println(s"validated 3.4=${validated4}")
     println()
 
-    val validated5 = Validated.fromOption[String, Int]( None, "ErrorOption" )
+    val validated5 = Validated.fromOption[String, Int](None, "ErrorOption")
     println(s"validated 3.4=${validated5}")
     println()
-
 
   }
 

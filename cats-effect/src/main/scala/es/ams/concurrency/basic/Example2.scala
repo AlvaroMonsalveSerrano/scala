@@ -4,8 +4,7 @@ import cats.effect.{Blocker, ContextShift, IO}
 
 import scala.concurrent.ExecutionContext
 
-/**
-  * Concurrency
+/** Concurrency
   * -----------
   *
   * https://typelevel.org/cats-effect/concurrency/basics.html
@@ -15,7 +14,6 @@ import scala.concurrent.ExecutionContext
   * operaciones.
   *
   * Se usa Blocker[IO] para gestionar de forma segura operaciones de bloqueo de forma explícita.
-  *
   */
 object Example2 extends App {
 
@@ -25,16 +23,16 @@ object Example2 extends App {
     implicit val contextShift: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
     def readName(): IO[String] = {
-      IO{
+      IO {
         println(s"Name:")
         scala.io.StdIn.readLine()
       }
     }
 
-    def doSomething(): IO[Unit] = IO( println(s"Saludo al mundo") )
+    def doSomething(): IO[Unit] = IO(println(s"Saludo al mundo"))
 
-    val program = Blocker[IO].use{ blocker =>
-      for{
+    val program = Blocker[IO].use { blocker =>
+      for {
         _ <- blocker.blockOn(readName())
         _ <- doSomething()
       } yield ()

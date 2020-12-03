@@ -6,44 +6,41 @@ import doobie.util.ExecutionContexts
 import doobie.util.log.LogEvent
 import cats.effect._
 
-
-/**
- * Logging
- * -------
- *
- * https://tpolecat.github.io/doobie/docs/10-Logging.html
- *
- * + Docker MySQL:
- *
- * # run mysql
- * docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.0
- *
- * # connect to mysql container
- * docker exec -it mysql bash
- *
- * # connect to mysql
- * mysql -uroot -p
- *
- * # create database
- * CREATE DATABASE IF NOT EXISTS doobie;
- *
- *
- * + SQL:
- *
- * CREATE TABLE doobie.country (
- * code       character(3)  NOT NULL,
- * name       text          NOT NULL,
- * population integer       NOT NULL,
- * gnp        numeric(10,2)
- * -- more columns, but we won't use them here
- * );
- *
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'ESP', 'España', 10, 10.10);
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'POR', 'Portugal', 9, 9.9);
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'FRA', 'Francia', 8, 8.8);
- *
- * SELECT * FROM country;
- */
+/** Logging
+  * -------
+  *
+  * https://tpolecat.github.io/doobie/docs/10-Logging.html
+  *
+  * + Docker MySQL:
+  *
+  * # run mysql
+  * docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.0
+  *
+  * # connect to mysql container
+  * docker exec -it mysql bash
+  *
+  * # connect to mysql
+  * mysql -uroot -p
+  *
+  * # create database
+  * CREATE DATABASE IF NOT EXISTS doobie;
+  *
+  * + SQL:
+  *
+  * CREATE TABLE doobie.country (
+  * code       character(3)  NOT NULL,
+  * name       text          NOT NULL,
+  * population integer       NOT NULL,
+  * gnp        numeric(10,2)
+  * -- more columns, but we won't use them here
+  * );
+  *
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'ESP', 'España', 10, 10.10);
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'POR', 'Portugal', 9, 9.9);
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'FRA', 'Francia', 8, 8.8);
+  *
+  * SELECT * FROM country;
+  */
 
 object Example8Logging extends App {
 
@@ -57,11 +54,8 @@ object Example8Logging extends App {
     Blocker.liftExecutionContext(ExecutionContexts.synchronous) // just for testing
   )
 
-
-  /**
-   * Basic Statement Logging
-   *
-   */
+  /** Basic Statement Logging
+    */
   def example1(): Unit = {
 
     // TODO 2.13
@@ -91,10 +85,8 @@ object Example8Logging extends App {
 
   }
 
-  /**
-   * Implicit Logging
-   *
-   */
+  /** Implicit Logging
+    */
   def example2(): Unit = {
 
     // TODO 2.13
@@ -118,7 +110,7 @@ object Example8Logging extends App {
 
     case class LogHandler(unsafeRun: LogEvent => Unit)
 
-    val nop = doobie.LogHandler(_ => ())
+    val nop     = doobie.LogHandler(_ => ())
     val trivial = doobie.LogHandler(e => Console.println("*** " + e))
 
     println(s"-*- Example3 -*-")
@@ -128,7 +120,6 @@ object Example8Logging extends App {
     println()
 
   }
-
 
   // TODO 2.13
 //  /**

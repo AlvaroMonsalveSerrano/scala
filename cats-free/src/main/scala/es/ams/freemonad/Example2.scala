@@ -5,11 +5,8 @@ import cats.free.Free
 import cats.{Id, InjectK, ~>}
 import scala.collection.mutable.ListBuffer
 
-/**
-  * FreeMomnad (Cont.)
+/** FreeMomnad (Cont.)
   * ----------
-  *
-  *
   *
   * Composición de Free Monad.
   *
@@ -17,7 +14,6 @@ import scala.collection.mutable.ListBuffer
   * nos permite componer álgebras en el contexto de Free.
   *
   * Este es un ejemplo trivial.
-  *
   */
 
 object Example2 extends App {
@@ -29,26 +25,25 @@ object Example2 extends App {
   //
   sealed trait Interact[A]
   case class Ask(propmt: String) extends Interact[String]
-  case class Tell(msg: String) extends Interact[Unit]
+  case class Tell(msg: String)   extends Interact[Unit]
 
   sealed trait DataOp[A]
   case class AddCat(a: String) extends DataOp[Unit]
-  case class GetAllCats() extends DataOp[List[String]]
+  case class GetAllCats()      extends DataOp[List[String]]
 
   //
   // Definición del DSL
   //
-  class Interacts[F[_]](implicit I: InjectK[Interact, F]){
-    def tell(msg: String): Free[F, Unit] = Free.inject[Interact, F](Tell(msg))
+  class Interacts[F[_]](implicit I: InjectK[Interact, F]) {
+    def tell(msg: String): Free[F, Unit]     = Free.inject[Interact, F](Tell(msg))
     def ask(prompt: String): Free[F, String] = Free.inject[Interact, F](Ask(prompt))
   }
-  object Interacts{
+  object Interacts {
     implicit def interacts[F[_]](implicit I: InjectK[Interact, F]): Interacts[F] = new Interacts[F]
   }
 
-
-  class DataSource[F[_]](implicit I: InjectK[DataOp, F]){
-    def addCat(a: String): Free[F, Unit] = Free.inject[DataOp, F](AddCat(a))
+  class DataSource[F[_]](implicit I: InjectK[DataOp, F]) {
+    def addCat(a: String): Free[F, Unit]  = Free.inject[DataOp, F](AddCat(a))
     def getAllCats: Free[F, List[String]] = Free.inject[DataOp, F](GetAllCats())
   }
   object DataSource {
@@ -63,18 +58,18 @@ object Example2 extends App {
     import I._
     import D._
 
-    for{
-      cat <- ask("Name?")
-      _ <- addCat(cat)
+    for {
+      cat  <- ask("Name?")
+      _    <- addCat(cat)
       cats <- getAllCats
-      _ <- tell(cats.toString())
+      _    <- tell(cats.toString())
     } yield {}
   }
 
   //
   // Definición de intérpretes
   //
-  object ConsoleCatsInterpreter extends ( Interact ~> Id){
+  object ConsoleCatsInterpreter extends (Interact ~> Id) {
     def apply[A](i: Interact[A]) = i match {
       case Ask(prompt) =>
         println(prompt)
@@ -84,7 +79,7 @@ object Example2 extends App {
     }
   }
 
-  object InMemoryDatasourceInterpreter extends (DataOp ~> Id){
+  object InMemoryDatasourceInterpreter extends (DataOp ~> Id) {
 
     private[this] val memDataSet = new ListBuffer[String]
 
@@ -103,6 +98,5 @@ object Example2 extends App {
   // Ejecución
   //
   val result: Unit = program.foldMap(interpreter)
-
 
 }

@@ -8,7 +8,6 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class Ejem3DependecyInyectorTest extends AnyWordSpec with Matchers {
 
-
   "Example Mock" when {
 
     "Example OK" in {
@@ -16,11 +15,11 @@ class Ejem3DependecyInyectorTest extends AnyWordSpec with Matchers {
       val context = ServiceContext(Component1Ejem3.doSomething, Component2Ejem3.doSomething)
 
       val msg: String = "prueba"
-        val result: String = ServiceImpl.doBusiness(msg).run(context) match {
-          case Right(msg) => { println(msg); msg}
-          case Left(error) => error
-        }
-        result shouldBe(msg + " modificado-6")
+      val result: String = ServiceImpl.doBusiness(msg).run(context) match {
+        case Right(msg)  => { println(msg); msg }
+        case Left(error) => error
+      }
+      result shouldBe (msg + " modificado-6")
     }
 
     "Example OK: mock component1" in {
@@ -30,7 +29,7 @@ class Ejem3DependecyInyectorTest extends AnyWordSpec with Matchers {
 
       val msg: String = "prueba"
       val result: String = ServiceImpl.doBusiness(msg).run(context) match {
-        case Right(msg) => { println(msg); msg}
+        case Right(msg)  => { println(msg); msg }
         case Left(error) => error
       }
       assert(result.length > 0)
@@ -38,13 +37,13 @@ class Ejem3DependecyInyectorTest extends AnyWordSpec with Matchers {
     }
 
     "Example OK: mock component2" in {
-      val funcComponent2: GetComponent2 =  (num: Int) => 0.asRight
+      val funcComponent2: GetComponent2 = (num: Int) => 0.asRight
 
-      val context = ServiceContext(Component1Ejem3.doSomething,funcComponent2)
+      val context = ServiceContext(Component1Ejem3.doSomething, funcComponent2)
 
       val msg: String = "prueba"
       val result: String = ServiceImpl.doBusiness(msg).run(context) match {
-        case Right(msg) => { println(msg); msg}
+        case Right(msg)  => { println(msg); msg }
         case Left(error) => error
       }
       assert(result.length > 0)
@@ -58,13 +57,12 @@ class Ejem3DependecyInyectorTest extends AnyWordSpec with Matchers {
 
       val msg: String = "prueba"
       val result: String = ServiceImpl.doBusiness(msg).run(context) match {
-        case Right(msg) => { println(msg); msg}
+        case Right(msg)  => { println(msg); msg }
         case Left(error) => error
       }
       assert(result.length > 0)
       assert(result.equals("mock-0"))
     }
-
 
   }
 

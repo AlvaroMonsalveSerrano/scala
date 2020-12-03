@@ -12,22 +12,22 @@ object InvariantCatsEjem1 extends App {
     import scala.Symbol // Equivale a un String
 
     implicit val symbolMonoid: Monoid[Symbol] =
-      Monoid[String].imap( (nombre:String) => Symbol.apply(nombre) )( (elem:Symbol) => elem.name)
+      Monoid[String].imap((nombre: String) => Symbol.apply(nombre))((elem: Symbol) => elem.name)
 //    Monoid[String].imap( Symbol.apply )( elem.name )
 
     val monoidSymbol = Monoid[Symbol].empty
 
-    println(s"monoidSymbol=${ monoidSymbol } ")
+    println(s"monoidSymbol=${monoidSymbol} ")
     println()
     println(s"Símbolo básico=${"SymbolEjem1"} ")
     println()
 
     val symbolFromString = "SymbolEjem1" |+| "paraProbar" |+| "cosasInvariantes"
-    println(s"symbolFromString= ${ symbolFromString } ")
-    println(s"getClass= ${ symbolFromString.getClass } ")
+    println(s"symbolFromString= ${symbolFromString} ")
+    println(s"getClass= ${symbolFromString.getClass} ")
     println()
 
-    println(s"monoidSymbol=${ "stringToImap" |+| "Imap"} ")
+    println(s"monoidSymbol=${"stringToImap" |+| "Imap"} ")
     println()
 
   }

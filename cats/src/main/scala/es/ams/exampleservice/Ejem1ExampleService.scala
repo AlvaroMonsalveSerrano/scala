@@ -13,7 +13,7 @@ import cats.implicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-object Ejem1ExampleService extends App{
+object Ejem1ExampleService extends App {
 
   //
   // Definición de funciones.
@@ -21,7 +21,7 @@ object Ejem1ExampleService extends App{
   val functionOperation1: FunctionString = (param: String) => {
     param match {
       case "ValueOK" => Right("OK")
-      case _ => Left("KO: Value not valid.")
+      case _         => Left("KO: Value not valid.")
     }
   }
 
@@ -35,14 +35,14 @@ object Ejem1ExampleService extends App{
     Future.successful(parseDouble(s))
 
   def divideAsync(a: Double, b: Double): Future[Either[String, Double]] =
-    Future.successful(divide(a,b))
+    Future.successful(divide(a, b))
 
   val functionDivisionProgramAsyncEitherT = (inputA: String, inputB: String) => {
     for {
-      a <- EitherT(parseDoubleAsync(inputA))
-      b <- EitherT(parseDoubleAsync(inputB))
-      result <- EitherT(divideAsync(a,b))
-    }yield {
+      a      <- EitherT(parseDoubleAsync(inputA))
+      b      <- EitherT(parseDoubleAsync(inputB))
+      result <- EitherT(divideAsync(a, b))
+    } yield {
       result
     }
   }
@@ -50,61 +50,59 @@ object Ejem1ExampleService extends App{
   //
   // Definición de un Servicio.
   //
-  object Service{
-
+  object Service {
 
     def businessFunction1(param1: Parameter): Kleisli[List, OrderInyector, OrderOutput] =
-
-      Kleisli[List, OrderInyector, OrderOutput]{ (inyectorFunction: OrderInyector) => {
-        val result = for{
+      Kleisli[List, OrderInyector, OrderOutput] { (inyectorFunction: OrderInyector) =>
+        {
+          val result = for {
             resultFunction <- inyectorFunction.fOperator(param1)
-          }yield{ resultFunction }
-        result match {
-          case Right(valueResult) => List(OrderOutput(valueResult))
-          case Left(error) =>  List(OrderOutput(s"ERROR: ${error}"))
+          } yield { resultFunction }
+          result match {
+            case Right(valueResult) => List(OrderOutput(valueResult))
+            case Left(error)        => List(OrderOutput(s"ERROR: ${error}"))
+          }
         }
-      }
 
-    }
+      }
 
     def businessFunction2(inputA: String, inputB: String): Kleisli[List, OrderInyector, OrderOutput] =
-      Kleisli[List, OrderInyector, OrderOutput]{ (inyectorFunction: OrderInyector) => {
+      Kleisli[List, OrderInyector, OrderOutput] { (inyectorFunction: OrderInyector) =>
+        {
 
-        implicit val timeout = Timeout(2 seconds)
-        val result = for{
-          resultFunction <- inyectorFunction.fDivideAsync(inputA, inputB)
-        } yield {resultFunction}
+          implicit val timeout = Timeout(2 seconds)
+          val result = for {
+            resultFunction <- inyectorFunction.fDivideAsync(inputA, inputB)
+          } yield { resultFunction }
 
-        Await.result(result.value, timeout.duration) match {
-          case Right(valueResult) => List(OrderOutput(valueResult.toString))
-          case Left(error) =>  List(OrderOutput(s"ERROR: ${error}"))
+          Await.result(result.value, timeout.duration) match {
+            case Right(valueResult) => List(OrderOutput(valueResult.toString))
+            case Left(error)        => List(OrderOutput(s"ERROR: ${error}"))
+          }
         }
       }
-    }
   }
 
   def example1(): Unit = {
 
     val startOrder = OrderInyector("inputOrder1", functionOperation1, functionDivisionProgramAsyncEitherT)
 
-    val paramTest1 = "ValueOK"
-    val objService1 = Service.businessFunction1(paramTest1)
+    val paramTest1                 = "ValueOK"
+    val objService1                = Service.businessFunction1(paramTest1)
     val result1: List[OrderOutput] = objService1.run(startOrder)
     println(s"Result1=${result1}")
     println()
 
-    val paramTest2 = "ValueKO"
-    val objService2 = Service.businessFunction1(paramTest2)
+    val paramTest2                 = "ValueKO"
+    val objService2                = Service.businessFunction1(paramTest2)
     val result2: List[OrderOutput] = objService2.run(startOrder)
     println(s"Result2=${result2}")
     println()
 
-
-    val objService3 = Service.businessFunction2("20", "4")
+    val objService3                = Service.businessFunction2("20", "4")
     val result3: List[OrderOutput] = objService3.run(startOrder)
     println(s"Result3=${result3}")
     println()
-
 
   }
 

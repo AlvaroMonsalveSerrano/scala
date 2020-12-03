@@ -12,16 +12,13 @@ object CodecApp extends App {
   println(s" codifica('{cadena}')=${cadenaString1} ")
   println()
 
-
   val ejem1 = codifica[Double](123.4)
   println(s" ejem1=${ejem1} ")
   println()
 
-
   val ejem2 = decodifica[Double]("123.4")
   println(s" ejem2=${ejem2} ")
   println()
-
 
   // Pendiente las pruebas d IMAP
 //  println( "encode('cadena')=" + Codec.apply[String].imap( (elem:String) => "{" + elem + "}"   ,

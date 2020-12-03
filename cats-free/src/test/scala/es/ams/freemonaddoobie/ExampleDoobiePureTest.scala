@@ -10,8 +10,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 import scala.concurrent.ExecutionContext
 
-/**
-  * Se necesita una base de datos MySQL en un contenedor para realizar las pruebas.
+/** Se necesita una base de datos MySQL en un contenedor para realizar las pruebas.
   *
   * Comando SQL para la creación de una base de datos:
   *   CREATE DATABASE IF NOT EXISTS doobieTest;
@@ -29,7 +28,7 @@ class ExampleDoobiePureTest extends AnyFlatSpec {
 
   "Interprete Pure" should "CreateSchema test" in {
 
-    val test = for{
+    val test = for {
       result <- createSchema()
     } yield (result)
 
@@ -42,7 +41,7 @@ class ExampleDoobiePureTest extends AnyFlatSpec {
   it should "Insert Author test" in {
     val test = for {
       create <- createSchema()
-      num <- insert( Author(0, "Author1"))
+      num    <- insert(Author(0, "Author1"))
     } yield (num)
 
     val resultTest: (StateDatabase, OperationDBResponse[Int]) = test.foldMap(pureInterpreter(xa)).run(Created).value
@@ -52,11 +51,11 @@ class ExampleDoobiePureTest extends AnyFlatSpec {
 
   it should "Delete Author test" in {
     val test = for {
-      create <- createSchema()
-      num <- insert(Author(0, "Author1"))
+      create     <- createSchema()
+      num        <- insert(Author(0, "Author1"))
       numDeleted <- delete(1)
 
-    } yield {numDeleted}
+    } yield { numDeleted }
 
     val resultTest: (StateDatabase, OperationDBResponse[Int]) = test.foldMap(pureInterpreter(xa)).run(Created).value
     assert(resultTest._1 === Created)
@@ -68,12 +67,13 @@ class ExampleDoobiePureTest extends AnyFlatSpec {
     val nameAuthor = "AuthorTest"
     val test = for {
       create <- createSchema()
-      num <- insert(Author(0, nameAuthor))
+      num    <- insert(Author(0, nameAuthor))
       author <- select(1)
 
-    } yield {author}
+    } yield { author }
 
-    val resultTest: (StateDatabase, OperationDBResponseOption[String]) = test.foldMap(pureInterpreter(xa)).run(Created).value
+    val resultTest: (StateDatabase, OperationDBResponseOption[String]) =
+      test.foldMap(pureInterpreter(xa)).run(Created).value
     assert(resultTest._1 === Created)
     assert(resultTest._2 === Right(Some(nameAuthor)))
 

@@ -5,8 +5,7 @@ import cats.effect.{ContextShift, Fiber, IO}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 
-/**
-  * Fiber
+/** Fiber
   * =====
   *
   * https://typelevel.org/cats-effect/datatypes/fiber.html
@@ -14,7 +13,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
   * Representa el resultado puro de un tipo de dato Async.
   *
   * Se puede pensar que un Fiber es como un hilo.
-  *
   */
 object Example1 extends App {
 
@@ -42,7 +40,7 @@ object Example1 extends App {
     // OJO!! IO define la mónada error.
     val launchMissiles: IO[Unit] = IO.raiseError(new Exception("Boom!!"))
 
-    val runToBunker: IO[Unit]  = IO(println("To the bunker!!!"))
+    val runToBunker: IO[Unit] = IO(println("To the bunker!!!"))
 
     val result = for {
       fiber <- launchMissiles.start
@@ -52,7 +50,7 @@ object Example1 extends App {
       aftermath <- fiber.join
     } yield (aftermath)
 
-    result.unsafeRunAsyncAndForget()    // Ejecución OK.
+    result.unsafeRunAsyncAndForget() // Ejecución OK.
 //    result.unsafeRunSync()               // Ejecución KO
 
   }

@@ -1,52 +1,62 @@
 import Dependencies._
+import sbtassembly.AssemblyPlugin.autoImport.assemblyJarName
 
-ThisBuild / description      := "Scala Basic Concept Testing and Documentation Examples"
-ThisBuild / scalaVersion     := "2.13.4"
-ThisBuild / version          := "0.1.0-SNAPSHOT"
-ThisBuild / organization     := "es.ams"
+ThisBuild / description := "Scala Basic Concept Testing and Documentation Examples"
+ThisBuild / scalaVersion := "2.13.4"
+ThisBuild / version := "0.1.0-SNAPSHOT"
+ThisBuild / organization := "es.ams"
 ThisBuild / organizationName := "AMS"
-ThisBuild / developers       := List(
- Developer(
-   id    = "",
-   name  = "Álvaro Monsalve Serrano",
-   email = "",
-   url   = url("http://alvaromonsalve.com")
- )
+ThisBuild / developers := List(
+  Developer(
+    id = "",
+    name = "Álvaro Monsalve Serrano",
+    email = "",
+    url = url("http://alvaromonsalve.com")
+  )
 )
 
 lazy val basicScalacOptions = Seq(
-  "-deprecation"
-  ,"-encoding"
-  ,"utf-8"
-  ,"-explaintypes"
-  ,"-feature"
-  ,"-unchecked"
-  ,"-language:postfixOps"
-  ,"-language:higherKinds"
-  ,"-language:implicitConversions"
-  ,"-Xlint"               // enable handy linter warnings
-  ,"-Xfatal-warnings"     // turn compiler warnings into errors
-  ,"-language:reflectiveCalls"
+  "-deprecation",
+  "-encoding",
+  "utf-8",
+  "-explaintypes",
+  "-feature",
+  "-unchecked",
+  "-language:postfixOps",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+  "-Xlint" // enable handy linter warnings
+  ,
+  "-Xfatal-warnings" // turn compiler warnings into errors
+  ,
+  "-language:reflectiveCalls"
 )
 
- lazy val root = (project in file("."))
-   .aggregate(cats)
-   .aggregate(doobie)
-   .aggregate(pf)
-   .aggregate(catsEffect)
-   .aggregate(catsFree)
-   .aggregate(ciris)
-   .settings(
-     name := "scala",
-     scalacOptions ++= basicScalacOptions,
-     libraryDependencies += scalaTest % Test,
-     resolvers ++= Seq(
-       "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
-       Resolver.sonatypeRepo("releases"),
-       Resolver.sonatypeRepo("snapshots"),
-       "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
-     )
-   )
+lazy val commonSettings = Seq(
+  scalacOptions ++= basicScalacOptions,
+  test in assembly := {},
+  assemblyJarName in assembly := "scala-example.jar"
+)
+
+lazy val root = (project in file("."))
+  .aggregate(cats)
+  .aggregate(doobie)
+  .aggregate(pf)
+  .aggregate(catsEffect)
+  .aggregate(catsFree)
+  .aggregate(ciris)
+  .settings(
+    name := "scala",
+    commonSettings,
+    scalacOptions ++= basicScalacOptions,
+    libraryDependencies += scalaTest % Test,
+    resolvers ++= Seq(
+      "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
+      Resolver.sonatypeRepo("releases"),
+      Resolver.sonatypeRepo("snapshots"),
+      "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
+    )
+  )
 
 lazy val cats = (project in file("cats"))
   .settings(
@@ -55,8 +65,8 @@ lazy val cats = (project in file("cats"))
     scalacOptions ++= basicScalacOptions,
     libraryDependencies ++=
       catsDependencies ++ Seq(
-      scalaTest
-    )
+        scalaTest
+      )
   )
 
 lazy val catsDependencies = Seq(
@@ -64,7 +74,6 @@ lazy val catsDependencies = Seq(
   scalacheck,
   akka_actor
 )
-
 
 lazy val catsEffect = (project in file("cats-effect"))
   .settings(
@@ -82,7 +91,6 @@ lazy val catsEffectDependencies = Seq(
   cats_effect_laws
 )
 
-
 lazy val catsFree = (project in file("cats-free"))
   .settings(
     name := "example-cats-free",
@@ -90,11 +98,11 @@ lazy val catsFree = (project in file("cats-free"))
     scalacOptions ++= basicScalacOptions,
     libraryDependencies ++=
       catsFreeDependencies ++
-      doobieDependencies ++
-      cirisDependencies ++
-      catsEffectDependencies ++ Seq(
-        scalaTest
-      )
+        doobieDependencies ++
+        cirisDependencies ++
+        catsEffectDependencies ++ Seq(
+          scalaTest
+        )
   )
 
 lazy val catsFreeDependencies = Seq(
@@ -111,7 +119,6 @@ lazy val pf = (project in file("pf"))
         scalaTest
       )
   )
-
 
 lazy val doobie = (project in file("doobie"))
   .settings(
@@ -135,7 +142,6 @@ lazy val doobieDependencies = Seq(
   doobie_scalatest
 )
 
-
 lazy val ciris = (project in file("ciris"))
   .settings(
     name := "example-ciris",
@@ -148,12 +154,12 @@ lazy val ciris = (project in file("ciris"))
   )
 
 lazy val cirisDependencies = Seq(
-  ciris_ciris
-  ,ciris_circe
-  ,ciris_enumeratum
-  ,ciris_refined
-  ,ciris_squants
-  ,ciris_refined_cats
+  ciris_ciris,
+  ciris_circe,
+  ciris_enumeratum,
+  ciris_refined,
+  ciris_squants,
+  ciris_refined_cats
 )
 
 lazy val assemblySettings = Seq(

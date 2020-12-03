@@ -1,6 +1,5 @@
 package es.ams.cap8testingasynchronouscode
 
-
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 //import cats.instances.future._
@@ -23,7 +22,6 @@ import scala.concurrent.duration._
 
 import akka.util.Timeout
 
-
 object Ejem2AsynchronousClient extends App {
 
   type Id[A] = A
@@ -31,31 +29,29 @@ object Ejem2AsynchronousClient extends App {
   implicit val timeout = Timeout(2 seconds)
 
   // Interfaz del cliente----------------------------------------------------------------------------------------------
-  trait UptimeClient2[F[_]]{
+  trait UptimeClient2[F[_]] {
     def getUptime(hostname: String): F[Int]
   }
 
   // Asíncrono
-  object UptimeClientFuture extends UptimeClient2[Future]{
+  object UptimeClientFuture extends UptimeClient2[Future] {
     override def getUptime(hostname: String): Future[Int] =
       Future(hostname.toInt)
-        .recover{
-          case e:Exception => 0
+        .recover { case e: Exception =>
+          0
         }
   }
 
-
   // Síncrono
-  object UptimeClientId extends  UptimeClient2[Id]{
+  object UptimeClientId extends UptimeClient2[Id] {
     override def getUptime(hostname: String): Id[Int] = {
-      try{
+      try {
         hostname.toInt
-      }catch{
+      } catch {
         case e: Exception => 0
       }
     }
   }
-
 
 //
 //  trait RealUptimeClient extends UptimeClient2[Future]{
@@ -71,12 +67,11 @@ object Ejem2AsynchronousClient extends App {
 //    def getUptime(hostname: String): Id[Int] = hosts.getOrElse(hostname, 0)
 //  }
 
-
   // -------------------------------------------------------------------------------------------------------------------
   class UptimeService2[F[_]](client: UptimeClient2[F])(implicit a: Applicative[F]) {
 
     def getTotalUptime(hostnames: List[String]): F[Int] =
-      hostnames.traverse( client.getUptime  ).map(_.sum)
+      hostnames.traverse(client.getUptime).map(_.sum)
 
   }
 
@@ -84,8 +79,8 @@ object Ejem2AsynchronousClient extends App {
   // PRUEBA DE EJECUCIÓN
   //
 
-  val clienteId = UptimeClientId
-  val serviceId = new UptimeService2[Id](clienteId)
+  val clienteId             = UptimeClientId
+  val serviceId             = new UptimeService2[Id](clienteId)
   val listHostNamesSincrono = List("10", "20")
   println(s"Lista de host=${listHostNamesSincrono}")
   println()
@@ -94,14 +89,13 @@ object Ejem2AsynchronousClient extends App {
   println(s"Resultado Síncrono=${resultId}")
   println()
 
-
-  val clienteFuture = UptimeClientFuture
-  val serviceFuture = new UptimeService2[Future](clienteFuture)
+  val clienteFuture          = UptimeClientFuture
+  val serviceFuture          = new UptimeService2[Future](clienteFuture)
   val listHostNamesASincrono = List("10", "20")
-  val resultFuture = serviceFuture.getTotalUptime(listHostNamesASincrono)
+  val resultFuture           = serviceFuture.getTotalUptime(listHostNamesASincrono)
 
-  resultFuture onComplete{
-    case Success(value) => println(s" Resultado Asíncrono=${value}")
+  resultFuture onComplete {
+    case Success(value)     => println(s" Resultado Asíncrono=${value}")
     case Failure(exception) => println(s"Exception=${exception}")
   }
 

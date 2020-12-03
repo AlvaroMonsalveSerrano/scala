@@ -1,16 +1,12 @@
 package es.ams.cap4monadas
 
-/**
-  * cats.data.State nos permite pasar un estado adicional como parte de un programa.
+/** cats.data.State nos permite pasar un estado adicional como parte de un programa.
   * State representa un estado atómico.
   * Podemos modelas estados mutables de una forma pçuramente funcional.
   */
 object Ejem1StateMonad extends App {
 
-
-  /**
-    * Creación de un estado: State[S,A] = S => (S,A) ; S, estado; y A, resultado.
-    *
+  /** Creación de un estado: State[S,A] = S => (S,A) ; S, estado; y A, resultado.
     */
   def ejemplo1(): Unit = {
 
@@ -18,7 +14,7 @@ object Ejem1StateMonad extends App {
 
     import cats.data.State
 
-    val a =  State[Int, String]{ state =>
+    val a = State[Int, String] { state =>
       (state, s"El resultado es $state")
     }
 
@@ -42,34 +38,31 @@ object Ejem1StateMonad extends App {
 
   }
 
-
-  /**
-    * Composición y transformación de estados.
+  /** Composición y transformación de estados.
     *
     * De la misma manera que con Writer y Reader, el poder de la mónada State reside en la combinación de instancias.
     */
-  def ejemplo2():Unit = {
+  def ejemplo2(): Unit = {
 
     import cats.data.State
 
     println(s"--- EJEMPLO2: Composición de State ---")
-    val step1 = State[Int, String]{ num =>
+    val step1 = State[Int, String] { num =>
       val ans = num + 1
       (ans, s"Resultado de step1= $ans")
     }
 
-    val step2 = State[Int, String]{ num =>
+    val step2 = State[Int, String] { num =>
       val ans = num * 2
       (ans, s"Resultado de step2= $ans")
     }
-
 
     // State esta hilada de estado a estado. La salida de step1 es la entrada de step2.
     val both = for {
       a <- step1
       b <- step2
-    }yield{
-      (a,b)
+    } yield {
+      (a, b)
     }
 
     val (state, result) = both.run(20).value
@@ -78,9 +71,7 @@ object Ejem1StateMonad extends App {
 
   }
 
-
-  /**
-    * Funciones de estado:
+  /** Funciones de estado:
     *   - get: retorna es estado como el resultado.
     *   - set: modifica el estado y retorna unit como el resultado
     *   - pure: ignora el estado y retorna el resultado.
@@ -104,10 +95,11 @@ object Ejem1StateMonad extends App {
     println(s"pureDemo=${pureDemo.run(10).value}")
     println()
 
-// TODO 2.13
-//    val inspectDemo = State.inspect[Int, String](_ + "!") // OJO! Transforma el estado en un resultado de salida.
-//    println(s"inspectDemo=${inspectDemo.run(10).value}")
-//    println()
+    val strs = "!"
+    val inspectDemo =
+      State.inspect[Int, String]((elem: Int) => s"$elem$strs") // OJO! Transforma el estado en un resultado de salida.
+    println(s"inspectDemo=${inspectDemo.run(10).value}")
+    println()
 
     val modifyDemo = State.modify[Int](_ + 1) // OJO! Transforma el estado en un resultado de salida.
     println(s"modifyDemo=${modifyDemo.run(10).value}")
@@ -115,10 +107,7 @@ object Ejem1StateMonad extends App {
 
   }
 
-
-  /**
-    * Ejemplo de for comprehension con las funciones básicas de State.
-    *
+  /** Ejemplo de for comprehension con las funciones básicas de State.
     */
   def ejemplo4(): Unit = {
 
@@ -132,9 +121,8 @@ object Ejem1StateMonad extends App {
       _ <- set[Int](a + 1)
       b <- get[Int]
       _ <- modify[Int](_ + 1)
-      c <- inspect[Int,Int](_ * 1000)
-    }yield(a,b,c)
-
+      c <- inspect[Int, Int](_ * 1000)
+    } yield (a, b, c)
 
     val (state, result) = program.run(1).value
     println(s"run() For comprehension: Estado=${state} y el resultado=${result}")

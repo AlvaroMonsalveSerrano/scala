@@ -9,9 +9,7 @@ import cats.data.State
 
 import scala.collection.mutable
 
-
-/**
-  * FreeMomnad
+/** FreeMomnad
   * ----------
   *
   * https://typelevel.org/cats/datatypes/freemonad.html
@@ -39,22 +37,19 @@ import scala.collection.mutable
   * Este proceso se conoce como trampolín.
   * La seguridad de la pila proporciona confiabilidad para su uso en tareas de uso intensivo de datos, así como, en
   * procesos infinitos.
-  *
-  *
   */
 object Example1 extends App {
 
-
   type KVStore[A] = Free[KVStoreA, A]
 
-  type KVStoreState[A] = State[ Map[String, Any], A ]
+  type KVStoreState[A] = State[Map[String, Any], A]
 
 //  def example1(): Unit = {
 //
 //
 //  }
 
-  def pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState ){
+  def pureCompiler: KVStoreA ~> KVStoreState = new (KVStoreA ~> KVStoreState) {
 
     override def apply[A](fa: KVStoreA[A]): KVStoreState[A] = fa match {
 
@@ -62,7 +57,7 @@ object Example1 extends App {
         State.modify(_.updated(key, value))
 
       case Get(key) =>
-        State.inspect( _.get(key).map(_.asInstanceOf[A]) )
+        State.inspect(_.get(key).map(_.asInstanceOf[A]))
 
       case Delete(key) =>
         State.modify(_ - key)
@@ -97,9 +92,9 @@ object Example1 extends App {
     liftF(Delete(key))
 
   def update[T](key: String, f: T => T): KVStore[Unit] =
-    for{
+    for {
       vMaybe <- get[T](key)
-      _ <- vMaybe.map(v => put[T](key, f(v))).getOrElse( Free.pure(()) )
+      _      <- vMaybe.map(v => put[T](key, f(v))).getOrElse(Free.pure(()))
     } yield ()
 
   def put[T](key: String, value: T): KVStore[Unit] =
@@ -116,7 +111,6 @@ object Example1 extends App {
   case class Get[T](key: String) extends KVStoreA[Option[T]]
 
   case class Delete(key: String) extends KVStoreA[Unit]
-
 
   // Parece un flujo monádico pero solo crea una estructura de datos recursiva que representa una secuencia de operaciones.
   def program: KVStore[Option[Int]] =

@@ -8,48 +8,46 @@ import cats.effect._
 
 //import Fragments.{ in, whereAndOpt }
 
-/**
- * Statement Fragments
- * -------------------
- *
- * https://tpolecat.github.io/doobie/docs/08-Fragments.html
- *
- * + Docker MySQL:
- *
- * # run mysql
- * docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.0
- *
- * # connect to mysql container
- * docker exec -it mysql bash
- *
- * # connect to mysql
- * mysql -uroot -p
- *
- * # create database
- * CREATE DATABASE IF NOT EXISTS doobie;
- *
- *
- * + SQL:
- *
- * CREATE TABLE doobie.country (
- * code       character(3)  NOT NULL,
- * name       text          NOT NULL,
- * population integer       NOT NULL,
- * gnp        numeric(10,2)
- * -- more columns, but we won't use them here
- * );
- *
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'ESP', 'España', 10, 10.10);
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'POR', 'Portugal', 9, 9.9);
- * INSERT INTO country (code, name, population, gnp) VALUES ( 'FRA', 'Francia', 8, 8.8);
- *
- * SELECT * FROM country;
- *
- *  Se puede construir un SQL Fragment usando el interpolador fr el cual se comporta como
- *  el interpolador sql.
- *
- *  Se concatenan con ++
- */
+/** Statement Fragments
+  * -------------------
+  *
+  * https://tpolecat.github.io/doobie/docs/08-Fragments.html
+  *
+  * + Docker MySQL:
+  *
+  * # run mysql
+  * docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.0
+  *
+  * # connect to mysql container
+  * docker exec -it mysql bash
+  *
+  * # connect to mysql
+  * mysql -uroot -p
+  *
+  * # create database
+  * CREATE DATABASE IF NOT EXISTS doobie;
+  *
+  * + SQL:
+  *
+  * CREATE TABLE doobie.country (
+  * code       character(3)  NOT NULL,
+  * name       text          NOT NULL,
+  * population integer       NOT NULL,
+  * gnp        numeric(10,2)
+  * -- more columns, but we won't use them here
+  * );
+  *
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'ESP', 'España', 10, 10.10);
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'POR', 'Portugal', 9, 9.9);
+  * INSERT INTO country (code, name, population, gnp) VALUES ( 'FRA', 'Francia', 8, 8.8);
+  *
+  * SELECT * FROM country;
+  *
+  *  Se puede construir un SQL Fragment usando el interpolador fr el cual se comporta como
+  *  el interpolador sql.
+  *
+  *  Se concatenan con ++
+  */
 
 object Example6StatementFragmentsDoobie extends App {
 
@@ -66,10 +64,8 @@ object Example6StatementFragmentsDoobie extends App {
   val y = xa.yolo
   import y._
 
-  /**
-   * SQL literals.
-   *
-   */
+  /** SQL literals.
+    */
   def example1(): Unit = {
     println(s"-*- Example1 -*-")
     val a = fr"select name from country"
@@ -85,15 +81,13 @@ object Example6StatementFragmentsDoobie extends App {
 
   }
 
-  /**
-   * SQL literals.
-   *
-   */
+  /** SQL literals.
+    */
   def example2(): Unit = {
 
     println(s"-*- Example2 -*-")
     def whereCode(s: String) = fr"where code = $s"
-    val esp = whereCode("ESP")
+    val esp                  = whereCode("ESP")
     // esp: Fragment = Fragment("where code = ? ")
     (fr"select name from country" ++ esp).query[String].quick.unsafeRunSync()
 
@@ -103,11 +97,8 @@ object Example6StatementFragmentsDoobie extends App {
 
   }
 
-
-  /**
-   * The Fragments Module
-   *
-   */
+  /** The Fragments Module
+    */
   def example3(): Unit = {
 
     case class Info(name: String, code: String, population: Int)

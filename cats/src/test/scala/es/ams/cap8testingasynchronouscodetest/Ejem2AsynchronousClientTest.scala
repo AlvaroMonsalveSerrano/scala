@@ -17,17 +17,17 @@ import cats.implicits._
 
 class Ejem2AsynchronousClientTest extends AnyWordSpec with Matchers {
 
-  val listHostNames = List("10", "20")
+  val listHostNames          = List("10", "20")
   val listHostNamesIncorrect = List("10", "20", "", "hostError")
-  implicit val timeout = Timeout(2 seconds)
+  implicit val timeout       = Timeout(2 seconds)
 
   "Test del libro del cliente asíncrono: prueba síncrona" when {
     "prueba con una lista de host correctos el cliente síncrono" in {
-        val cliente = UptimeClientId
-        val service = new UptimeService2[Id](cliente)
+      val cliente = UptimeClientId
+      val service = new UptimeService2[Id](cliente)
 
-        val resultId: Id[Int] = service.getTotalUptime(listHostNames)
-        resultId shouldBe (30)
+      val resultId: Id[Int] = service.getTotalUptime(listHostNames)
+      resultId shouldBe (30)
     }
 
     "prueba con una lista de host incorrectos el cliente síncrono" in {
@@ -46,7 +46,7 @@ class Ejem2AsynchronousClientTest extends AnyWordSpec with Matchers {
       val service = new UptimeService2[Future](cliente)
 
       val resultFuture: Future[Int] = service.getTotalUptime(listHostNames)
-      val result = Await.result(resultFuture, timeout.duration)
+      val result                    = Await.result(resultFuture, timeout.duration)
 
       result shouldBe (30)
     }
@@ -56,12 +56,10 @@ class Ejem2AsynchronousClientTest extends AnyWordSpec with Matchers {
       val service = new UptimeService2[Future](cliente)
 
       val resultFuture: Future[Int] = service.getTotalUptime(listHostNamesIncorrect)
-      val result = Await.result(resultFuture, timeout.duration)
+      val result                    = Await.result(resultFuture, timeout.duration)
 
       result shouldBe (30)
     }
   }
 
 }
-
-

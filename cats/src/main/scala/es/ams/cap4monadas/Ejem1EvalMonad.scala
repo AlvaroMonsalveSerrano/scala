@@ -14,7 +14,6 @@ package es.ams.cap4monadas
  */
 object Ejem1EvalMonad extends App {
 
-
   //
   // Ejemplos de tipos de evaluaciones.
   //
@@ -32,7 +31,6 @@ object Ejem1EvalMonad extends App {
 
   }
 
-
   def evaluacionPerezosaLazyYNoCacheadaMemoized(): Unit = {
     println(s"-*- Ejemplo de evaluación perezosa(Lazy) y No cacheada(Memoized)")
     def x = {
@@ -43,7 +41,6 @@ object Ejem1EvalMonad extends App {
     println(x)
     println()
   }
-
 
   def evaluacionPerezosaLazyYCacheadaMemoized(): Unit = {
     println(s"-*- Ejemplo de evaluación perezosa(Lazy) y cacheada(Memoized)")
@@ -58,7 +55,6 @@ object Ejem1EvalMonad extends App {
   // [END] -------------------------------------------------------
   //
 
-
   //
   // Ejemplos utilizando la mónada Eval
   // [START] -----------------------------------------------------
@@ -66,7 +62,7 @@ object Ejem1EvalMonad extends App {
   def ejemploEvalNow(): Unit = {
     import cats.Eval
     println(s"-*- Ejemplo de evaluación Eval.now (Como definir solo val)")
-    val x = Eval.now{
+    val x = Eval.now {
       println("Procesando X")
       Math.random
     }
@@ -78,7 +74,7 @@ object Ejem1EvalMonad extends App {
   def ejemploEvalAlways(): Unit = {
     import cats.Eval
     println(s"-*- Ejemplo de evaluación Eval.always (Como definir solo def)")
-    val x = Eval.always{
+    val x = Eval.always {
       println("Procesando X")
       Math.random
     }
@@ -90,7 +86,7 @@ object Ejem1EvalMonad extends App {
   def ejemploEvalLater(): Unit = {
     import cats.Eval
     println(s"-*- Ejemplo de evaluación Eval.later (Como definir solo lazy, not memoized)")
-    val x = Eval.later{
+    val x = Eval.later {
       println("Procesando X")
       Math.random
     }
@@ -109,6 +105,5 @@ object Ejem1EvalMonad extends App {
   ejemploEvalNow()
   ejemploEvalAlways()
   ejemploEvalLater()
-
 
 }

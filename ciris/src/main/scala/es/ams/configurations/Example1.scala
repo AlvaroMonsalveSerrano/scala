@@ -6,9 +6,7 @@ import ciris._
 
 import scala.concurrent.duration._
 
-/**
-  *
-  * CIRIS
+/** CIRIS
   * -----
   *
   * https://cir.is/docs/configurations
@@ -18,11 +16,10 @@ import scala.concurrent.duration._
 object Example1 extends IOApp {
 
   val port: ConfigValue[Int] =
-    env("API_PORT").or( prop("api.port") ).as[Int]
+    env("API_PORT").or(prop("api.port")).as[Int]
 
   val timeout: ConfigValue[Option[Duration]] =
     env("API_TIMEOUT").as[Duration].option
-
 
   def exampleLoadIntENV(): Unit = {
 
@@ -32,27 +29,25 @@ object Example1 extends IOApp {
 
   }
 
-
   def exampleLoadPairEnvVar(): Unit = {
 
     final case class Config(port: Int, tiemout: Option[Duration])
 
     val config: ConfigValue[Config] = (port, timeout).parMapN(Config)
-    val resultConfig: Config = config.load[IO].unsafeRunSync()
+    val resultConfig: Config        = config.load[IO].unsafeRunSync()
     println(s"Result Config->${resultConfig}")
     println()
 
   }
 
-
   def exampleLoadWithForCom(): Unit = {
 
     final case class Config(port: Int, tiemout: Option[Duration])
 
-    val config = for{
-      eport <- env("API_PORT").or( prop("api.port") ).as[Int]
+    val config = for {
+      eport    <- env("API_PORT").or(prop("api.port")).as[Int]
       etimeout <- env("API_TIMEOUT").as[Duration].option
-    } yield{
+    } yield {
       Config(eport, etimeout)
     }
     val result: Config = config.load[IO].unsafeRunSync()
@@ -76,9 +71,9 @@ object Example1 extends IOApp {
     final case class Config(port: Int, tiemout: Option[Duration])
 
     val config = (
-      env("API_PORT").or( prop("api.port") ).as[Int],
+      env("API_PORT").or(prop("api.port")).as[Int],
       env("API_TIMEOUT").as[Duration].option
-    ).parMapN(Config).default{
+    ).parMapN(Config).default {
       Config(8082, 20.seconds.some)
     }
 
@@ -88,21 +83,19 @@ object Example1 extends IOApp {
 
   }
 
-
   def exampleSecrets(): Unit = {
-    val apiKey: ConfigValue[Secret[String]] =  env("API_KEY").secret
-    val resultSecret: Secret[String] = apiKey.load[IO].unsafeRunSync()
+    val apiKey: ConfigValue[Secret[String]] = env("API_KEY").secret
+    val resultSecret: Secret[String]        = apiKey.load[IO].unsafeRunSync()
     println(s"secret=${resultSecret.value}")
     println()
 
   }
 
-
   def exampleSource(): Unit = {
 
     def env(name: String): ConfigValue[String] = {
       ConfigValue.suspend {
-        val key = ConfigKey.env(name)
+        val key   = ConfigKey.env(name)
         val value = System.getenv(name)
 
         if (value != null) {
@@ -114,12 +107,11 @@ object Example1 extends IOApp {
     }
 
     val resultEnv: ConfigValue[String] = env("API_PORT")
-    val result: String = resultEnv.load[IO].unsafeRunSync()
+    val result: String                 = resultEnv.load[IO].unsafeRunSync()
     println(s"Source result=${result}")
     println()
 
   }
-
 
   override def run(args: List[String]): IO[ExitCode] = {
     exampleLoadIntENV()
@@ -136,7 +128,7 @@ object Example1 extends IOApp {
 
     exampleSource()
 
-    IO( println("End Example1") ).as(ExitCode.Success)
+    IO(println("End Example1")).as(ExitCode.Success)
   }
 
 }

@@ -6,8 +6,7 @@ import cats.syntax.applicative._
 
 object Ejem1MonadTransformer extends App {
 
-  /**
-    * Elemplo de definición de una Mónada transformer de Lista de Option
+  /** Elemplo de definición de una Mónada transformer de Lista de Option
     */
   def example1OptionT(): Unit = {
 
@@ -70,7 +69,7 @@ object Ejem1MonadTransformer extends App {
 //
 //  }
 
-    example1OptionT()
+  example1OptionT()
 //    example2OptionT()
 
 }

@@ -1,15 +1,14 @@
 package es.ams.cap1introduccion
 
 import cats._
-//import cats.implicits._
 
-trait MyEq[A]{
-  def eq(op1:A, op2:A): Boolean
+trait MyEq[A] {
+  def eq(op1: A, op2: A): Boolean
 }
 
 object MyEq extends MyEqInstances with MyEqSyntax
 
-trait MyEqInstances{
+trait MyEqInstances {
 
   def apply[A](implicit ME: MyEq[A]): MyEq[A] = ME
 
@@ -34,10 +33,10 @@ trait MyEqInstances{
 
 }
 
-trait MyEqSyntax{
-  object syntax{
-    implicit class MyEqOps[A](elem:A)(implicit ME: MyEq[A]){
-      def ===?(op2:A):Boolean = ME.eq(elem, op2)
+trait MyEqSyntax {
+  object syntax {
+    implicit class MyEqOps[A](elem: A)(implicit ME: MyEq[A]) {
+      def ===?(op2: A): Boolean = ME.eq(elem, op2)
     }
   }
 }

@@ -9,7 +9,7 @@ import doobie._
 import doobie.implicits._
 import doobie.util.ExecutionContexts
 
-object ExampleDoobieImpure extends App{
+object ExampleDoobieImpure extends App {
 
   type OperationDoobie[A] = Free[OperationDatabase, A]
 
@@ -18,11 +18,11 @@ object ExampleDoobieImpure extends App{
 
   // Definición de la gramática -------------------------------------
   sealed trait OperationDatabase[A]
-  case class CreateSchema() extends OperationDatabase[Unit]
+  case class CreateSchema()     extends OperationDatabase[Unit]
   case class Insert(elem: Book) extends OperationDatabase[Int]
 //  case class Select(key: Int) extends OperationDatabase[Option[String]]
   case class Select[T](key: Int) extends OperationDatabase[Option[T]]
-  case class Delete(key: Int) extends OperationDatabase[Unit]
+  case class Delete(key: Int)    extends OperationDatabase[Unit]
 
   // Definición de las funciones del DSL ----------------------------
   def createSchema(): OperationDoobie[Unit] =
@@ -37,9 +37,8 @@ object ExampleDoobieImpure extends App{
   def delete(key: Int): OperationDoobie[Unit] =
     liftF[OperationDatabase, Unit](Delete(key))
 
-
   // Definición de un intérprete. -----------------------------------
-  def impureInterpreter: OperationDatabase ~> Id = new (OperationDatabase ~> Id){
+  def impureInterpreter: OperationDatabase ~> Id = new (OperationDatabase ~> Id) {
 
     implicit val cs = IO.contextShift(ExecutionContexts.synchronous)
 
@@ -75,15 +74,16 @@ object ExampleDoobieImpure extends App{
       } // CreateSchema
 
       case Insert(elem) => {
-          val result: Id[Int] = elem match {
-            case p: Book =>
-              val id = p.id
-              val name = p.name
-              val resultInsert = sql"insert into Book (id, name) values ($id, $name)".update.run.transact(xa).unsafeRunSync()
-              resultInsert
-            case _ => 0
-          }
-          result
+        val result: Id[Int] = elem match {
+          case p: Book =>
+            val id   = p.id
+            val name = p.name
+            val resultInsert =
+              sql"insert into Book (id, name) values ($id, $name)".update.run.transact(xa).unsafeRunSync()
+            resultInsert
+          case _ => 0
+        }
+        result
       } // Insert
 
       case Select(key) => {
@@ -95,7 +95,7 @@ object ExampleDoobieImpure extends App{
           """.query[String]
 
         val listResult = findBookById(key).stream.compile.toList.transact(xa).unsafeRunSync()
-        val result = Some( listResult.head ) // : Id[Option[Int]]
+        val result     = Some(listResult.head) // : Id[Option[Int]]
         result
 
       } // Select
@@ -115,15 +115,14 @@ object ExampleDoobieImpure extends App{
   } // impureInterpreter
 
   def programCreate: OperationDoobie[(Int, Option[String])] = for {
-    _ <- createSchema()
+    _            <- createSchema()
     numInserted1 <- insert(Book(1, "Book1"))
     numInserted2 <- insert(Book(2, "Book2"))
     numInserted3 <- insert(Book(3, "Book3"))
-    nameBook <- select(2)
-    _ <- delete(3)
+    nameBook     <- select(2)
+    _            <- delete(3)
   } yield {
-    ( (numInserted1 + numInserted2 + numInserted3),
-      nameBook)
+    ((numInserted1 + numInserted2 + numInserted3), nameBook)
   }
 
   val resultProgramCreate = programCreate.foldMap(impureInterpreter)
@@ -134,7 +133,7 @@ object ExampleDoobieImpure extends App{
     numInserted4 <- insert(Book(4, "Book4"))
     numInserted5 <- insert(Book(5, "Book5"))
     numInserted6 <- insert(Book(6, "Book6"))
-    _ <- delete(5)
+    _            <- delete(5)
   } yield {
     (numInserted4 + numInserted5 + numInserted6)
   }

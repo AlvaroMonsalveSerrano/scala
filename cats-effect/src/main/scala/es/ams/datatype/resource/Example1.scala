@@ -17,8 +17,7 @@ object Example1 extends App {
 
   }
 
-  /**
-    * Definición de un recurso
+  /** Definición de un recurso
     */
   def example2(): Unit = {
     println(s"-*- Example2 -*-")
@@ -35,17 +34,15 @@ object Example1 extends App {
     val report: String => IO[String] =
       x => IO(println(s"...produce weather report...")) *> IO(s"It's raining ${x}")
 
-    Resource.make(acquire)(release)
+    Resource
+      .make(acquire)(release)
       .evalMap(addDogs)
       .use(report)
       .unsafeRunSync()
 
   }
 
-
-  /**
-    * Definición de dos recursos y su utilización conjunta.
-    *
+  /** Definición de dos recursos y su utilización conjunta.
     */
   def example3(): Unit = {
     println(s"-*- Example3 -*-")
@@ -58,24 +55,25 @@ object Example1 extends App {
       Resource.make(acquire)(release)
     }
 
-    val result = for{
+    val result = for {
       outer <- mkResource("outer")
       inner <- mkResource("inner")
-    }yield (outer, inner)
+    } yield (outer, inner)
 
-    result.use{
-      case (a, b) => IO(println(s"Using $a and $b"))
-    }.unsafeRunSync()
+    result
+      .use { case (a, b) =>
+        IO(println(s"Using $a and $b"))
+      }
+      .unsafeRunSync()
 
   }
 
-  /**
-    * Definición de un Resource "AutoCloseable"
+  /** Definición de un Resource "AutoCloseable"
     */
   def example4(): Unit = {
     println(s"-*- Example4 -*-")
 
-    val acquire = IO{
+    val acquire = IO {
       scala.io.Source.fromString("Hello World")
     }
 

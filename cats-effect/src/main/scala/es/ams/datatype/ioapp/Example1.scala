@@ -2,19 +2,17 @@ package es.ams.datatype.ioapp
 
 import cats.effect.{ExitCode, IO, IOApp}
 
-/**
-  * IO Data Type
+/** IO Data Type
   * ============
   *
   * Pure Programs
   *
   * https://typelevel.org/cats-effect/datatypes/ioapp.html
-  *
   */
-object Example1 extends IOApp{
+object Example1 extends IOApp {
 
   def run(args: List[String]): IO[ExitCode] = {
-    IO( println("Hola Mundo desde IOApp") ).as(ExitCode.Success)
+    IO(println("Hola Mundo desde IOApp")).as(ExitCode.Success)
   }
 
 }
