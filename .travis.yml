@@ -1,0 +1,14 @@
+jdk:
+  - openjdk11
+
+language: scala
+scala:
+  - 2.13.4
+
+addons:
+  apt:
+    update: true
+
+script:
+  - sbt clean compile test
+  - sbt assembly
