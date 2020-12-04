@@ -10,5 +10,5 @@ addons:
     update: true
 
 script:
-  - sbt clean compile test
+  - sbt clean compile
   - sbt assembly
