@@ -2,8 +2,8 @@ package es.ams.freemonaddoobie
 
 import doobie._
 import doobie.implicits._
-import doobie.util.transactor.Transactor.Aux
 import cats.effect.IO
+import doobie.h2.H2Transactor
 import es.ams.freemonaddoobie.AuthorDSL.{OperationDBResponse, OperationDBResponseOption}
 
 object AuthorRepository {
@@ -11,7 +11,7 @@ object AuthorRepository {
   val dropAuthor: ConnectionIO[Int]   = sql"""DROP TABLE IF EXISTS Author""".update.run
   val createAuthor: ConnectionIO[Int] = sql"""CREATE TABLE Author (id SERIAL, name text)""".update.run
 
-  def createSchemaIntoMySqlA[A](xa: Aux[IO, Unit]): Either[Exception, Unit] = {
+  def createSchemaIntoMySqlA[A](xa: H2Transactor[IO]): Either[Exception, Unit] = {
     val creator: ConnectionIO[Unit] = for {
       _ <- dropAuthor
       _ <- createAuthor
@@ -30,7 +30,7 @@ object AuthorRepository {
     }
   }
 
-  def createSchemaIntoMySqlB[A](xa: Aux[IO, Unit]): OperationDBResponse[Boolean] = {
+  def createSchemaIntoMySqlB[A](xa: H2Transactor[IO]): OperationDBResponse[Boolean] = {
     val creator: ConnectionIO[Unit] = for {
       _ <- dropAuthor
       _ <- createAuthor
@@ -53,7 +53,7 @@ object AuthorRepository {
     }
   }
 
-  def insertAuthorIntoMySql(xa: Aux[IO, Unit], author: Author): OperationDBResponse[Int] = {
+  def insertAuthorIntoMySql(xa: H2Transactor[IO], author: Author): OperationDBResponse[Int] = {
     val name = author.name
     val insert =
       sql"insert into Author (name) values ($name)".update
@@ -71,7 +71,7 @@ object AuthorRepository {
     }
   }
 
-  def selectAuthorById(xa: Aux[IO, Unit], key: Int): OperationDBResponseOption[String] = {
+  def selectAuthorById(xa: H2Transactor[IO], key: Int): OperationDBResponseOption[String] = {
     val selectOperation: Query0[String] = sql"""select name from Author where id = $key""".query[String]
     val selectResult =
       selectOperation.stream.compile.toList.attemptSql.map {
@@ -86,7 +86,7 @@ object AuthorRepository {
     }
   }
 
-  def deleteAuthorById(xa: Aux[IO, Unit], key: Int): OperationDBResponse[Int] = {
+  def deleteAuthorById(xa: H2Transactor[IO], key: Int): OperationDBResponse[Int] = {
     try {
       val deleteOperation: ConnectionIO[Int] = sql"""delete from Author where id = $key""".update.run
       Right(deleteOperation.transact(xa).unsafeRunSync())

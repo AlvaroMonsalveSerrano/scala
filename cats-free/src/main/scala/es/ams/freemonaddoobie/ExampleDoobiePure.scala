@@ -1,9 +1,8 @@
 package es.ams.freemonaddoobie
 
-import cats.effect.{Blocker, IO}
-import doobie.Transactor
+import cats.effect.{Blocker, IO, Resource}
+import doobie.h2.H2Transactor
 import doobie.util.ExecutionContexts
-
 import es.ams.freemonaddoobie.AuthorDSL._
 
 /** Ejemplo básico de FreeMonad con un intérprete puro.
@@ -14,29 +13,42 @@ object ExampleDoobiePure extends App {
 
   // Definición del transactor a la BBDD. ---------------------------
   implicit val cs = IO.contextShift(ExecutionContexts.synchronous)
-  val xa = Transactor.fromDriverManager[IO](
-    "com.mysql.jdbc.Driver",
-    "jdbc:mysql://localhost:3306/doobie",
-    "root",
-    "root",
-    Blocker.liftExecutionContext(ExecutionContexts.synchronous) // just for testing
-  )
+  val transactor: Resource[IO, H2Transactor[IO]] =
+    for {
+      ce <- ExecutionContexts.fixedThreadPool[IO](32) // our connect EC
+      be <- Blocker[IO] // our blocking EC
+      xa <- H2Transactor.newH2Transactor[IO](
+        "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", // connect URL
+        "sa",                                 // username
+        "",                                   // password
+        ce,                                   // await connection here
+        be                                    // execute JDBC operations here
+      )
+    } yield xa
 
   // Definición de programas de prueba. -----------------------------
   def createDatabase(): Operation[Either[Exception, Boolean]] = for {
     result <- createSchema()
   } yield (result)
 
-  val resultCreate = createDatabase().foldMap(pureInterpreter(xa)).run(Init).value
-  println(s"Create database=${resultCreate}")
+  val resultCreate: IO[(StateDatabase, Either[Exception, Boolean])] = transactor.use { xa =>
+    val resultCreate = createDatabase().foldMap(pureInterpreter(xa)).run(Init).value
+    IO(resultCreate)
+
+  }
+  val resultCreateRun = resultCreate.unsafeRunSync()
+  println(s"Create database=${resultCreateRun}")
   println()
 
   def insertAuthor(): Operation[Either[Exception, Int]] = for {
     num <- insert(Author(0, "Author1"))
   } yield (num)
 
-  val resultInsertAuthor = insertAuthor().foldMap(pureInterpreter(xa)).run(Created).value
-  println(s"Insert Author=${resultInsertAuthor}")
+  val resultInsert: IO[(StateDatabase, Either[Exception, Int])] = transactor.use { xa =>
+    IO(insertAuthor().foldMap(pureInterpreter(xa)).run(Created).value)
+  }
+  val resultInsertRun = resultInsert.unsafeRunSync()
+  println(s"Insert Author=${resultInsertRun}")
   println()
 
   def deleteAuthor(): Operation[Either[Exception, Int]] = for {
@@ -46,24 +58,33 @@ object ExampleDoobiePure extends App {
     numDeleted  <- delete(2)
   } yield (numDeleted)
 
-  val resultDeleteAuthor = deleteAuthor().foldMap(pureInterpreter(xa)).run(Created).value
-  println(s"Delete Author=${resultDeleteAuthor}")
+  val resultDelete: IO[(StateDatabase, Either[Exception, Int])] = transactor.use { xa =>
+    IO(deleteAuthor().foldMap(pureInterpreter(xa)).run(Created).value)
+  }
+  val resultDeletetRun = resultDelete.unsafeRunSync()
+  println(s"Delete Author=${resultDeletetRun}")
   println()
 
   def selectAuthorKO(): Operation[Either[Exception, Option[String]]] = for {
     author <- select(100)
   } yield (author)
 
-  val resultSelectAuthorKO = selectAuthorKO().foldMap(pureInterpreter(xa)).run(Created).value
-  println(s"Select Author=${resultSelectAuthorKO}")
+  val resultSelectAuthorKO: IO[(StateDatabase, Either[Exception, Option[String]])] = transactor.use { xa =>
+    IO(selectAuthorKO().foldMap(pureInterpreter(xa)).run(Created).value)
+  }
+  val resultSelectAuthorKORun = resultSelectAuthorKO.unsafeRunSync()
+  println(s"Select Author=${resultSelectAuthorKORun}")
   println()
 
   def selectAuthorOK(): Operation[Either[Exception, Option[String]]] = for {
     author <- select(1)
   } yield (author)
 
-  val resultSelectAuthorOK = selectAuthorOK().foldMap(pureInterpreter(xa)).run(Created).value
-  println(s"Select Author=${resultSelectAuthorOK}")
+  val resultSelectAuthorOK: IO[(StateDatabase, Either[Exception, Option[String]])] = transactor.use { xa =>
+    IO(selectAuthorOK().foldMap(pureInterpreter(xa)).run(Created).value)
+  }
+  val resultSelectAuthorOKRun = resultSelectAuthorOK.unsafeRunSync()
+  println(s"Select Author=${resultSelectAuthorOKRun}")
   println()
 
 }

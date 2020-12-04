@@ -5,7 +5,7 @@ import cats.free.Free
 import cats.free.Free.liftF
 import cats.data.State
 import cats.effect.IO
-import doobie.util.transactor.Transactor.Aux
+import doobie.h2.H2Transactor
 
 // Definición del dominio.-----------------------------------------
 case class Author(id: Long, name: String)
@@ -46,7 +46,7 @@ object AuthorDSL {
     liftF[OperationDB, OperationDBResponseOption[String]](Select(key))
 
   // Definición del intérprete --------------------------------------
-  def pureInterpreter(xa: Aux[IO, Unit]): OperationDB ~> OperationState = new (OperationDB ~> OperationState) {
+  def pureInterpreter(xa: H2Transactor[IO]): OperationDB ~> OperationState = new (OperationDB ~> OperationState) {
 
     override def apply[A](fa: OperationDB[A]): OperationState[A] = fa match {
 

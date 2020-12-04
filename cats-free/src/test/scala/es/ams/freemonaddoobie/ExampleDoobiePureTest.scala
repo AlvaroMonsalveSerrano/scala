@@ -1,11 +1,9 @@
 package es.ams.freemonaddoobie
 
-import cats.effect.{Blocker, IO}
-import doobie.Transactor
+import cats.effect.{Blocker, IO, Resource}
+import doobie.h2.H2Transactor
 import doobie.util.ExecutionContexts
-
 import es.ams.freemonaddoobie.AuthorDSL._
-
 import org.scalatest.flatspec.AnyFlatSpec
 
 import scala.concurrent.ExecutionContext
@@ -18,13 +16,18 @@ import scala.concurrent.ExecutionContext
 class ExampleDoobiePureTest extends AnyFlatSpec {
 
   implicit val cs = IO.contextShift(ExecutionContext.global)
-  val xa = Transactor.fromDriverManager[IO](
-    "com.mysql.jdbc.Driver",
-    "jdbc:mysql://localhost:3306/doobieTest",
-    "root",
-    "root",
-    Blocker.liftExecutionContext(ExecutionContexts.synchronous) // just for testing
-  )
+  val transactor: Resource[IO, H2Transactor[IO]] =
+    for {
+      ce <- ExecutionContexts.fixedThreadPool[IO](32) // our connect EC
+      be <- Blocker[IO] // our blocking EC
+      xa <- H2Transactor.newH2Transactor[IO](
+        "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", // connect URL
+        "sa",                                 // username
+        "",                                   // password
+        ce,                                   // await connection here
+        be                                    // execute JDBC operations here
+      )
+    } yield xa
 
   "Interprete Pure" should "CreateSchema test" in {
 
@@ -32,9 +35,13 @@ class ExampleDoobiePureTest extends AnyFlatSpec {
       result <- createSchema()
     } yield (result)
 
-    val resultTest: (StateDatabase, OperationDBResponse[Boolean]) = test.foldMap(pureInterpreter(xa)).run(Init).value
-    assert(resultTest._1 === Created)
-    assert(resultTest._2 === Right(true))
+    val resultCreate: IO[(StateDatabase, OperationDBResponse[Boolean])] = transactor.use { xa =>
+      IO(test.foldMap(pureInterpreter(xa)).run(Init).value)
+    }
+
+    val resultCreateRun = resultCreate.unsafeRunSync()
+    assert(resultCreateRun._1 === Created)
+    assert(resultCreateRun._2 === Right(true))
 
   }
 
@@ -44,9 +51,13 @@ class ExampleDoobiePureTest extends AnyFlatSpec {
       num    <- insert(Author(0, "Author1"))
     } yield (num)
 
-    val resultTest: (StateDatabase, OperationDBResponse[Int]) = test.foldMap(pureInterpreter(xa)).run(Created).value
-    assert(resultTest._1 === Created)
-    assert(resultTest._2 === Right(1))
+    val resultCreate: IO[(StateDatabase, OperationDBResponse[Int])] = transactor.use { xa =>
+      IO(test.foldMap(pureInterpreter(xa)).run(Created).value)
+    }
+
+    val resultCreateRun = resultCreate.unsafeRunSync()
+    assert(resultCreateRun._1 === Created)
+    assert(resultCreateRun._2 === Right(1))
   }
 
   it should "Delete Author test" in {
@@ -57,9 +68,13 @@ class ExampleDoobiePureTest extends AnyFlatSpec {
 
     } yield { numDeleted }
 
-    val resultTest: (StateDatabase, OperationDBResponse[Int]) = test.foldMap(pureInterpreter(xa)).run(Created).value
-    assert(resultTest._1 === Created)
-    assert(resultTest._2 === Right(1))
+    val resultCreate: IO[(StateDatabase, OperationDBResponse[Int])] = transactor.use { xa =>
+      IO(test.foldMap(pureInterpreter(xa)).run(Created).value)
+    }
+
+    val resultCreateRun = resultCreate.unsafeRunSync()
+    assert(resultCreateRun._1 === Created)
+    assert(resultCreateRun._2 === Right(1))
 
   }
 
@@ -72,10 +87,13 @@ class ExampleDoobiePureTest extends AnyFlatSpec {
 
     } yield { author }
 
-    val resultTest: (StateDatabase, OperationDBResponseOption[String]) =
-      test.foldMap(pureInterpreter(xa)).run(Created).value
-    assert(resultTest._1 === Created)
-    assert(resultTest._2 === Right(Some(nameAuthor)))
+    val resultCreate: IO[(StateDatabase, OperationDBResponseOption[String])] = transactor.use { xa =>
+      IO(test.foldMap(pureInterpreter(xa)).run(Created).value)
+    }
+
+    val resultCreateRun = resultCreate.unsafeRunSync()
+    assert(resultCreateRun._1 === Created)
+    assert(resultCreateRun._2 === Right(Some(nameAuthor)))
 
   }
 
