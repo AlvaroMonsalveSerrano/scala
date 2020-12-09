@@ -1,12 +1,15 @@
 package es.ams.freemonaddoobie
 
 import cats.data.EitherK
-import cats.effect.{Blocker, IO}
+import cats.effect.{Blocker, IO, Resource}
 import cats.free.Free
 import cats.{Id, InjectK, ~>}
+import ciris.{ConfigValue, Secret, env, prop}
 import doobie.util.ExecutionContexts
-import doobie.Transactor
+import doobie.h2.H2Transactor
 import doobie.util.transactor.Transactor.Aux
+
+import cats.implicits._
 
 /** Ejemplo de composición de Free Monads.
   *
@@ -69,47 +72,77 @@ object AuthorComposingDSL {
 
     implicit val cs = IO.contextShift(ExecutionContexts.synchronous)
 
-    // TODO var -> val?
-    private var xa = Transactor.fromDriverManager[IO](
-      s"com.mysql.jdbc.Driver",
-      s"jdbc:mysql://host:port/doobie",
-      s"user",
-      s"pwd",
-      Blocker.liftExecutionContext(ExecutionContexts.synchronous) // just for testing
-    )
+    final case class DatabaseConfig(host: String, port: String, user: String, password: Secret[String])
+
+    /** Ejemplo de variables de entorno para una base de datos H2:
+      * DDBB_HOST=mem:test;DDBB_PORT=;DDBB_USER=sa;DDBB_PWD=
+      */
+    def loadEnvironmentVariables(): DatabaseConfig = {
+      val host: ConfigValue[String]             = env("DDBB_HOST").or(prop("ddbb.host")).as[String].default("mem:test")
+      val port: ConfigValue[String]             = env("DDBB_PORT").or(prop("ddbb.port")).as[String].default("")
+      val user: ConfigValue[String]             = env("DDBB_USER").or(prop("ddbb.user")).as[String].default("sa")
+      val password: ConfigValue[Secret[String]] = env("DDBB_PWD").secret.default(Secret.apply(""))
+
+      val configureEnv: ConfigValue[DatabaseConfig] = (host, port, user, password).parMapN(DatabaseConfig)
+
+      configureEnv.load[IO].unsafeRunSync()
+    }
+
+    val configDatabase = loadEnvironmentVariables()
+    val transactor: Resource[IO, H2Transactor[IO]] =
+      for {
+        ce <- ExecutionContexts.fixedThreadPool[IO](32) // our connect EC
+        be <- Blocker[IO] // our blocking EC
+        xa <- H2Transactor.newH2Transactor[IO](
+          s"jdbc:h2:${configDatabase.host};DB_CLOSE_DELAY=-1", // connect URL
+          s"${configDatabase.user}",                           // username
+          s"${configDatabase.password.value}",                 // password
+          ce,                                                  // await connection here
+          be                                                   // execute JDBC operations here
+        )
+      } yield xa
 
     override def apply[A](fa: DBOperation[A]) = fa match {
 
       case Configure(xaTransactor) => {
-        this.xa = xaTransactor
         val result: OperationResponse[Response[Unit]] = Right(())
         result
 
       }
 
       case CreateSchema() => {
-        val resultCreateSchema: Response[Boolean]        = AuthorRepository.createSchemaIntoMySqlB(xa)
-        val result: OperationResponse[Response[Boolean]] = resultCreateSchema
-        result
+
+        val resultCreate: IO[OperationResponse[Response[Boolean]]] = transactor.use { xa =>
+          val resultCreateSchema: Response[Boolean] = AuthorRepository.createSchemaIntoMySqlB(xa)
+          IO(resultCreateSchema)
+        }
+        resultCreate.unsafeRunSync()
+
       }
 
       case Insert(author) => {
-        val resultTask: Response[Int]                = AuthorRepository.insertAuthorIntoMySql(xa, author)
-        val result: OperationResponse[Response[Int]] = resultTask
-        result
 
+        val resultInsert: IO[OperationResponse[Response[Int]]] = transactor.use { xa =>
+          val resultTask: Response[Int] = AuthorRepository.insertAuthorIntoMySql(xa, author)
+          IO(resultTask)
+        }
+        resultInsert.unsafeRunSync()
       }
 
       case Delete(key) => {
-        val resultTask: Response[Int]                = AuthorRepository.deleteAuthorById(xa, key)
-        val result: OperationResponse[Response[Int]] = resultTask
-        (result)
+        val resultDelete: IO[OperationResponse[Response[Int]]] = transactor.use { xa =>
+          val resultTask: Response[Int] = AuthorRepository.deleteAuthorById(xa, key)
+          IO(resultTask)
+        }
+        resultDelete.unsafeRunSync()
       }
 
       case Select(key) => {
-        val resultTask: Response[Option[String]]                = AuthorRepository.selectAuthorById(xa, key)
-        val result: OperationResponse[Response[Option[String]]] = resultTask
-        (result)
+        val resultSelect: IO[OperationResponse[Response[Option[String]]]] = transactor.use { xa =>
+          val resultTask: Response[Option[String]] = AuthorRepository.selectAuthorById(xa, key)
+          IO(resultTask)
+        }
+        resultSelect.unsafeRunSync()
       }
 
     }
