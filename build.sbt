@@ -169,6 +169,22 @@ lazy val cirisDependencies = Seq(
   ciris_refined_cats
 )
 
+lazy val zio = (project in file("zio"))
+  .settings(
+    name := "example-zio",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    libraryDependencies ++=
+      zioDependencies ++ Seq(
+        scalaTest
+      )
+  )
+
+lazy val zioDependencies = Seq(
+  zio_core,
+  zio_streams
+)
+
 lazy val assemblySettings = Seq(
   assemblyJarName in assembly := name.value + ".jar",
   assemblyMergeStrategy in assembly := {
