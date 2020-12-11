@@ -43,6 +43,7 @@ lazy val root = (project in file("."))
   .aggregate(catsEffect)
   .aggregate(catsFree)
   .aggregate(ciris)
+  .aggregate(zio)
   .settings(BuildInfoSettings.value)
   .settings(
     name := "scala",
