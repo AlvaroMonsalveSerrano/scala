@@ -10,18 +10,12 @@ import es.ams.basic.ExampleBasicOperations.{
   readFileRetrying,
   sqrt
 }
-import org.scalatest.flatspec.AnyFlatSpec
 import zio.clock.Clock
 import zio.{IO, Runtime, Task, UIO, ZIO}
 
 import java.io.IOException
-import java.net.URI
 
-class HandlingErrorsTest extends AnyFlatSpec {
-
-  val nameFile: String = "file1test.data"
-
-  def getURIFileTest(nameFile: String): URI = this.getClass.getClassLoader.getResource(nameFile).toURI
+class HandlingErrorsTest extends BaseClassTest {
 
   "ZIO Handling Errors" should "Either" in {
 
