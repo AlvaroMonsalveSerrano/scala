@@ -8,7 +8,7 @@ import scala.util.Try
 
 class CreatingEffetsTest extends AnyFlatSpec {
 
-  "Creating Effect" should "From success values" in {
+  "ZIO Creating Effect" should "From success values" in {
 
     val int42 = for {
       intS1 <- ZIO.succeed(42)
@@ -56,6 +56,7 @@ class CreatingEffetsTest extends AnyFlatSpec {
     // TODO Determinar cómo se ejecuta.
     // val zfun: URIO[Int, Int] = ZIO.fromFunction((i: Int) => i * i)
 
+    // Future
     lazy val future = Future.successful("Hi!")
 
     val zfuture: Task[String] = ZIO.fromFuture { implicit ec =>
