@@ -1,7 +1,7 @@
 package es.ams.basic
 
-import es.ams.basic.ExampleBasicOperations.readFile
-import zio.{IO, Runtime, UIO}
+import es.ams.basic.ExampleHandlingResource.readFileBracket
+import zio.{IO, Runtime, Task, UIO}
 
 class HandlingResourcesTest extends BaseClassTest {
 
@@ -20,8 +20,8 @@ class HandlingResourcesTest extends BaseClassTest {
 
   it should "Bracket" in {
 
-    val file: UIO[List[String]] = readFile(getURIFileTest(nameFile).getPath)
-    val resultFile              = Runtime.default.unsafeRun(file)
+    val file: Task[List[String]] = readFileBracket(getURIFileTest(nameFile).getPath)
+    val resultFile               = Runtime.default.unsafeRun(file)
     assertResult(List("1 2 3", "4 5 6"))(resultFile)
 
   }

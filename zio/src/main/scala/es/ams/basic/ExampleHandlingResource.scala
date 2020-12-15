@@ -7,7 +7,7 @@ import scala.io.Source
 
 object ExampleHandlingResource {
 
-  def closeBufferedSource(buffer: FileInputStream) = UIO(buffer.close())
+  def closeBufferedSource(buffer: FileInputStream): UIO[Unit] = UIO(buffer.close())
 
   def readFileBracket(nameFile: String): Task[List[String]] =
     UIO(Source.fromFile(nameFile)).bracket(bufferedSource => UIO(bufferedSource.close())) { file =>
