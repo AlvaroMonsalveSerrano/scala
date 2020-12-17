@@ -175,6 +175,7 @@ lazy val zio = (project in file("zio"))
     name := "example-zio",
     assemblySettings,
     scalacOptions ++= basicScalacOptions,
+    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
     libraryDependencies ++=
       zioDependencies ++ Seq(
         scalaTest
@@ -183,7 +184,10 @@ lazy val zio = (project in file("zio"))
 
 lazy val zioDependencies = Seq(
   zio_core,
-  zio_streams
+  zio_streams,
+  zio_test,
+  zio_test_sbt,
+  zio_test_magnolia
 )
 
 lazy val assemblySettings = Seq(
