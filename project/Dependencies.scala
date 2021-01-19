@@ -37,4 +37,14 @@ object Dependencies {
   lazy val zio_test          = "dev.zio" %% "zio-test"          % Versions.zio % "test"
   lazy val zio_test_sbt      = "dev.zio" %% "zio-test-sbt"      % Versions.zio % "test"
   lazy val zio_test_magnolia = "dev.zio" %% "zio-test-magnolia" % Versions.zio % "test" // optional
+
+  lazy val munit               = "org.scalameta" %% "munit"               % Versions.munit                     % Test
+  lazy val munit_cats_effect_2 = "org.typelevel" %% "munit-cats-effect-2" % Versions.munit_cats_effect_version % Test
+
+  lazy val http4s_blaze_server = "org.http4s" %% "http4s-blaze-server" % Versions.http4s
+  lazy val http4s_blaze_client = "org.http4s" %% "http4s-blaze-client" % Versions.http4s
+  lazy val http4s_circe        = "org.http4s" %% "http4s-circe"        % Versions.http4s
+  lazy val http4s_dsl          = "org.http4s" %% "http4s-dsl"          % Versions.http4s
+  lazy val circe_generic       = "io.circe"   %% "circe-generic"       % Versions.circe
+
 }

@@ -27,7 +27,8 @@ lazy val basicScalacOptions = Seq(
   "-language:implicitConversions",
   "-Xlint",
   "-Xfatal-warnings",
-  "-language:reflectiveCalls"
+  "-language:reflectiveCalls",
+  "-Yrangepos"
 )
 
 lazy val commonSettings = Seq(
@@ -44,6 +45,7 @@ lazy val root = (project in file("."))
   .aggregate(catsFree)
   .aggregate(ciris)
   .aggregate(zio)
+  .aggregate(http4s)
   .settings(BuildInfoSettings.value)
   .settings(
     name := "scala",
@@ -56,14 +58,17 @@ lazy val root = (project in file("."))
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots"),
       "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
-    )
+    ),
+    testFrameworks += new TestFramework("munit.Framework")
   )
   .enablePlugins(GitVersioning)
   .enablePlugins(BuildInfoPlugin)
 
 lazy val commonDependencies = Seq(
   scalaTest,
-  scalacheck
+  scalacheck,
+  munit,
+  munit_cats_effect_2
 )
 
 lazy val cats = (project in file("cats"))
@@ -188,6 +193,26 @@ lazy val zioDependencies = Seq(
   zio_test,
   zio_test_sbt,
   zio_test_magnolia
+)
+
+lazy val http4s = (project in file("http4s"))
+  .settings(
+    name := "example-http4s",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    testFrameworks += new TestFramework("munit.Framework"),
+    libraryDependencies ++=
+      http4sDependencies ++ Seq(
+        scalaTest
+      )
+  )
+
+lazy val http4sDependencies = Seq(
+  http4s_blaze_server,
+  http4s_blaze_client,
+  http4s_circe,
+  http4s_dsl,
+  circe_generic
 )
 
 lazy val assemblySettings = Seq(
