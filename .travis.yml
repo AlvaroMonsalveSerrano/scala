@@ -11,4 +11,4 @@ addons:
 
 script:
   - sbt clean compile
-  - sbt assembly
+  - sbt test
