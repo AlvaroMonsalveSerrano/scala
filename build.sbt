@@ -212,7 +212,8 @@ lazy val http4sDependencies = Seq(
   http4s_blaze_client,
   http4s_circe,
   http4s_dsl,
-  circe_generic
+  circe_generic,
+  circe_literal
 )
 
 lazy val assemblySettings = Seq(
