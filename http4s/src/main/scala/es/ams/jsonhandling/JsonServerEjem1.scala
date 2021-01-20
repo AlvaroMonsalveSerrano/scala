@@ -1,26 +1,11 @@
 package es.ams.jsonhandling
 
-//import io.circe._
-//import io.circe.generic.auto.exportDecoder
-//import org.http4s.circe.CirceEntityCodec._
-//import org.http4s.circe._
-//import org.http4s.implicits._
-//import org.http4s.server.Router
-//import org.http4s.server.blaze._
-//import io.circe.syntax._
-//import io.circe.literal._
-//import cats.effect._
-//import org.http4s._
-//import org.http4s.dsl.io._
-
 import cats.data.Chain
 import cats.effect._
 import io.circe._
-//import io.circe.generic.auto._
 import io.circe.literal._
 import io.circe.syntax._
 import org.http4s._
-//import org.http4s.circe.CirceEntityCodec.circeEntityDecoder
 import org.http4s.circe._
 import org.http4s.dsl.io._
 import org.http4s.server._
@@ -59,7 +44,7 @@ object JsonServerEjem1 extends IOApp {
   }
 
   import User._
-  val json1Service = HttpRoutes.of[IO] {
+  val jsonService = HttpRoutes.of[IO] {
     case GET -> Root / "json2" / name => Ok(hello(name).toString())
     case GET -> Root / "json3" / name => Ok(User(name).asJson)
     case req @ GET -> Root / "hello1" / pName / edad =>
@@ -75,7 +60,7 @@ object JsonServerEjem1 extends IOApp {
       }
   }
 
-  val services = json1Service
+  val services = jsonService
 
   val httpApp = Router("/" -> services).orNotFound
 

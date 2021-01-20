@@ -203,7 +203,9 @@ lazy val http4s = (project in file("http4s"))
     testFrameworks += new TestFramework("munit.Framework"),
     libraryDependencies ++=
       http4sDependencies ++ Seq(
-        scalaTest
+        scalaTest,
+        munit,
+        munit_cats_effect_2
       )
   )
 
