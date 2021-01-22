@@ -1,15 +1,17 @@
-package es.ams.streaming
-
-import fs2.Stream
+package es.ams.client
 
 import cats.effect._
 import org.http4s._
+import org.http4s.circe._
 import org.http4s.dsl.io._
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze._
 
-import scala.concurrent.duration._
+import io.circe._
+import io.circe.literal._
+import io.circe.syntax._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /** Referencia: https://http4s.org/v0.21/streaming/
@@ -19,19 +21,21 @@ import scala.concurrent.ExecutionContext.Implicits.global
   * StreamingEjem1 define un servicio de Stream que cada segundo responde un string con el
   * número del segundo desde su inicio.
   */
-object StreamingEjem1 extends IOApp {
+object ServiceToClientEjem extends IOApp {
 
-  val seconds = Stream.awakeEvery[IO](1.second)
+  case class Response(message: String) extends AnyVal
+  object Response {
+    implicit val userEncoder: Encoder[Response] =
+      Encoder.instance { (response: Response) =>
+        json"""{"msg": ${response.message}}"""
+      }
+  }
 
   val healthyService = HttpRoutes.of[IO] { case GET -> Root / "healthy" / name =>
-    Ok(s"Healthy, $name.")
+    Ok(Response(name).asJson)
   }
 
-  val service = HttpRoutes.of[IO] { case GET -> Root / "seconds" =>
-    Ok(seconds.map(_.toString)) // map toString porque no hay un Encoder de Duration.
-  }
-
-  val httpRoute = Router("/" -> healthyService, "/api" -> service).orNotFound
+  val httpRoute = Router("/" -> healthyService).orNotFound
 
   def run(args: List[String]): IO[ExitCode] =
     BlazeServerBuilder[IO](global)
