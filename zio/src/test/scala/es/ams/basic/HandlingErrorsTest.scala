@@ -6,6 +6,7 @@ import es.ams.basic.ExampleBasicOperations.{
   readFileFallback,
   readFileFold,
   readFileFoldM,
+  readFileFoldM2,
   readFileOrDefault,
   readFileRetrying,
   sqrt
@@ -99,6 +100,20 @@ class HandlingErrorsTest extends BaseClassTest {
     assertResult(List("1 2 3", "4 5 6"))(resultReadFileOK)
 
     val readFileKO: Task[List[String]] = readFileFoldM("errorFile.data")
+    val resultReadFileKO: List[String] = Runtime.default.unsafeRun(readFileKO)
+    assert(resultReadFileKO.isEmpty === false)
+    assertResult(List("OK"))(resultReadFileKO)
+
+  }
+
+  it should "FoldM2" in {
+
+    val readFileOK: UIO[List[String]]  = readFileFoldM2(getURIFileTest(nameFile).getPath)
+    val resultReadFileOK: List[String] = Runtime.default.unsafeRun(readFileOK)
+    assert(resultReadFileOK.isEmpty === false)
+    assertResult(List("1 2 3", "4 5 6"))(resultReadFileOK)
+
+    val readFileKO: UIO[List[String]]  = readFileFoldM2("errorFile.data")
     val resultReadFileKO: List[String] = Runtime.default.unsafeRun(readFileKO)
     assert(resultReadFileKO.isEmpty === false)
     assertResult(List("OK"))(resultReadFileKO)

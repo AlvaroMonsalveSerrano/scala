@@ -30,10 +30,12 @@ object ExampleTestingEffects {
     }
   }
 
+  // Definición del módulo Database.
   trait Database {
     def database: Database.Service
   }
 
+  // Define el componente que simula la base de datos.
   trait DatabaseLive extends Database {
     def database: Database.Service = new Database.Service {
       override def lookup(id: UserID): Task[UserProfile] =

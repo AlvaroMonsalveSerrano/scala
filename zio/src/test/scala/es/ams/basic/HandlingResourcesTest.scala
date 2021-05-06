@@ -12,8 +12,9 @@ class HandlingResourcesTest extends BaseClassTest {
     assertResult(())(resultFinalizer)
 
     val finalizer2: UIO[Unit] = UIO.effectTotal(println("finally"))
-    val operation: UIO[Unit]  = IO.succeed(println("Finalizing 2!")).ensuring(finalizer2)
-    val resultOperation       = Runtime.default.unsafeRun(operation)
+    // ensuring equivale a esquema try/finally. En ensuring se realiza el efecto de la parte de finally.
+    val operation: UIO[Unit] = IO.succeed(println("Finalizing 2!")).ensuring(finalizer2)
+    val resultOperation      = Runtime.default.unsafeRun(operation)
     assertResult(())(resultOperation)
 
   }

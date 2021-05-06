@@ -1,7 +1,7 @@
 package es.ams.basic
 
 import org.scalatest.flatspec.AnyFlatSpec
-import zio.{IO, Runtime, Task, UIO, ZIO}
+import zio.{IO, Runtime, Task, UIO, URIO, ZIO}
 
 import scala.concurrent.Future
 import scala.util.Try
@@ -21,6 +21,7 @@ class CreatingEffetsTest extends AnyFlatSpec {
     val resultTask42: Int = Runtime.default.unsafeRun(task42)
     assert(42 === resultTask42)
 
+    // effectTotal cuando el valor no tiene un efecto de lado
     val effectTotal: Task[Long] = ZIO.effectTotal(System.currentTimeMillis())
     val resultEffectTotal: Long = Runtime.default.unsafeRun(effectTotal)
     assert(resultEffectTotal > 0)
@@ -28,7 +29,15 @@ class CreatingEffetsTest extends AnyFlatSpec {
   }
 
   it should "From failure values" in {
-    // TODO
+    val f1: zio.URIO[Any, Either[String, Nothing]] = ZIO.fail("Uh oh!").either
+    val resultFailf1: Either[String, Nothing]      = Runtime.default.unsafeRun(f1)
+    assertResult(resultFailf1)(Left("Uh oh!"))
+
+    val exception                                     = new Exception("Uh oh!")
+    val f2: zio.URIO[Any, Either[Throwable, Nothing]] = Task.fail(exception).either
+    val resultFailf2: Either[Throwable, Nothing]      = Runtime.default.unsafeRun(f2)
+    assertResult(resultFailf2)(Left(exception))
+
   }
 
   it should "From scala values" in {
@@ -38,6 +47,7 @@ class CreatingEffetsTest extends AnyFlatSpec {
     val resultZOption: Int                = Runtime.default.unsafeRun(zoption)
     assert(2 === resultZOption)
 
+    // Cambia el error de Option[Nothing] a String
     val zoption2: IO[String, Int] = zoption.mapError(_ => "It wasn't there!")
     val resultZOption2: Int       = Runtime.default.unsafeRun(zoption2)
     assert(2 === resultZOption2)
@@ -53,8 +63,9 @@ class CreatingEffetsTest extends AnyFlatSpec {
     assert(20 === resultZTry)
 
     // Function
-    // TODO Determinar cómo se ejecuta.
-    // val zfun: URIO[Int, Int] = ZIO.fromFunction((i: Int) => i * i)
+    val zfun: URIO[Int, Int] = ZIO.fromFunction((i: Int) => i * i)
+    val resultZfun: Int      = Runtime.default.unsafeRun(zfun.provide(5))
+    assert(25 === resultZfun)
 
     // Future
     lazy val future = Future.successful("Hi!")
