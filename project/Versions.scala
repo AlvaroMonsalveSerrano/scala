@@ -17,5 +17,7 @@ object Versions {
   val munit_cats_effect_version = "0.12.0"
   val http4s                    = "0.21.14"
   val circe                     = "0.13.0"
+  val quill                     = "3.7.1"
+  val quill_h2                  = "1.4.200"
 
 }

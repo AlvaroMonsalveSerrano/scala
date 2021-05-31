@@ -2,7 +2,7 @@ import Dependencies._
 import sbtassembly.AssemblyPlugin.autoImport.assemblyJarName
 
 ThisBuild / description := "Scala Basic Concept Testing and Documentation Examples"
-ThisBuild / scalaVersion := "2.13.4"
+ThisBuild / scalaVersion := "2.13.6"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "es.ams"
 ThisBuild / organizationName := "AMS"
@@ -46,6 +46,7 @@ lazy val root = (project in file("."))
   .aggregate(ciris)
   .aggregate(zio)
   .aggregate(http4s)
+  .aggregate(mquill)
   .settings(BuildInfoSettings.value)
   .settings(
     name := "scala",
@@ -216,6 +217,29 @@ lazy val http4sDependencies = Seq(
   http4s_dsl,
   circe_generic,
   circe_literal
+)
+
+lazy val mquill = (project in file("quill"))
+  .settings(
+    name := "example-quill",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    testFrameworks += new TestFramework("munit.Framework"),
+    unmanagedClasspath in Compile += baseDirectory.value / "src" / "main" / "resources",
+    libraryDependencies ++=
+      quillDependencies ++ Seq(
+        scalaTest,
+        munit,
+        munit_cats_effect_2
+      )
+  )
+
+lazy val quillDependencies = Seq(
+  quill,
+  quill_sql,
+  quillJdbc,
+  quillH2,
+  quillPostgres
 )
 
 lazy val assemblySettings = Seq(
