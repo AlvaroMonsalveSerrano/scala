@@ -48,6 +48,8 @@ object Dependencies {
   lazy val circe_generic       = "io.circe"   %% "circe-generic"       % Versions.circe
   lazy val circe_literal       = "io.circe"   %% "circe-literal"       % Versions.circe
 
+  lazy val postgres = "org.postgresql" % "postgresql" % "42.2.8"
+
   lazy val quillH2 = "com.h2database" % "h2" % Versions.quill_h2
 
   lazy val quill         = "io.getquill" %% "quill-sql-portable"   % Versions.quill

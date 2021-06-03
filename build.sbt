@@ -239,7 +239,8 @@ lazy val quillDependencies = Seq(
   quill_sql,
   quillJdbc,
   quillH2,
-  quillPostgres
+  quillPostgres,
+  postgres
 )
 
 lazy val assemblySettings = Seq(
