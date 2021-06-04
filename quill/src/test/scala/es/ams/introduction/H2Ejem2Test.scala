@@ -17,14 +17,14 @@ class H2Ejem2Test extends AnyFlatSpec with BeforeAndAfter {
     deleteDataTest()
   }
 
-  case class Circle(radius: Float, cname: String)
+  case class Circlebasic(radius: Float, cname: String)
 
   // ----
 
   val pi = quote(3.14159)
 
-  def insertCicle(circle: Circle) = quote {
-    query[Circle]
+  def insertCicle(circle: Circlebasic) = quote {
+    query[Circlebasic]
       .insert(
         lift(circle)
       )
@@ -32,30 +32,30 @@ class H2Ejem2Test extends AnyFlatSpec with BeforeAndAfter {
   }
 
   def deleteCircle(id: Int) = quote {
-    query[Circle].filter(_.radius == lift(id)).delete
+    query[Circlebasic].filter(_.radius == lift(id)).delete
   }
 
   def biggerThan(i: Float) = quote {
-    query[Circle].filter(r => r.radius > lift(i))
+    query[Circlebasic].filter(r => r.radius > lift(i))
   }
 
   def selectCicleAll() = quote {
-    query[Circle]
+    query[Circlebasic]
   }
 
   def selectINList(radiusList: List[Long]) = quote {
-    query[Circle].filter(r => liftQuery(radiusList).contains(r.radius))
+    query[Circlebasic].filter(r => liftQuery(radiusList).contains(r.radius))
   }
 
   val selectOneRadiusFirstClass = quote {
-    query[Circle].filter(c => c.radius == 1)
+    query[Circlebasic].filter(c => c.radius == 1)
   }
 
   def insertDataTest() = {
-    ctx.run(insertCicle(Circle(radius = 1, cname = "circle_1")))
-    ctx.run(insertCicle(Circle(radius = 2, cname = "circle_2")))
-    ctx.run(insertCicle(Circle(radius = 3, cname = "circle_3")))
-    ctx.run(insertCicle(Circle(radius = 4, cname = "circle_4")))
+    ctx.run(insertCicle(Circlebasic(radius = 1, cname = "circle_1")))
+    ctx.run(insertCicle(Circlebasic(radius = 2, cname = "circle_2")))
+    ctx.run(insertCicle(Circlebasic(radius = 3, cname = "circle_3")))
+    ctx.run(insertCicle(Circlebasic(radius = 4, cname = "circle_4")))
   }
 
   def deleteDataTest() = {

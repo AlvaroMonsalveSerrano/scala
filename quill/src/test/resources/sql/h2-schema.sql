@@ -4,9 +4,25 @@ CREATE TABLE IF NOT EXISTS Product(
     sku int
 );
 
+CREATE TABLE IF NOT EXISTS Circlebasic(
+     radius integer,
+     cname VARCHAR(255)
+);
+
 CREATE TABLE IF NOT EXISTS Circle(
-  radius int,
-  cname VARCHAR(255)
+  id integer not null,
+  radius integer,
+  cname VARCHAR(255),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS CircleInfo(
+    id INTEGER NOT NULL,
+    info1 VARCHAR(255),
+    info2 VARCHAR2(255),
+    circle_id INTEGER NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY(circle_id) REFERENCES Circle(id)
 );
 
 CREATE TABLE IF NOT EXISTS Rectangle(
