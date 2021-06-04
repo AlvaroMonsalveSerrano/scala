@@ -14,3 +14,4 @@ CREATE TABLE IF NOT EXISTS Rectangle(
     length_rec int,
     width_rec int
 );
+

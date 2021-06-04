@@ -224,7 +224,7 @@ lazy val mquill = (project in file("quill"))
     name := "example-quill",
     assemblySettings,
     scalacOptions ++= basicScalacOptions,
-    testFrameworks += new TestFramework("munit.Framework"),
+    testFrameworks += new TestFramework("munit.Framework", "scalatest.Framework"),
     unmanagedClasspath in Compile += baseDirectory.value / "src" / "main" / "resources",
     libraryDependencies ++=
       quillDependencies ++ Seq(

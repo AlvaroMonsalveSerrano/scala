@@ -1,6 +1,6 @@
 object Versions {
 
-  val scalatest                 = "3.2.3"
+  val scalatest                 = "3.2.9"
   val scalacheck                = "1.15.1"
   val doobie                    = "0.9.4"
   val doobie_postgres           = "0.9.0"
