@@ -6,16 +6,16 @@ class QueriesTest extends BaseTest {
 
   import ctx._
 
-  "Queries" should "Map Operation" in {
-
-    def mapExample() = quote {
-      schema.circles.map(c => c.cname)
-    }
-
-    val result = ctx.run(mapExample())
-    assert(result.size == 3)
-
-  }
+//  "Queries" should "Map Operation" in {
+//
+//    def mapExample() = quote {
+//      schema.circles.map(c => c.cname)
+//    }
+//
+//    val result = ctx.run(mapExample())
+//    assert(result.size == 3)
+//
+//  }
 
   it should "flatMap operation" in {
     def myFlatMap(name: String) = quote {

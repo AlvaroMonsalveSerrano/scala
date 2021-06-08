@@ -1,4 +1,5 @@
 import Dependencies._
+import sbt.Keys.libraryDependencies
 import sbtassembly.AssemblyPlugin.autoImport.assemblyJarName
 
 ThisBuild / description := "Scala Basic Concept Testing and Documentation Examples"
@@ -220,12 +221,17 @@ lazy val http4sDependencies = Seq(
 )
 
 lazy val mquill = (project in file("quill"))
+  .dependsOn(macroMQuill)
   .settings(
     name := "example-quill",
     assemblySettings,
     scalacOptions ++= basicScalacOptions,
     testFrameworks += new TestFramework("munit.Framework", "scalatest.Framework"),
     unmanagedClasspath in Compile += baseDirectory.value / "src" / "main" / "resources",
+    // include the macro classes and resources in the main jar
+    Compile / packageBin / mappings ++= (macroMQuill / Compile / packageBin / mappings).value,
+    // include the macro sources in the main source jar
+    Compile / packageSrc / mappings ++= (macroMQuill / Compile / packageSrc / mappings).value,
     libraryDependencies ++=
       quillDependencies ++ Seq(
         scalaTest,
@@ -242,6 +248,18 @@ lazy val quillDependencies = Seq(
   quillPostgres,
   postgres
 )
+
+lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
+
+lazy val macroMQuill = (project in file("macro"))
+  .settings(
+    name := "example-macro-quill",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    libraryDependencies += scalaReflect.value,
+    publish := {},
+    publishLocal := {}
+  )
 
 lazy val assemblySettings = Seq(
   assemblyJarName in assembly := name.value + ".jar",
