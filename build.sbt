@@ -191,6 +191,7 @@ lazy val zio = (project in file("zio"))
 
 lazy val zioDependencies = Seq(
   zio_core,
+  zio_interop_cats,
   zio_streams,
   zio_test,
   zio_test_sbt,
@@ -204,7 +205,7 @@ lazy val http4s = (project in file("http4s"))
     scalacOptions ++= basicScalacOptions,
     testFrameworks += new TestFramework("munit.Framework"),
     libraryDependencies ++=
-      http4sDependencies ++ Seq(
+      http4sDependencies ++ zioDependencies ++ Seq(
         scalaTest,
         munit,
         munit_cats_effect_2

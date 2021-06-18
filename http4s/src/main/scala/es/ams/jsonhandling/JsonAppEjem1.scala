@@ -25,8 +25,8 @@ import org.http4s.client.dsl.Http4sClientDsl
 import org.http4s.circe._
 import org.http4s.Method._
 
-/** Definición de la aplicación que defien un server con dos endpoint: healthy, check de estado; y,
-  * operation , define una operación que emplea un cliente.
+/** Definición de la aplicación que define un server con dos endpoint: healthy, check de estado; y,
+  * operation, define una operación que emplea un cliente.
   *
   * Para realizar pruebas desde la consola una vez arrancada la aplicación:
   *

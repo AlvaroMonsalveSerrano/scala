@@ -33,6 +33,7 @@ object Dependencies {
   lazy val ciris_refined_cats = "eu.timepit" %% "refined-cats"     % Versions.refined_cats
 
   lazy val zio_core          = "dev.zio" %% "zio"               % Versions.zio
+  lazy val zio_interop_cats  = "dev.zio" %% "zio-interop-cats"  % "2.1.4.0"
   lazy val zio_streams       = "dev.zio" %% "zio-streams"       % Versions.zio
   lazy val zio_test          = "dev.zio" %% "zio-test"          % Versions.zio % "test"
   lazy val zio_test_sbt      = "dev.zio" %% "zio-test-sbt"      % Versions.zio % "test"
