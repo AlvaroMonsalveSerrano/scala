@@ -46,8 +46,6 @@ object Dependencies {
   lazy val http4s_blaze_client = "org.http4s" %% "http4s-blaze-client" % Versions.http4s
   lazy val http4s_dsl          = "org.http4s" %% "http4s-dsl"          % Versions.http4s
   lazy val http4s_circe        = "org.http4s" %% "http4s-circe"        % Versions.http4s
-  lazy val circe_generic       = "io.circe"   %% "circe-generic"       % Versions.circe
-  lazy val circe_literal       = "io.circe"   %% "circe-literal"       % Versions.circe
 
   lazy val postgres = "org.postgresql" % "postgresql" % "42.2.8"
 
@@ -58,4 +56,8 @@ object Dependencies {
   lazy val quillJdbc     = "io.getquill" %% "quill-jdbc"           % Versions.quill
   lazy val quillPostgres = "io.getquill" %% "quill-async-postgres" % Versions.quill
 
+  lazy val circe_core    = "io.circe" %% "circe-core"    % Versions.circe
+  lazy val circe_generic = "io.circe" %% "circe-generic" % Versions.circe
+  lazy val circe_literal = "io.circe" %% "circe-literal" % Versions.circe
+  lazy val circe_parser  = "io.circe" %% "circe-parser"  % Versions.circe
 }

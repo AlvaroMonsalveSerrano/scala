@@ -45,7 +45,7 @@ object Ejem1 extends App {
     val q = quote {
       query[Rectangle]
     }
-    val result1 = ctx.run(q)
+    val result1: List[Rectangle] = ctx.run(q)
     // Result: List(Rectangle(22,222,222), Rectangle(1,55,55))
     println(s"Select all=${result1}")
   }

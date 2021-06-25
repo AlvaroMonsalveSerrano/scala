@@ -29,7 +29,8 @@ lazy val basicScalacOptions = Seq(
   "-Xlint",
   "-Xfatal-warnings",
   "-language:reflectiveCalls",
-  "-Yrangepos"
+  "-Yrangepos",
+  "-Ymacro-annotations"
 )
 
 lazy val commonSettings = Seq(
@@ -48,6 +49,7 @@ lazy val root = (project in file("."))
   .aggregate(zio)
   .aggregate(http4s)
   .aggregate(mquill)
+  .aggregate(circe)
   .settings(BuildInfoSettings.value)
   .settings(
     name := "scala",
@@ -248,6 +250,27 @@ lazy val quillDependencies = Seq(
   quillH2,
   quillPostgres,
   postgres
+)
+
+lazy val circe = (project in file("circe"))
+  .settings(
+    name := "example-circe",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    testFrameworks += new TestFramework("munit.Framework"),
+    libraryDependencies ++=
+      circeDependencies ++ Seq(
+        scalaTest,
+        munit,
+        munit_cats_effect_2
+      )
+  )
+
+lazy val circeDependencies = Seq(
+  circe_core,
+  circe_generic,
+  circe_literal,
+  circe_parser
 )
 
 lazy val scalaReflect = Def.setting { "org.scala-lang" % "scala-reflect" % scalaVersion.value }
