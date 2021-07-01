@@ -19,5 +19,6 @@ object Versions {
   val circe                     = "0.14.1"
   val quill                     = "3.7.1"
   val quill_h2                  = "1.4.200"
+  val testcontainers            = "0.39.5"
 
 }

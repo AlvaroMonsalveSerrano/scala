@@ -15,6 +15,7 @@ ThisBuild / developers := List(
     url = url("http://alvaromonsalve.com")
   )
 )
+Test / fork := true
 
 lazy val basicScalacOptions = Seq(
   "-deprecation",
@@ -39,6 +40,17 @@ lazy val commonSettings = Seq(
   assemblyJarName in assembly := "scala-example.jar"
 )
 
+lazy val assemblySettings = Seq(
+  assemblyJarName in assembly := name.value + ".jar",
+  assemblyMergeStrategy in assembly := {
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case "application.conf"            => MergeStrategy.concat
+    case x =>
+      val oldStrategy = (assemblyMergeStrategy in assembly).value
+      oldStrategy(x)
+  }
+)
+
 lazy val root = (project in file("."))
   .aggregate(cats)
   .aggregate(doobie)
@@ -50,7 +62,8 @@ lazy val root = (project in file("."))
   .aggregate(http4s)
   .aggregate(mquill)
   .aggregate(circe)
-  .settings(BuildInfoSettings.value)
+  .aggregate(testContainers)
+//  .settings(BuildInfoSettings.value)
   .settings(
     name := "scala",
     commonSettings,
@@ -285,13 +298,24 @@ lazy val macroMQuill = (project in file("macro"))
     publishLocal := {}
   )
 
-lazy val assemblySettings = Seq(
-  assemblyJarName in assembly := name.value + ".jar",
-  assemblyMergeStrategy in assembly := {
-    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-    case "application.conf"            => MergeStrategy.concat
-    case x =>
-      val oldStrategy = (assemblyMergeStrategy in assembly).value
-      oldStrategy(x)
-  }
+lazy val testContainers = (project in file("testcontainers"))
+  .settings(
+    name := "example-testcontainers",
+    assemblySettings,
+    scalacOptions ++= basicScalacOptions,
+    testFrameworks += new TestFramework("munit.Framework"),
+    libraryDependencies ++=
+      testContainersDependencies ++ Seq(
+        scalaTest,
+        munit,
+        munit_cats_effect_2
+      )
+  )
+
+lazy val testContainersDependencies = Seq(
+  testcontainers_scalatest,
+  testcontainers_munit,
+  testcontainers_postgresql,
+  testcontainers_scala_nginx,
+  postgres
 )

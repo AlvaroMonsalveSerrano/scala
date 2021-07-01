@@ -60,4 +60,15 @@ object Dependencies {
   lazy val circe_generic = "io.circe" %% "circe-generic" % Versions.circe
   lazy val circe_literal = "io.circe" %% "circe-literal" % Versions.circe
   lazy val circe_parser  = "io.circe" %% "circe-parser"  % Versions.circe
+
+  lazy val testcontainers_scalatest =
+    "com.dimafeng" %% "testcontainers-scala-scalatest" % Versions.testcontainers % "test"
+  lazy val testcontainers_munit =
+    "com.dimafeng" %% "testcontainers-scala-munit" % Versions.testcontainers % "test"
+  lazy val testcontainers_postgresql =
+    "com.dimafeng" %% "testcontainers-scala-postgresql" % Versions.testcontainers % "test"
+
+  lazy val testcontainers_scala_nginx =
+    "com.dimafeng" %% "testcontainers-scala-nginx" % Versions.testcontainers % "test"
+
 }

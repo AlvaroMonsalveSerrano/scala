@@ -30,6 +30,4 @@ class Parsing1Test extends munit.FunSuite {
 
   }
 
-  test("") {}
-
 }
