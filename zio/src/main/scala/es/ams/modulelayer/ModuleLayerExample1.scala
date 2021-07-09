@@ -1,7 +1,7 @@
 package es.ams.modulelayer
 
 import zio.clock.Clock
-import zio.{Has, IO, Runtime, UIO, URIO, ZIO, ZLayer}
+import zio.{Has, IO, Runtime, ZIO, ZLayer}
 import zio.console.Console
 import zio.random.Random
 
@@ -44,23 +44,26 @@ object ModuleLayerExample1 extends App {
   type Logging = Has[Logging.Service]
   object Logging {
     trait Service {
-      def info(s: String): UIO[Unit]
-      def error(s: String): UIO[Unit]
+      def info(s: String): IO[DBError, Unit]  // UIO[Unit]
+      def error(s: String): IO[DBError, Unit] // UIO[Unit]
     }
 
     // Service implementation
     val consoleLogger: ZLayer[Console, Nothing, Logging] = ZLayer.fromFunction(console =>
       new Service {
-        def info(s: String): UIO[Unit] = console.get.putStrLn(s"info - ${s}")
+        // Does not compile by zio-logging library ZIO[Any, Nothing, Unit]
+        def info(s: String): IO[DBError, Unit] =
+          console.get.putStrLn(s"info - ${s}").mapError(_ => "Error put Logging function")
 
-        def error(s: String): UIO[Unit] = console.get.putStrLn(s"error - ${s}")
+        def error(s: String): IO[DBError, Unit] =
+          console.get.putStrLn(s"error - ${s}").mapError(_ => "Error error Logging function")
       }
     )
 
     // Accesor Method
-    def info(s: String): URIO[Logging, Unit] = ZIO.accessM(_.get.info(s))
+    def info(s: String): ZIO[Logging, DBError, Unit] = ZIO.accessM(_.get.info(s))
 
-    def error(s: String): URIO[Logging, Unit] = ZIO.accessM(_.get.error(s))
+    def error(s: String): ZIO[Logging, DBError, Unit] = ZIO.accessM(_.get.error(s))
   }
 
   // Composición horizontal de capas. Construye una capa que tiene los requerimientos de ambas.

@@ -2,15 +2,15 @@ package es.ams.usecases
 
 import zio._
 import zio.console._
-
 import zio.test._
 import zio.test.Assertion._
 import zio.test.environment._
-
 import HelloWorld._
 
+import java.io.IOException
+
 object HelloWorld {
-  def sayHello: URIO[Console, Unit] =
+  def sayHello: ZIO[Console, IOException, Unit] /*URIO[Console, Unit] */ =
     console.putStrLn("Hello, World!")
 }
 

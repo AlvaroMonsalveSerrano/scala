@@ -38,6 +38,8 @@ object Dependencies {
   lazy val zio_test          = "dev.zio" %% "zio-test"          % Versions.zio % "test"
   lazy val zio_test_sbt      = "dev.zio" %% "zio-test-sbt"      % Versions.zio % "test"
   lazy val zio_test_magnolia = "dev.zio" %% "zio-test-magnolia" % Versions.zio % "test" // optional
+  lazy val zio_logging       = "dev.zio" %% "zio-logging"       % Versions.zio_logging
+  lazy val zio_logging_slf4j = "dev.zio" %% "zio-logging-slf4j" % Versions.zio_logging
 
   lazy val munit               = "org.scalameta" %% "munit"               % Versions.munit                     % Test
   lazy val munit_cats_effect_2 = "org.typelevel" %% "munit-cats-effect-2" % Versions.munit_cats_effect_version % Test

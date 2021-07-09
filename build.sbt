@@ -200,7 +200,9 @@ lazy val zio = (project in file("zio"))
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
     libraryDependencies ++=
       zioDependencies ++ Seq(
-        scalaTest
+        scalaTest,
+        zio_logging
+        //        zio_logging_slf4j
       )
   )
 
