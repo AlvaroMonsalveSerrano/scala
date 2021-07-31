@@ -13,6 +13,9 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+project/.bloop/
+project/metals.sbt
+project/project/
 
 # Ignore Eclipse files
 .project
@@ -30,3 +33,9 @@ project/plugins/project/
 FileTarget.txt
 
 project/scala-build.iml
+
+.metals/
+
+.vscode/
+
+.bloop/
