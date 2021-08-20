@@ -201,8 +201,11 @@ lazy val zio = (project in file("zio"))
     libraryDependencies ++=
       zioDependencies ++ Seq(
         scalaTest,
-        zio_logging
-        //        zio_logging_slf4j
+        zio_logging,
+        zio_logging_slf4j,
+        slf4j_api,
+        logback_classic,
+        logstash_logback_encoder
       )
   )
 

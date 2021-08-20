@@ -73,4 +73,9 @@ object Dependencies {
   lazy val testcontainers_scala_nginx =
     "com.dimafeng" %% "testcontainers-scala-nginx" % Versions.testcontainers % "test"
 
+
+  lazy val slf4j_api = "org.slf4j" % "slf4j-api" % Versions.slf4jVersion
+
+  lazy val logback_classic          = "ch.qos.logback"       % "logback-classic"          % "1.2.5"
+  lazy val logstash_logback_encoder = "net.logstash.logback" % "logstash-logback-encoder" % "6.6"         
 }
