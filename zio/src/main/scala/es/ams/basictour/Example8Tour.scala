@@ -10,12 +10,12 @@ object Example8Tour extends zio.App{
 
     val correlationId: LogAnnotation[String] = LogAnnotation[String](
         name = "correlationId",
-        initialValue = "undefined-correlation-id",
+        initialValue = "Example8Tour-id",
         combine = (_, newValue) => newValue,
         render = identity
     )
 
-    val logFormat = "[correlation-id = %s] %s"
+    val logFormat = "[correlation-id2 = %s] %s"
 
     val env: ULayer[Logging] =
         Slf4jLogger.make((context, message) => logFormat.format(context(correlationId), message))

@@ -34,8 +34,10 @@
         <!--
         <appender-ref ref="STDOUT" />
         <appender-ref ref="logstash" />
-        -->
         <appender-ref ref="FILE-ROLLING"/>
+        -->
+        <appender-ref ref="STDOUT" />
+        
     </root>
 
 </configuration>
