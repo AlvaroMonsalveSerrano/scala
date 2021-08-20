@@ -10,7 +10,7 @@ object Versions {
   val cats_free                 = "2.3.0"
   val cats_core                 = "2.3.0"
   val refined_cats              = "0.9.19"
-  val zio                       = "1.0.10"
+  val zio                       = "1.0.3"
   val zio_logging               = "0.5.11"
   val akka_actor                = "2.6.10"
   val mysql_connector           = "5.1.34"

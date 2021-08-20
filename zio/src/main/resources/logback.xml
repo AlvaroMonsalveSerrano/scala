@@ -11,9 +11,31 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
 
+    <property name="HOME_LOG" value="/Users/E050690/logs"/>
+
+    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${HOME_LOG}/app.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <totalSizeCap>20GB</totalSizeCap>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>    
+    </appender>    
+
     <root level="debug">
+        <!--
         <appender-ref ref="STDOUT" />
         <appender-ref ref="logstash" />
+        -->
+        <appender-ref ref="FILE-ROLLING"/>
     </root>
 
 </configuration>
