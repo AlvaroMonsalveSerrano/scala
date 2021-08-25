@@ -41,6 +41,12 @@ object Dependencies {
   lazy val zio_logging       = "dev.zio" %% "zio-logging"       % Versions.zio_logging
   lazy val zio_logging_slf4j = "dev.zio" %% "zio-logging-slf4j" % Versions.zio_logging
 
+  lazy val zio_config          = "dev.zio" %% "zio-config"          % Versions.zio_config
+  lazy val zio_config_magnolia = "dev.zio" %% "zio-config-magnolia" % Versions.zio_config
+  lazy val zio_config_typesafe = "dev.zio" %% "zio-config-typesafe" % Versions.zio_config // module (HOCON/Json source)
+  lazy val zio_config_refined  = "dev.zio" %% "zio-config-refined"  % Versions.zio_config
+  lazy val zio_config_yaml     = "dev.zio" %% "zio-config-yaml"     % Versions.zio_config // module (Yaml source)
+
   lazy val munit               = "org.scalameta" %% "munit"               % Versions.munit                     % Test
   lazy val munit_cats_effect_2 = "org.typelevel" %% "munit-cats-effect-2" % Versions.munit_cats_effect_version % Test
 

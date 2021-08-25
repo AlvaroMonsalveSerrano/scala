@@ -215,7 +215,12 @@ lazy val zioDependencies = Seq(
   zio_streams,
   zio_test,
   zio_test_sbt,
-  zio_test_magnolia
+  zio_test_magnolia,
+  zio_config,
+  zio_config_magnolia,
+  zio_config_typesafe,
+  zio_config_refined,
+  zio_config_yaml
 )
 
 lazy val http4s = (project in file("http4s"))

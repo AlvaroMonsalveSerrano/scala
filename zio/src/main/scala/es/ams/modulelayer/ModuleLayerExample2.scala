@@ -3,7 +3,6 @@ package es.ams.modulelayer
 import zio._
 import zio.random.Random
 
-//import zio.console._
 
 /**
   * Ref: https://timpigden.github.io/_pages/zlayer/Examples.html

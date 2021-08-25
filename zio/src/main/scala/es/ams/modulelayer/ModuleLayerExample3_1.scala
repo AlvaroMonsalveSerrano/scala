@@ -12,7 +12,6 @@ import zio.ExitCode
 object ModuleLayerExample3_1 extends App{
   
     type MyServices =  Names with Teams with History with Logging
-    type Error = Throwable
 
     // Log layer
     val envLog =
