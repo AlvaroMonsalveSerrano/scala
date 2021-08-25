@@ -3,19 +3,22 @@ package es.ams.modulelayer
 import zio._
 import zio.random.Random
 
+//import zio.console._
+
+/**
+  * Ref: https://timpigden.github.io/_pages/zlayer/Examples.html
+  */
 object ModuleLayerExample2 {
 
   val firstNames = Vector("Ed", "Jane", "Joe", "Linda", "Sue", "Tim", "Tom")
 
   type Names = Has[Names.Service]
-
   object Names {
     trait Service {
       def randomName: UIO[String]
     }
 
     case class NamesImpl(random: Random.Service) extends Names.Service {
-      println(s"created namesImpl")
       override def randomName: UIO[String] = random.nextIntBounded(firstNames.size).map(firstNames(_))
     }
 
@@ -23,13 +26,12 @@ object ModuleLayerExample2 {
   }
 
   type Teams = Has[Teams.Service]
-
   object Teams {
     trait Service {
       def pickTeam(size: Int): UIO[Set[String]]
     }
 
-    case class TeamsImpl(names: Names.Service) extends Service {
+    case class TeamsImpl(names: Names.Service) extends Teams.Service {
       override def pickTeam(size: Int): UIO[Set[String]] =
         ZIO.collectAll(0.until(size).map { _ => names.randomName }).map(_.toSet)
     }
@@ -38,14 +40,15 @@ object ModuleLayerExample2 {
   }
 
   type History = Has[History.Service]
-
   object History {
     trait Service {
       def wonLastYear(team: Set[String]): Boolean
     }
 
-    case class HistoryImpl(lastTearsWinners: Set[String]) extends Service {
-      override def wonLastYear(team: Set[String]): Boolean = lastTearsWinners == team
+    case class HistoryImpl(lastTearsWinners: Set[String]) extends History.Service {
+      override def wonLastYear(team: Set[String]): Boolean = {
+        lastTearsWinners == team
+      }  
     }
 
     val live: ZLayer[Teams, Nothing, History] = ZLayer.fromServiceM { teams =>
