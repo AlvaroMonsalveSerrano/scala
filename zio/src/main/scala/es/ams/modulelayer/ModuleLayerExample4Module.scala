@@ -51,7 +51,7 @@ object ModuleLayerExample4Module {
       override def doLoader(data: TransformedResult): Task[LoaderResult] =
         data match {
           case dataIn: OkTransformed =>
-            ZIO.fromFuture(implicit ec => loaderData(dataIn)).catchAllCause(_ => ZIO.fail(BasicLoaderException()))
+            ZIO.fromFuture(implicit ec => loaderData(dataIn))
           case _ => ZIO.fail(BasicLoaderException())
         }
     }
