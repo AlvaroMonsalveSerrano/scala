@@ -33,11 +33,12 @@ object ModuleLayerExample4 extends App {
       _               <- log.info(s"[extrated done] data = ${dataExtracted}")
       dataTransformed <- transformer(dataExtracted)
       _               <- log.info(s"[transformed done] data = ${dataTransformed}")
-      dataLoaded      <- loader(dataTransformed).catchAllCause(cause => log.info(s"Cause=>${cause}"))
+      dataLoaded      <- loader(dataTransformed).catchAllCause(cause => log.info(s"Exception Loader=${cause.prettyPrint}"))
       _               <- log.info(s"[loaded done] data = ${dataLoaded}")
       _               <- log.info(s"[END]")
 
     } yield { true }) orElse ZIO.succeed(false)
+
   }
 
   override def run(args: List[String]): URIO[ZEnv, ExitCode] = {
